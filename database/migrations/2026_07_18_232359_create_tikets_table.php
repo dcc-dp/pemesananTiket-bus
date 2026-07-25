@@ -26,9 +26,6 @@ return new class extends Migration
                 ->constrained('kursis', 'id_kursi')
                 ->cascadeOnDelete();
 
-            $table->string('nama_pemesan', 250);
-            $table->string('no_hp_pemesan', 20);
-
             $table->enum('status_pembayaran', [
                 'pending',
                 'lunas',
