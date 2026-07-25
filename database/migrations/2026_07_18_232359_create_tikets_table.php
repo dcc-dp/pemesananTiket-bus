@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('tikets', function (Blueprint $table) {
@@ -16,29 +13,21 @@ return new class extends Migration
 
             $table->string('kode_tiket', 50)->unique();
 
-            $table->foreignId('id_penumpang')
-                ->constrained('penumpangs', 'id_penumpang')
+            $table->foreignId('id_jadwal')
+                ->constrained('jadwals', 'id_jadwal')
                 ->cascadeOnDelete();
+
+            $table->foreignId('id_penumpang')
+                ->nullable()
+                ->constrained('penumpangs', 'id_penumpang')
+                ->nullOnDelete();
 
             $table->foreignId('id_kursi')
                 ->constrained('kursis', 'id_kursi')
                 ->cascadeOnDelete();
 
-            $table->foreignId('id_bus')
-                ->constrained('buses', 'id_bus')
-                ->cascadeOnDelete();
-
-            $table->foreignId('id_supir')
-                ->constrained('supirs', 'id_supir')
-                ->cascadeOnDelete();
-
-            $table->foreignId('id_rute')
-                ->constrained('rutes', 'id_rute')
-                ->cascadeOnDelete();
-
-            $table->dateTime('waktu_berangkat');
-
-            $table->integer('harga_tiket');
+            $table->string('nama_pemesan', 250);
+            $table->string('no_hp_pemesan', 20);
 
             $table->enum('status_pembayaran', [
                 'pending',
