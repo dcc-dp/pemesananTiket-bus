@@ -236,6 +236,18 @@ Route::group(
                 Route::get('/create', [AbsenController::class, 'userCreate'])->name('user.absensi.create');
                 Route::post('/store', [AbsenController::class, 'userStore'])->name('user.absensi.store');
             });
+
+
+            //Bus
+              Route::prefix('bus')->group(function () {
+                Route::get('/', 'BusController@index')->name('bus.index');
+                Route::get('/create', 'BusController@create')->name('bus.create');
+                Route::post('/store', 'BusController@store')->name('bus.store');
+                Route::get('/edit/{id}', 'BusController@edit')->name('bus.edit');
+                Route::put('/update', 'BusController@update')->name('bus.update');
+                Route::post('/hapus/{id}', 'BusController@destroy')->name('bus.hapus');
+            });
+
         });
     }
 );
