@@ -14,7 +14,7 @@ class Terminal extends Model
     protected $primaryKey = 'id_terminal';
 
     protected $fillable = [
-        'nama_terminal',
+        'nama_terminal', 
         'kota',
     ];
 

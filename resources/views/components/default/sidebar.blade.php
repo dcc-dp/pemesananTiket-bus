@@ -38,6 +38,11 @@
                                 Kegiatan
                             </a>
                         </li>
+                        <li class="{{ $menu == 'bus' ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('bus.index') }}">
+                                Bus
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

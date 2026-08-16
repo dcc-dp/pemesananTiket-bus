@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\bus;
+use App\Models\Bus;
 use Illuminate\Http\Request;
 
 class BusController extends Controller
 {
+    private $menu = 'bus';
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $menu = $this->menu;
+        $datas = Bus::all();
+        return view('pages.admin.bus.index', compact('datas', 'menu'));
+
     }
 
     /**
