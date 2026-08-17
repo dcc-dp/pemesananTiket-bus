@@ -95,7 +95,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('register') }}" style="color: #ffffff; font-weight: 600; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.95rem; background: rgba(255,255,255,0.12);">
+                                            <a class="nav-link" href="{{ route('register') }}" style="color: #ffffff; font-weight: 600; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.95rem;">
                                                 <i class="fas fa-user-plus" style="margin-right: 0.4rem;"></i> Daftar
                                             </a>
                                         </li>
