@@ -16,6 +16,8 @@ class Kursi extends Model
     protected $fillable = [
         'id_bus',
         'nomor_kursi',
+        'posisi',
+        'status',
     ];
 
     public function bus()
@@ -23,8 +25,13 @@ class Kursi extends Model
         return $this->belongsTo(Bus::class, 'id_bus', 'id_bus');
     }
 
-    public function tikets()
+    public function bookingSeats()
     {
-        return $this->hasMany(Tiket::class, 'id_kursi', 'id_kursi');
+        return $this->hasMany(BookingSeat::class, 'id_kursi', 'id_kursi');
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return ucfirst($this->status);
     }
 }

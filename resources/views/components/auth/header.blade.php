@@ -1,6 +1,10 @@
 <div class="login-brand">
-    <img src="{{ asset('landing/images/footer/rapp.png') }}" alt="logo" width="80" class="shadow-light rounded-circle" />
-    <img src="{{ asset('landing/images/footer/logoimig.png') }}" alt="logo" width="80" class="shadow-light rounded-circle" />
-    <!-- <img src="https://e7.pngegg.com/pngimages/690/421/png-clipart-logo-graphics-jpeg-cdr-logo.png" alt="logo" width="100" class="shadow-light rounded-circle" /> -->
-
+    <div class="brand-logo">
+        <span style="font-size: 2rem; font-weight: 800; color: #123E73;">
+            <i class="fas fa-bus" style="color: #1E5AA8;"></i> Bus<span style="color: #1E5AA8;">Ticket</span>
+        </span>
+    </div>
+    <p class="brand-title" style="color: #6C757D; margin-top: 0.5rem;">
+        Aplikasi Pemesanan Tiket Bus
+    </p>
 </div>

@@ -14,12 +14,26 @@ class Terminal extends Model
     protected $primaryKey = 'id_terminal';
 
     protected $fillable = [
-        'nama_terminal', 
+        'nama_terminal',
+        'kode_terminal',
+        'alamat',
         'kota',
+        'provinsi',
+        'status',
     ];
 
-    public function rutes()
+    public function routesAsal()
     {
-        return $this->hasMany(Rute::class, 'id_terminal', 'id_terminal');
+        return $this->hasMany(Rute::class, 'terminal_asal_id', 'id_terminal');
+    }
+
+    public function routesTujuan()
+    {
+        return $this->hasMany(Rute::class, 'terminal_tujuan_id', 'id_terminal');
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return ucfirst($this->status);
     }
 }

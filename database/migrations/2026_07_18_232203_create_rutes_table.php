@@ -6,25 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('rutes', function (Blueprint $table) {
             $table->id('id_rute');
-            $table->string('kota_asal',100);
-            $table->string('kota_tujuan',100);
-            $table->foreignId('id_terminal')
-                  ->constrained('terminals','id_terminal')
-                  ->cascadeOnDelete();
+            $table->foreignId('terminal_asal_id')
+                ->constrained('terminals', 'id_terminal')
+                ->cascadeOnDelete();
+            $table->foreignId('terminal_tujuan_id')
+                ->constrained('terminals', 'id_terminal')
+                ->cascadeOnDelete();
+            $table->decimal('jarak', 10, 2)->nullable();
+            $table->integer('estimasi_durasi')->nullable();
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('rutes');

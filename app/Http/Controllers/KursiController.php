@@ -2,64 +2,91 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kursi;
+use App\Models\Bus;
+use App\Models\Kursi;
 use Illuminate\Http\Request;
 
 class KursiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private $menu = 'kursi';
+
+    public function index(Request $request)
     {
-        //
+        $menu = $this->menu;
+        $busId = $request->query('bus', Bus::first()?->id_bus);
+
+        $bus = $busId ? Bus::findOrFail($busId) : null;
+        $buses = Bus::orderBy('nama_bus')->get();
+        $datas = $bus ? Kursi::where('id_bus', $bus->id_bus)->orderBy('nomor_kursi')->get() : collect();
+
+        return view('pages.admin.kursi.index', compact('menu', 'buses', 'bus', 'datas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $menu = $this->menu;
+        $buses = Bus::orderBy('nama_bus')->get();
+
+        return view('pages.admin.kursi.create', compact('menu', 'buses'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'id_bus' => 'required|exists:buses,id_bus',
+            'nomor_kursi' => 'required|string|max:10',
+            'posisi' => 'nullable|string|max:20',
+            'status' => 'required|in:tersedia,rusak',
+        ]);
+
+        $exists = Kursi::where('id_bus', $request->id_bus)
+            ->where('nomor_kursi', $request->nomor_kursi)
+            ->exists();
+
+        if ($exists) {
+            return back()->with('message', 'kursi sudah ada');
+        }
+
+        Kursi::create($request->only(['id_bus', 'nomor_kursi', 'posisi', 'status']));
+
+        return redirect()->route('admin.kursi.index', ['bus' => $request->id_bus])->with('message', 'store');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(kursi $kursi)
+    public function edit(Kursi $kursi)
     {
-        //
+        $menu = $this->menu;
+        $data = $kursi;
+
+        return view('pages.admin.kursi.edit', compact('data', 'menu'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(kursi $kursi)
+    public function update(Request $request, Kursi $kursi)
     {
-        //
+        $request->validate([
+            'nomor_kursi' => 'required|string|max:10',
+            'posisi' => 'nullable|string|max:20',
+            'status' => 'required|in:tersedia,rusak',
+        ]);
+
+        $exists = Kursi::where('id_bus', $kursi->id_bus)
+            ->where('nomor_kursi', $request->nomor_kursi)
+            ->where('id_kursi', '!=', $kursi->id_kursi)
+            ->exists();
+
+        if ($exists) {
+            return back()->with('message', 'kursi sudah ada');
+        }
+
+        $kursi->update($request->only(['nomor_kursi', 'posisi', 'status']));
+
+        return redirect()->route('admin.kursi.index', ['bus' => $kursi->id_bus])->with('message', 'update');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, kursi $kursi)
+    public function destroy(Kursi $kursi)
     {
-        //
-    }
+        $busId = $kursi->id_bus;
+        $kursi->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(kursi $kursi)
-    {
-        //
+        return redirect()->route('admin.kursi.index', ['bus' => $busId])->with('message', 'hapus');
     }
 }

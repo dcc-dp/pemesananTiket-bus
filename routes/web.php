@@ -1,269 +1,159 @@
 <?php
 
-
+use App\Http\Controllers\AkunController;
+use App\Http\Controllers\AdminBookingController;
+use App\Http\Controllers\AdminCustomerController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\BusController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\KursiController;
+use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RuteController;
+use App\Http\Controllers\TerminalController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\AbsenController;
-use App\Http\Controllers\User\JadwalController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
-//  User
-Route::group(
-    ['prefix' => '', 'namespace' => 'App\Http\Controllers\User'],
-    function () {
-        Route::redirect('/', '/');
-        // Dashboard
 
-        //         Route::get(
-        //             '/',
-        //             function () {
-        //                 return view('pages.landing.index');
-        //             }
-        //         )->name('user.index');
+// ===================== PUBLIC =====================
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-        // Route::get(
-        //     '/',
-        //     function () {
-        //         return view('pages.landing.index');
-        //     }
-        // )->name('user.index');
+// Pencarian tiket
+Route::get('/tiket', [TicketController::class, 'search'])->name('tiket.search.form');
+Route::get('/tiket/search', [TicketController::class, 'search'])->name('tiket.search');
 
-        Route::get('/', 'UserController@index')->name('user.index');
-        Route::get('/kontak', 'UserController@kontak')->name('user.kontak');
-        Route::get('/eksternal', 'UserController@guru')->name('user.guru');
+// ===================== AUTH =====================
+Route::prefix('auth')->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/login', [AuthController::class, 'login_action'])->name('login_action');
+    Route::post('/register', [AuthController::class, 'register_action'])->name('register_action');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+});
 
-        Route::get('/detail/{jenis}/{id}', 'UserController@detail')->name('user.detail.post');
+// Callback pembayaran (Midtrans) - tanpa CSRF
+Route::post('/payment/callback', [BookingController::class, 'callback'])->name('payment.callback');
 
+// ===================== CUSTOMER =====================
+Route::group(['middleware' => ['ValidasiUser', 'CheckRole:customer']], function () {
+    Route::get('/customer/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
 
-        Route::get('/pegawai', 'UserController@pegawai')->name('user.pegawai');
-        Route::get('/pegawai/form', 'UserController@form_pegawai')->name('user.form_pegawai');
-        Route::post('/pegawai/daftar', 'UserController@daftar_pegawai')->name('user.daftar_pegawai');
-        Route::get('/pegawai/all', 'UserController@getPenugasanAll')->name('user.pegawai.all');
-        Route::get('/pegawai/detail', 'UserController@getPenugasanDetail')->name('user.pegawai.detail');
-        Route::get('/pegawai/detailLoka', 'UserController@getPenugasanDetailLoka')->name('user.pegawai.detail.loka');
-        Route::get('/pegawai/detailEksternal', 'UserController@getPenugasanDetailEksternal')->name('user.pegawai.detail.eksternal');
+    // Pemilihan kursi & booking
+    Route::get('/tiket/{jadwal}/kursi', [TicketController::class, 'seats'])->name('tiket.seats');
+    Route::get('/booking/{jadwal}/form', [BookingController::class, 'passengerForm'])->name('booking.form');
+    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
 
-        Route::get('/statistik', 'UserController@statistik')->name('user.statistik');
-        Route::get('/api/statistics/month/{month}', 'UserController@getMonthStatistics')->name('user.statistik.month');
-        Route::get('/api/statistics/activities/{month}', 'UserController@getActivitiesByMonth')->name('user.statistik.month');
-        Route::get('/api/statistics/activity/{activityId}/{participantType}', 'UserController@getActivityStatistics')->name('user.statistik.activity');
+    Route::get('/booking/{booking}', [BookingController::class, 'detail'])->name('customer.booking.detail');
+    Route::get('/booking/{booking}/bayar', [BookingController::class, 'pay'])->name('customer.booking.pay');
+    Route::get('/booking/{booking}/tiket', [BookingController::class, 'ticket'])->name('customer.booking.ticket');
 
-        Route::get('/eksternal', 'UserController@guru')->name('user.guru');
-        Route::get('/eksternal/form/{jenis}', 'UserController@form_guru')->name('user.form_guru');
-        Route::post('/eksternal/daftar', 'UserController@daftar_guru')->name('user.daftar_guru');
+    Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
+    Route::get('/customer/tickets', [CustomerController::class, 'tickets'])->name('customer.tickets');
+    Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+    Route::post('/customer/profile/update', [CustomerController::class, 'profileUpdate'])->name('customer.profile.update');
+});
 
-        Route::get('/kegiatan', 'KegiatanController@index')->name('user.kegiatan');
-        Route::get('/kegiatan/cari', 'KegiatanController@cari')->name('user.cari');
+// ===================== ADMIN =====================
+Route::group(['prefix' => 'admin', 'middleware' => ['ValidasiUser', 'CheckRole:admin']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-        Route::get('/kegiatan/registrasi', 'KegiatanController@regist')->name('user.kegiatan_regist');
-        Route::post('/kegiatan/store', 'KegiatanController@store')->name('user.kegiatan_store');
+    // Master Data
+    Route::prefix('operators')->group(function () {
+        Route::get('/', [OperatorController::class, 'index'])->name('admin.operator.index');
+        Route::get('/create', [OperatorController::class, 'create'])->name('admin.operator.create');
+        Route::post('/store', [OperatorController::class, 'store'])->name('admin.operator.store');
+        Route::get('/edit/{operator}', [OperatorController::class, 'edit'])->name('admin.operator.edit');
+        Route::put('/update/{operator}', [OperatorController::class, 'update'])->name('admin.operator.update');
+        Route::post('/hapus/{operator}', [OperatorController::class, 'destroy'])->name('admin.operator.destroy');
+    });
 
-        // response json
-        Route::get('/kegiatan/getStatus', 'KegiatanController@getStatus')->name('user.kegiatan.getStatus');
-        Route::get('/kegiatan/cariPeserta', 'KegiatanController@cariPeserta')->name('user.kegiatan.cariPeserta');
-        Route::get('/kegiatan/peserta', 'KegiatanController@getPesertaByKegiatan')->name('user.kegiatan.peserta');
-        Route::get('/peserta/detail', 'KegiatanController@getPesertaDetail')->name('user.peserta.detail');
+    Route::prefix('buses')->group(function () {
+        Route::get('/', [BusController::class, 'index'])->name('admin.bus.index');
+        Route::get('/create', [BusController::class, 'create'])->name('admin.bus.create');
+        Route::post('/store', [BusController::class, 'store'])->name('admin.bus.store');
+        Route::get('/edit/{bus}', [BusController::class, 'edit'])->name('admin.bus.edit');
+        Route::put('/update/{bus}', [BusController::class, 'update'])->name('admin.bus.update');
+        Route::post('/hapus/{bus}', [BusController::class, 'destroy'])->name('admin.bus.destroy');
+    });
 
-        // trace pesrta dari kegiatan sebelum nya
-        Route::get('/peserta/cekData', 'KegiatanController@cekDataPeserta')->name('user.peserta.cekData');
+    Route::prefix('kursi')->group(function () {
+        Route::get('/', [KursiController::class, 'index'])->name('admin.kursi.index');
+        Route::get('/create', [KursiController::class, 'create'])->name('admin.kursi.create');
+        Route::post('/store', [KursiController::class, 'store'])->name('admin.kursi.store');
+        Route::get('/edit/{kursi}', [KursiController::class, 'edit'])->name('admin.kursi.edit');
+        Route::put('/update/{kursi}', [KursiController::class, 'update'])->name('admin.kursi.update');
+        Route::post('/hapus/{kursi}', [KursiController::class, 'destroy'])->name('admin.kursi.destroy');
+    });
 
-        Route::get('/print/absensi-peserta', 'KegiatanController@printAbsensiPeserta')->name('print.absensi.peserta');
-        Route::get('/print/registrasi-peserta', 'KegiatanController@fprintRegistrasiPeserta')->name('print.registrasi.peserta');
-        Route::get('/print/absensi-panitia', 'KegiatanController@printAbsensiPanitia')->name('print.absensi.panitia');
-        Route::get('/print/absensi-narasumber', 'KegiatanController@printAbsensiNarasumber')->name('print.absensi.narasumber');
+    Route::prefix('terminals')->group(function () {
+        Route::get('/', [TerminalController::class, 'index'])->name('admin.terminal.index');
+        Route::get('/create', [TerminalController::class, 'create'])->name('admin.terminal.create');
+        Route::post('/store', [TerminalController::class, 'store'])->name('admin.terminal.store');
+        Route::get('/edit/{terminal}', [TerminalController::class, 'edit'])->name('admin.terminal.edit');
+        Route::put('/update/{terminal}', [TerminalController::class, 'update'])->name('admin.terminal.update');
+        Route::post('/hapus/{terminal}', [TerminalController::class, 'destroy'])->name('admin.terminal.destroy');
+    });
 
-        Route::get('/print/absensi-tp', 'KegiatanController@printAbsensiTp')->name('print.absensi.tp');
-        Route::get('/print/absensi-tkp', 'KegiatanController@printAbsensiTkp')->name('print.absensi.tkp');
-        Route::get('/print/absensi-stk', 'KegiatanController@printAbsensiStk')->name('print.absensi.stk');
-        Route::get('/print/absensi-pgw', 'KegiatanController@printAbsensiPgw')->name('print.absensi.pgw');
-    }
-);
+    Route::prefix('rutes')->group(function () {
+        Route::get('/', [RuteController::class, 'index'])->name('admin.rute.index');
+        Route::get('/create', [RuteController::class, 'create'])->name('admin.rute.create');
+        Route::post('/store', [RuteController::class, 'store'])->name('admin.rute.store');
+        Route::get('/edit/{rute}', [RuteController::class, 'edit'])->name('admin.rute.edit');
+        Route::put('/update/{rute}', [RuteController::class, 'update'])->name('admin.rute.update');
+        Route::post('/hapus/{rute}', [RuteController::class, 'destroy'])->name('admin.rute.destroy');
+    });
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+    Route::prefix('jadwals')->group(function () {
+        Route::get('/', [JadwalController::class, 'index'])->name('admin.jadwal.index');
+        Route::get('/create', [JadwalController::class, 'create'])->name('admin.jadwal.create');
+        Route::post('/store', [JadwalController::class, 'store'])->name('admin.jadwal.store');
+        Route::get('/edit/{jadwal}', [JadwalController::class, 'edit'])->name('admin.jadwal.edit');
+        Route::put('/update/{jadwal}', [JadwalController::class, 'update'])->name('admin.jadwal.update');
+        Route::post('/hapus/{jadwal}', [JadwalController::class, 'destroy'])->name('admin.jadwal.destroy');
+    });
 
-//User
-// Route::group(
-//     ['prefix' => '', 'namespace' => 'App\Http\Controllers\Siswa', 'middleware' => 'ValidasiUser'],
-//     function () {
-//         Route::redirect('/', 'dahboard/');
-//         // Dashboard
-//         Route::prefix('dashboard')->group(function () {
+    // Transaksi
+    Route::prefix('bookings')->group(function () {
+        Route::get('/', [AdminBookingController::class, 'index'])->name('admin.booking.index');
+        Route::get('/{booking}', [AdminBookingController::class, 'show'])->name('admin.booking.show');
+        Route::post('/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('admin.booking.status');
+        Route::post('/{booking}/confirm-payment', [AdminBookingController::class, 'confirmPayment'])->name('admin.booking.confirm-payment');
+        Route::post('/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('admin.booking.cancel');
+    });
 
+    Route::prefix('payments')->group(function () {
+        Route::get('/', [PaymentController::class, 'index'])->name('admin.payment.index');
+        Route::get('/{payment}', [PaymentController::class, 'show'])->name('admin.payment.show');
+    });
 
-//         });
-//     }
-// );
-// User routes
+    Route::prefix('customers')->group(function () {
+        Route::get('/', [AdminCustomerController::class, 'index'])->name('admin.customer.index');
+    });
 
+    // Laporan
+    Route::get('/reports', [ReportController::class, 'index'])->name('admin.report.index');
 
+    // Pengaturan
+    Route::prefix('akun')->group(function () {
+        Route::get('/', [AkunController::class, 'index'])->name('admin.akun.index');
+        Route::get('/create', [AkunController::class, 'create'])->name('admin.akun.create');
+        Route::post('/store', [AkunController::class, 'store'])->name('admin.akun.store');
+        Route::get('/edit/{user}', [AkunController::class, 'edit'])->name('admin.akun.edit');
+        Route::put('/update/{user}', [AkunController::class, 'update'])->name('admin.akun.update');
+        Route::post('/hapus/{user}', [AkunController::class, 'destroy'])->name('admin.akun.destroy');
+    });
 
-// Admin
-Route::group(
-    ['prefix' => '', 'namespace' => 'App\Http\Controllers', 'middleware' => 'ValidasiUser'],
-    function () {
-        Route::redirect('/admin', 'dashboard/');
-        // Dashboard
-        Route::prefix('dashboard')->group(function () {
-
-            // Root
-            Route::get('/', 'AdminController@index')->name('dashboard');
-            Route::get('/jadwalKegiatan', 'AdminController@jadwal')->name('dashboard.jadwal');
-            Route::get('/jadwalKegiatan/{nik}', 'AdminController@getJadwalByPegawai')->name('dashboard.jadwal.getByPegawai');
-
-            Route::get('/getByKegiatan', 'AdminController@getByKegiatan')->name('dashboard.jadwal.getByKegiatan')->withoutMiddleware(['ValidasiUser']);
-            Route::get('/getByKegiatanUser', 'AdminController@getByKegiatanUser')->name('dashboard.jadwal.getByKegiatanUser')->withoutMiddleware(['ValidasiUser']);
-
-            // Profile User yang Login
-            Route::get('/profile/{id}', 'AdminController@profile')->name('profile.index');
-            Route::put('/profile/update', 'AdminController@profile_update')->name('profile.update');
-
-            Route::get('/fetch-sekolah', ['GuruController@index', 'fetchSekolah'])->name('fetchSekolah');
-
-
-            Route::prefix('umkm')->group(function () {
-                Route::get('/', 'DokumenController@index')->name('umkm.index');
-                Route::get('/create', 'DokumenController@create')->name('umkm.create');
-                Route::post('/store', 'DokumenController@store')->name('umkm.store');
-                Route::get('/edit/{id}', 'DokumenController@edit')->name('umkm.edit');
-                // Route::put('/update', 'DokumenController@update')->name('umkm.update');
-                Route::put('/update/{id}', 'DokumenController@update')
-                    ->name('umkm.update');
-                Route::delete('/hapus/{id}', 'DokumenController@destroy')->name('umkm.hapus');
-
-
-                // Route::get('/', 'UmkmController@index')->name('umkm.index');
-                // Route::get('/create', 'UmkmController@create')->name('umkm.create');
-                // Route::post('/store', 'UmkmController@store')->name('umkm.store');
-                // Route::get('/edit/{id}', 'UmkmController@edit')->name('umkm.edit');
-                // Route::put('/update', 'UmkmController@update')->name('umkm.update');
-                // Route::delete('/hapus/{id}', 'UmkmController@destroy')->name('umkm.hapus');
-
-                // ✅ PRODUK (lebih spesifik dulu)
-                Route::get('/{umkm_id}/produk', 'UmkmController@produk')->name('produk.index');
-                Route::get('/{umkm_id}/produk/create', 'UmkmController@produkCreate')->name('produk.create');
-                Route::post('/produk/store', 'UmkmController@produkStore')->name('produk.store');
-                Route::get('/produk/edit/{id}', 'UmkmController@produkEdit')->name('produk.edit');
-                Route::put('/produk/update', 'UmkmController@produkUpdate')->name('produk.update');
-                Route::delete('/produk/hapus/{id}', 'UmkmController@produkDestroy')->name('produk.hapus');
-            });
-
-            // Indikator
-            Route::prefix('indikator')->group(function () {
-                Route::get('/', 'IndicatorsController@index')->name('indikator.index');
-                Route::get('/create', 'IndicatorsController@create')->name('indikator.create');
-                Route::post('/store', 'IndicatorsController@store')->name('indikator.store');
-                Route::get('/edit/{id}', 'IndicatorsController@edit')->name('indikator.edit');
-                Route::put('/update', 'IndicatorsController@update')->name('indikator.update');
-                Route::delete('/hapus/{id}', 'IndicatorsController@destroy')->name('indikator.hapus');
-            });
-
-            // Penilaian Kinerja
-            Route::prefix('penilaian_kinerja')->group(function () {
-                Route::get('/', 'PenilaianController@index')->name('penilaian_kinerja.index');
-                Route::get('/create', 'PenilaianController@create')->name('penilaian_kinerja.create');
-                Route::post('/store', 'PenilaianController@store')->name('penilaian_kinerja.store');
-                Route::get('/edit/{id}', 'PenilaianController@edit')->name('penilaian_kinerja.edit');
-                Route::put('/update', 'PenilaianController@update')->name('penilaian_kinerja.update');
-                Route::delete('/hapus/{id}', 'PenilaianController@destroy')->name('penilaian_kinerja.hapus');
-            });
-
-
-            // Akun
-            Route::prefix('akun')->group(function () {
-                Route::get('/', 'AkunController@index')->name('akun.index');
-                Route::get('/create', 'AkunController@create')->name('akun.create');
-                Route::post('/store', 'AkunController@store')->name('akun.store');
-                Route::post('/regis', 'AkunController@regis')->name('akun.regis');
-                Route::get('/edit/{id}', 'AkunController@edit')->name('akun.edit');
-                Route::put('/update', 'AkunController@update')->name('akun.update');
-                Route::post('/hapus/{id}', 'AkunController@destroy')->name('akun.hapus');
-            });
-
-
-            // Jenis Usaha
-            Route::prefix('jenis_usaha')->group(function () {
-                Route::get('/', 'JenisUsahaController@index')->name('jenis_usaha.index');
-                Route::get('/create', 'JenisUsahaController@create')->name('jenis_usaha.create');
-                Route::post('/store', 'JenisUsahaController@store')->name('jenis_usaha.store');
-                Route::get('/edit/{id}', 'JenisUsahaController@edit')->name('jenis_usaha.edit');
-                Route::put('/update', 'JenisUsahaController@update')->name('jenis_usaha.update');
-                Route::post('/hapus/{id}', 'JenisUsahaController@destroy')->name('jenis_usaha.hapus');
-            });
-
-            // Absensi
-            Route::prefix('absensi')->group(function () {
-                Route::get('/', 'AbsensiController@index')->name('absensi.index');
-                Route::get('/create', 'AbsensiController@create')->name('absensi.create');
-                Route::post('/store', 'AbsensiController@store')->name('absensi.store');
-                Route::get('/edit/{id}', 'AbsensiController@edit')->name('absensi.edit');
-                Route::put('/update', 'AbsensiController@update')->name('absensi.update');
-                Route::post('/hapus/{id}', 'AbsensiController@destroy')->name('absensi.hapus');
-            });
-
-            // pembinaan
-            Route::prefix('pembinaan')->group(function () {
-                Route::get('/', 'PembinaanController@index')->name('pembinaan.index');
-                Route::get('/create', 'PembinaanController@create')->name('pembinaan.create');
-                Route::post('/store', 'PembinaanController@store')->name('pembinaan.store');
-                Route::get('/edit/{id}', 'PembinaanController@edit')->name('pembinaan.edit');
-                Route::put('/update', 'PembinaanController@update')->name('pembinaan.update');
-                Route::post('/hapus/{id}', 'PembinaanController@destroy')->name('pembinaan.hapus');
-            });
-
-            Route::prefix('jdwl')->group(function () {
-
-                //User jadwal mengajar
-                Route::get('/', [JadwalController::class, 'index'])->name('user.jadwal.index');
-                Route::get('/edit/{id}', [JadwalController::class, 'edit'])->name('user.jadwal.edit');
-                Route::put('/store', [JadwalController::class, 'update'])->name('user.jadwal.update');
-            });
-
-
-
-            Route::prefix('user')->group(function () {
-                //absensi
-                Route::get('/', [AbsenController::class, 'userIndex'])->name('user.absensi.index');
-                Route::get('/create', [AbsenController::class, 'userCreate'])->name('user.absensi.create');
-                Route::post('/store', [AbsenController::class, 'userStore'])->name('user.absensi.store');
-            });
-
-
-            //Bus
-              Route::prefix('bus')->group(function () {
-                Route::get('/', 'BusController@index')->name('bus.index');
-                Route::get('/create', 'BusController@create')->name('bus.create');
-                Route::post('/store', 'BusController@store')->name('bus.store');
-                Route::get('/edit/{id}', 'BusController@edit')->name('bus.edit');
-                Route::put('/update', 'BusController@update')->name('bus.update');
-                Route::post('/hapus/{id}', 'BusController@destroy')->name('bus.hapus');
-            });
-
-        });
-    }
-);
-
-// Auth
-Route::group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers'], function () {
-    Route::get('/', 'AuthController@login')->name('login');
-    // Route::get('/reset', 'AuthController@reset')->name('reset');
-    // Route::get('/reset_password', 'AuthController@reset_password')->name('reset.password');
-    Route::get('/register', 'AuthController@register')->name('register');
-    Route::post('/register_action', 'AuthController@register_action')->name('register_action');
-    Route::post('/login', 'AuthController@login_action')->name('login_action');
-    Route::get('/logout', function () {
-        Session::flush();
-        return redirect()->route(
-            'user.index'
-        )->with('message', 'sukses logout');
-    })->name('logout');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('admin.profile');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('admin.profile.update');
 });

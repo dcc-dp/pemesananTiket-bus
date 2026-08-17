@@ -1,0 +1,79 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Bus;
+use App\Models\Kursi;
+use App\Models\Operator;
+use Illuminate\Database\Seeder;
+
+class BusSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $configs = [
+            ['operator' => 'OP-DAMRI', 'buses' => [
+                ['nomor_polisi' => 'DD 1012 AB', 'nama_bus' => 'Damri Ekspres 1', 'kelas' => 'ekonomi', 'kapasitas' => 40, 'fasilitas' => 'AC, Wifi, Reclining Seat'],
+                ['nomor_polisi' => 'DD 1013 AC', 'nama_bus' => 'Damri Ekspres 2', 'kelas' => 'bisnis', 'kapasitas' => 36, 'fasilitas' => 'AC, Wifi, TV, USB Charger'],
+            ]],
+            ['operator' => 'OP-SINARJAYA', 'buses' => [
+                ['nomor_polisi' => 'AG 2345 BD', 'nama_bus' => 'Sinar Jaya Raya', 'kelas' => 'executive', 'kapasitas' => 30, 'fasilitas' => 'AC, Wifi, Toilet, Reclining Seat, TV'],
+                ['nomor_polisi' => 'AG 2346 BE', 'nama_bus' => 'Sinar Jaya Prima', 'kelas' => 'sleeper', 'kapasitas' => 24, 'fasilitas' => 'AC, Wifi, Toilet, Sleeper Bed, TV'],
+            ]],
+            ['operator' => 'OP-GUNUNGHARTA', 'buses' => [
+                ['nomor_polisi' => 'AG 3456 CF', 'nama_bus' => 'Gunung Harta Nusantara', 'kelas' => 'executive', 'kapasitas' => 30, 'fasilitas' => 'AC, Wifi, Toilet, Reclining Seat'],
+                ['nomor_polisi' => 'AG 3457 CG', 'nama_bus' => 'Gunung Harta Indah', 'kelas' => 'bisnis', 'kapasitas' => 36, 'fasilitas' => 'AC, Wifi, TV'],
+            ]],
+            ['operator' => 'OP-ROSALIA', 'buses' => [
+                ['nomor_polisi' => 'AD 4567 DH', 'nama_bus' => 'Rosalia Indah 88', 'kelas' => 'sleeper', 'kapasitas' => 24, 'fasilitas' => 'AC, Wifi, Toilet, Sleeper Bed'],
+                ['nomor_polisi' => 'AD 4568 DJ', 'nama_bus' => 'Rosalia Indah Eksekutif', 'kelas' => 'executive', 'kapasitas' => 30, 'fasilitas' => 'AC, Wifi, Toilet, TV'],
+            ]],
+            ['operator' => 'OP-HARAPANJAYA', 'buses' => [
+                ['nomor_polisi' => 'B 5678 EK', 'nama_bus' => 'Harapan Jaya Ekonomi', 'kelas' => 'ekonomi', 'kapasitas' => 40, 'fasilitas' => 'AC'],
+                ['nomor_polisi' => 'B 5679 EL', 'nama_bus' => 'Harapan Jaya Plus', 'kelas' => 'bisnis', 'kapasitas' => 36, 'fasilitas' => 'AC, Wifi, TV, USB Charger'],
+            ]],
+        ];
+
+        foreach ($configs as $config) {
+            $operator = Operator::where('kode_operator', $config['operator'])->first();
+            if (!$operator) {
+                continue;
+            }
+
+            foreach ($config['buses'] as $index => $bus) {
+                $bus['operator_id'] = $operator->id;
+                $bus['kode_bus'] = $operator->kode_operator . '-' . str_pad($index + 1, 2, '0', STR_PAD_LEFT);
+
+                $existing = Bus::where('nomor_polisi', $bus['nomor_polisi'])->first();
+                if ($existing) {
+                    $existing->update($bus);
+                    $created = $existing;
+                } else {
+                    $created = Bus::create($bus);
+                }
+
+                $this->generateSeats($created);
+            }
+        }
+    }
+
+    private function generateSeats(Bus $bus): void
+    {
+        $kapasitas = $bus->kapasitas;
+        $rows = intdiv($kapasitas, 4);
+        $seats = [];
+
+        foreach (range(1, $rows) as $row) {
+            foreach (['A', 'B', 'C', 'D'] as $col) {
+                $seats[] = $row . $col;
+            }
+        }
+
+        foreach ($seats as $nomor) {
+            Kursi::updateOrCreate(
+                ['id_bus' => $bus->id_bus, 'nomor_kursi' => $nomor],
+                ['posisi' => 'jendela', 'status' => 'tersedia']
+            );
+        }
+    }
+}

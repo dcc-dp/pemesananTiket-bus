@@ -1,1 +1,1 @@
-<div class="simple-footer">Copyright &copy; Imigrasi Bantaeng</div>
+<div class="simple-footer">Copyright &copy; <script>document.write(new Date().getFullYear())</script> BusTicket. All rights reserved.</div>

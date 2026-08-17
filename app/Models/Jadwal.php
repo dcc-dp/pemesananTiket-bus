@@ -16,9 +16,9 @@ class Jadwal extends Model
     protected $fillable = [
         'id_bus',
         'id_rute',
-        'id_supir',
         'tanggal',
         'jam_berangkat',
+        'jam_tiba',
         'harga',
         'status',
     ];
@@ -26,6 +26,7 @@ class Jadwal extends Model
     protected $casts = [
         'tanggal' => 'date',
         'jam_berangkat' => 'datetime:H:i',
+        'jam_tiba' => 'datetime:H:i',
         'harga' => 'integer',
     ];
 
@@ -39,13 +40,26 @@ class Jadwal extends Model
         return $this->belongsTo(Rute::class, 'id_rute', 'id_rute');
     }
 
-    public function supir()
+    public function bookings()
     {
-        return $this->belongsTo(Supir::class, 'id_supir', 'id_supir');
+        return $this->hasMany(Booking::class, 'id_jadwal', 'id_jadwal');
     }
 
-    public function tikets()
+    public function bookingSeats()
     {
-        return $this->hasMany(Tiket::class, 'id_jadwal', 'id_jadwal');
+        return $this->hasMany(BookingSeat::class, 'id_jadwal', 'id_jadwal');
+    }
+
+    public function kursiTerpesan(): array
+    {
+        return $this->bookingSeats()
+            ->whereIn('status_booking', ['pending', 'confirmed', 'completed'])
+            ->pluck('id_kursi')
+            ->toArray();
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return ucfirst($this->status);
     }
 }

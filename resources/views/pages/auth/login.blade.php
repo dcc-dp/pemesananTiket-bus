@@ -538,14 +538,14 @@
         <div class="card-body">
             <form method="POST" action="{{ route('login_action') }}" class="needs-validation" novalidate>
                 @csrf
-                <!-- Username -->
+                <!-- Username / Email -->
                 <div class="form-group">
-                    <label for="email">
-                        <i class="fas fa-user label-icon"></i> Username
+                    <label for="identity">
+                        <i class="fas fa-user label-icon"></i> Username / Email
                     </label>
-                    <input id="email" type="text" class="form-control" name="username" placeholder="Masukkan username Anda" tabindex="1" required autofocus>
+                    <input id="identity" type="text" class="form-control" name="identity" placeholder="Masukkan username atau email Anda" tabindex="1" required autofocus>
                     <div class="invalid-feedback">
-                        Silakan isi username Anda
+                        Silakan isi username atau email Anda
                     </div>
                 </div>
 
@@ -558,21 +558,6 @@
                     <div class="invalid-feedback">
                         Silakan isi password Anda
                     </div>
-                </div>
-
-                <!-- Role Selection -->
-                <div class="form-group">
-                    <label for="role">
-                        <i class="fas fa-user-tag label-icon"></i> Login Sebagai
-                    </label>
-                    <select class="form-control selectric" name="role" id="role" tabindex="3">
-                        <option value="">— Pilih Role —</option>
-                        <option value="admin">Admin</option>
-                        <option value="kepala">Kepala Kantor</option>
-                        <option value="tu">Tata Usaha</option>
-                        <option value="ti">TI & Inteldaktim</option>
-                        <option value="kasubsi">Kasubsi Pelayanan & Verdokjal</option>
-                    </select>
                 </div>
 
                 <!-- Login Button -->

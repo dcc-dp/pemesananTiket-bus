@@ -2,119 +2,108 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AkunController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private $menu = 'akun';
+
+    public function index(Request $request)
     {
-        $data = Admin::orderByDesc('id')->get();
-        return view('pages.admin.akun.index', ['menu' => 'akun', 'datas' => $data]);
-    }
+        $menu = $this->menu;
 
+        $query = User::query();
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $r)
-    {
-        
-        $cek_username = Admin::where('username', $r->username)->where('role', $r->role)->first();
-        if($cek_username == null) {
-            // dd($r);
-            $r = $r->all();
-            $r['password'] = bcrypt($r['password']);
-            Admin::create($r);
-            User::create($r);
-    
-            return redirect()->route('akun.index')->with('message', 'store');
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
         }
-        else {
-            return redirect()->route('akun.index')->with('message', 'username sudah ada');
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%')
+                    ->orWhere('username', 'like', '%' . $request->search . '%');
+            });
         }
-    }
 
-    /**
-     * Display the specified resource.
-     */
+        $datas = $query->orderBy('name')->paginate(15)->withQueryString();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $data = Admin::find($id);
-
-        return view('pages.admin.akun.edit', ['menu' => 'akun', 'datas' => $data]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request)
-    {
-        //
-        // $cek_username = Admin::where('username', $request->username)->where('role', $request->role)->first();
-        // if($cek_username == null) {
-
-            $r = $request->all();
-            $data = Admin::find($r['id']);
-            $dataUser = User::find($r['id']);
-            // dump($r);
-            $r['password'] = bcrypt($r['password']);
-            
-            $data->update($r);
-            $dataUser->update($r);
-            // dump($dataUser);
-            // dd($data);
-            return redirect()->route('akun.index')->with('message', 'update');
-        // }
-        // else {
-        //     return redirect()->route('akun.index')->with('message', 'username sudah ada');
-        // }
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-
-        $data = Admin::find($id);
-        $dataUser = User::find($id);
-        $dataUser->delete();
-        $data->delete();
-        return response()->json($data);
-    }
-
-
-
-    public function regis(Request $r)
-    {
-        // $r = $request->all();
-        // dd($r);
-        $reg = [];
-        $role = strtolower($r->role);
-        $user = strtolower(str_replace(' ', '', $r->username));
-        // dd($role);
-        $reg['name'] = $r->name;
-        $reg['username'] = $user;
-        $reg['role'] = $role;
-        $reg['password'] = bcrypt($r['password']);
-        Admin::create($reg);
-        User::create($reg);
-
-        return response()->json([
-            'status' => true,
-            'data' => $reg
+        return view('pages.admin.akun.index', [
+            'menu' => $menu,
+            'datas' => $datas,
         ]);
-        // return redirect()->route('akun.index')->with('message', 'store');
+    }
+
+    public function create()
+    {
+        $menu = $this->menu;
+
+        return view('pages.admin.akun.create', compact('menu'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username',
+            'email' => 'nullable|email|unique:users,email',
+            'phone' => 'nullable|string|max:30',
+            'password' => 'required|string|min:6|confirmed',
+            'role' => 'required|in:admin,customer',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+
+        return redirect()->route('admin.akun.index')->with('message', 'store');
+    }
+
+    public function edit(User $user)
+    {
+        $menu = $this->menu;
+        $data = $user;
+
+        return view('pages.admin.akun.edit', compact('data', 'menu'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'email' => 'nullable|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:30',
+            'password' => 'nullable|string|min:6|confirmed',
+            'role' => 'required|in:admin,customer',
+        ]);
+
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->role = $request->role;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.akun.index')->with('message', 'update');
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return redirect()->route('admin.akun.index')->with('message', 'hapus');
     }
 }

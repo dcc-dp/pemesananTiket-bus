@@ -1,11 +1,8 @@
 <footer class="main-footer">
     <div class="footer-left">
-        Copyright &copy; <div class="bullet"></div> RPPH Sulsel
-        {{-- <a href="https://nauv.al/">
-            Muhamad
-            Nauval Azhar</a> --}}
+        Copyright &copy; <script>document.write(new Date().getFullYear())</script> BusTicket. All rights reserved.
     </div>
     <div class="footer-right">
-        2.3.0
+        Aplikasi Pemesanan Tiket Bus
     </div>
 </footer>

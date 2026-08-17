@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport" />
-    <title>{{ $title }} &mdash; RPPH Sul-Sel</title>
+    <title>{{ $title }} &mdash; BusTicket</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -73,12 +73,12 @@
     <!-- Page Specific JS File -->
     @if (session('message') == 'username sudah ada')
         <script>
-            // iziToast.success({
-            //     title: 'Sukses',
-            //     message: 'Berhasil tambah data',
-            //     position: 'topRight'
-            // });
             swal("Warning", "Username sudah terdaftar", "error");
+        </script>
+    @endif
+    @if (session('message') == 'register sukses')
+        <script>
+            swal("Sukses", "Registrasi berhasil. Silakan login.", "success");
         </script>
     @endif
 </body>

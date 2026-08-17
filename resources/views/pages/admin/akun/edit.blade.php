@@ -1,101 +1,105 @@
 @extends('layouts.app', ['title' => 'Edit Akun'])
-@section('content')
-    @push('styles')
-        <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('library/selectric/public/selectric.css') }}">
-    @endpush
 
+@section('content')
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Edit Akun</h1>
-                {{-- <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                    <div class="breadcrumb-item"><a href="#">Bootstrap Components</a></div>
-                    <div class="breadcrumb-item">Form</div>
-                </div> --}}
+                <h1><i class="fas fa-user-edit"></i> Edit Akun</h1>
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item">Pengaturan</div>
+                    <div class="breadcrumb-item"><a href="{{ route('admin.akun.index') }}">Akun</a></div>
+                    <div class="breadcrumb-item">Edit</div>
+                </div>
             </div>
 
-            <div class="section-body">
-
-                <div class="row">
-
-                    <div class="col-md-12 col-lg-12">
-                        <form action="{{ route('akun.update') }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="id" value="{{ $datas->id }}">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label>Nama</label>
-                                                <input value="{{ $datas->name }}" name="name" required
-                                                    placeholder="Masukkan Nama Akun" type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label>Username</label>
-                                                <input value="{{ $datas->username }}"name="username" required
-                                                    placeholder="Masukkan Usernam untuk login" type="text"
-                                                    class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Password</label>
-                                                <input name="password" value="{{ $datas->password }}"
-                                                    placeholder="Masukkan Password" type="password" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Role</label>
-                                                <select name="role" required placeholder="Masukkan Akun"
-                                                    class="form-control">
-                                                    <option value="">-- Pilih Role Akun --</option>
-                                                    <option {{ $datas->role == 'guru' ? 'selected' : '' }}
-                                                        value="siswa">Siswa</option>
-                                                    <option {{ $datas->role == 'admin' ? 'selected' : '' }}
-                                                        value="admin">Admin</option>
-                                                </select>
-                                            </div>
+            <div class="row">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Form Akun</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="{{ route('admin.akun.update', $data->id) }}">
+                                @csrf
+                                @method('PUT')
+                                <div class="form-group">
+                                    <label>Nama Lengkap <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                        value="{{ old('name', $data->name) }}" required maxlength="255">
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Username <span class="text-danger">*</span></label>
+                                            <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                                                value="{{ old('username', $data->username) }}" required maxlength="255">
+                                            @error('username')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-plus"></i>
-                                                Update Data Akun
-                                            </button>
-                                        </div>
-                                        <div class="col-md-8 text-right">
-                                            <a href="{{ route('akun.index') }}" class="btn btn-warning my-2">
-                                                <i class="fas fa-arrow-left"></i>
-                                                Kembali
-                                            </a>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                                value="{{ old('email', $data->email) }}">
+                                            @error('email')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
-
-                        </form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>No. HP</label>
+                                            <input type="text" name="phone" class="form-control" value="{{ old('phone', $data->phone) }}" maxlength="30">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Role <span class="text-danger">*</span></label>
+                                            <select name="role" class="form-control">
+                                                <option value="customer" {{ old('role', $data->role) == 'customer' ? 'selected' : '' }}>Customer</option>
+                                                <option value="admin" {{ old('role', $data->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Password <small class="text-muted">(opsional)</small></label>
+                                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                                                minlength="6" placeholder="Kosongkan jika tidak diganti">
+                                            @error('password')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <small class="text-muted">Minimal 6 karakter</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Konfirmasi Password</label>
+                                            <input type="password" name="password_confirmation" class="form-control" minlength="6"
+                                                placeholder="Ulangi password baru">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #123E73, #1E5AA8); border: none;">
+                                        <i class="fas fa-save"></i> Simpan Perubahan
+                                    </button>
+                                    <a href="{{ route('admin.akun.index') }}" class="btn btn-secondary">Batal</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-
                 </div>
-
-
-
             </div>
+        </section>
     </div>
-    </section>
-    </div>
-
-    @push('scripts')
-        <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
-    @endpush
 @endsection

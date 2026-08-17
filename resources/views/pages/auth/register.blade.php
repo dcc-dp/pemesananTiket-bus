@@ -128,8 +128,40 @@
                     @enderror
                 </div>
 
-                {{-- Jabatan Hidden --}}
-                <input type="hidden" name="jabatan" value="-">
+                {{-- Email --}}
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        class="form-control @error('email') is-invalid @enderror"
+                        name="email"
+                        value="{{ old('email') }}"
+                        required>
+
+                    @error('email')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                {{-- No. HP --}}
+                <div class="form-group">
+                    <label for="phone">No. HP (opsional)</label>
+                    <input
+                        id="phone"
+                        type="text"
+                        class="form-control @error('phone') is-invalid @enderror"
+                        name="phone"
+                        value="{{ old('phone') }}">
+
+                    @error('phone')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
 
                 {{-- Password --}}
                 <div class="row">
@@ -161,9 +193,6 @@
                             required>
                     </div>
                 </div>
-
-                {{-- Role Hidden --}}
-                <input type="hidden" name="role" value="user">
 
                 {{-- Tombol Register --}}
                 <div class="form-group">
@@ -203,7 +232,6 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('library/jquery-pwstrength/pwstrength.js') }}"></script>
     <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
 
     <script>

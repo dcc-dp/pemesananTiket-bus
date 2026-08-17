@@ -2,64 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\rute;
+use App\Models\Rute;
+use App\Models\Terminal;
 use Illuminate\Http\Request;
 
 class RuteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private $menu = 'rute';
+
     public function index()
     {
-        //
+        $menu = $this->menu;
+        $datas = Rute::with(['terminalAsal', 'terminalTujuan'])->orderBy('id_rute')->get();
+
+        return view('pages.admin.rute.index', compact('datas', 'menu'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $menu = $this->menu;
+        $terminals = Terminal::where('status', 'aktif')->orderBy('kota')->get();
+
+        return view('pages.admin.rute.create', compact('menu', 'terminals'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'terminal_asal_id' => 'required|exists:terminals,id_terminal',
+            'terminal_tujuan_id' => 'required|exists:terminals,id_terminal|different:terminal_asal_id',
+            'jarak' => 'nullable|numeric|min:0',
+            'estimasi_durasi' => 'nullable|integer|min:1',
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        Rute::create($request->only([
+            'terminal_asal_id', 'terminal_tujuan_id', 'jarak', 'estimasi_durasi', 'status',
+        ]));
+
+        return redirect()->route('admin.rute.index')->with('message', 'store');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(rute $rute)
+    public function edit(Rute $rute)
     {
-        //
+        $menu = $this->menu;
+        $data = $rute;
+        $terminals = Terminal::where('status', 'aktif')->orderBy('kota')->get();
+
+        return view('pages.admin.rute.edit', compact('data', 'menu', 'terminals'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(rute $rute)
+    public function update(Request $request, Rute $rute)
     {
-        //
+        $request->validate([
+            'terminal_asal_id' => 'required|exists:terminals,id_terminal',
+            'terminal_tujuan_id' => 'required|exists:terminals,id_terminal|different:terminal_asal_id',
+            'jarak' => 'nullable|numeric|min:0',
+            'estimasi_durasi' => 'nullable|integer|min:1',
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        $rute->update($request->only([
+            'terminal_asal_id', 'terminal_tujuan_id', 'jarak', 'estimasi_durasi', 'status',
+        ]));
+
+        return redirect()->route('admin.rute.index')->with('message', 'update');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, rute $rute)
+    public function destroy(Rute $rute)
     {
-        //
-    }
+        $rute->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(rute $rute)
-    {
-        //
+        return redirect()->route('admin.rute.index')->with('message', 'hapus');
     }
 }

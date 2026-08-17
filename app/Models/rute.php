@@ -14,18 +14,43 @@ class Rute extends Model
     protected $primaryKey = 'id_rute';
 
     protected $fillable = [
-        'kota_asal',
-        'kota_tujuan',
-        'id_terminal',
+        'terminal_asal_id',
+        'terminal_tujuan_id',
+        'jarak',
+        'estimasi_durasi',
+        'status',
     ];
 
-    public function terminal()
+    protected $casts = [
+        'jarak' => 'float',
+        'estimasi_durasi' => 'integer',
+    ];
+
+    public function terminalAsal()
     {
-        return $this->belongsTo(Terminal::class, 'id_terminal', 'id_terminal');
+        return $this->belongsTo(Terminal::class, 'terminal_asal_id', 'id_terminal');
+    }
+
+    public function terminalTujuan()
+    {
+        return $this->belongsTo(Terminal::class, 'terminal_tujuan_id', 'id_terminal');
     }
 
     public function jadwals()
     {
         return $this->hasMany(Jadwal::class, 'id_rute', 'id_rute');
+    }
+
+    public function getNamaRuteAttribute()
+    {
+        $asal = $this->terminalAsal->kota ?? '-';
+        $tujuan = $this->terminalTujuan->kota ?? '-';
+
+        return $asal . ' → ' . $tujuan;
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return ucfirst($this->status);
     }
 }
