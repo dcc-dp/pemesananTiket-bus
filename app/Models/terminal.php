@@ -28,6 +28,7 @@ class Terminal extends Model
         'longitude' => 'float',
     ];
 
+
     public function routesAsal()
     {
         return $this->hasMany(Rute::class, 'terminal_asal_id', 'id_terminal');

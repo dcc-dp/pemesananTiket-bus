@@ -16,8 +16,7 @@ return new class extends Migration
             $table->foreignId('terminal_tujuan_id')
                 ->constrained('terminals', 'id_terminal')
                 ->cascadeOnDelete();
-            $table->decimal('latitude', 10, 7)->nullable();
-            $table->decimal('longitude', 10, 7)->nullable();
+          
             $table->decimal('jarak', 10, 2)->nullable();
             $table->integer('estimasi_durasi')->nullable();
             $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');

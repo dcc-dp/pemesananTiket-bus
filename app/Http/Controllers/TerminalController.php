@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Terminal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class TerminalController extends Controller
 {
@@ -35,13 +36,48 @@ class TerminalController extends Controller
             'status' => 'required|in:aktif,nonaktif',
         ]);
 
-        Terminal::create($request->only([
-            'nama_terminal', 'kode_terminal', 'alamat', 'kota', 'provinsi', 'status',
+        $alamatLengkap = implode(', ', array_filter([
+            $request->alamat,
+            $request->kota,
+            $request->provinsi,
+            'Indonesia'
         ]));
 
-        return redirect()->route('admin.terminal.index')->with('message', 'store');
-    }
+        $latitude = null;
+        $longitude = null;
 
+        $response = Http::withHeaders([
+            'User-Agent' => 'BusTicket Laravel Application'
+        ])->timeout(10)->get('https://nominatim.openstreetmap.org/search', [
+            'q' => $alamatLengkap,
+            'format' => 'json',
+            'limit' => 1,
+            'countrycodes' => 'id',
+        ]);
+        // dd($response->json());
+
+        if ($response->successful() && !empty($response->json())) {
+            $location = $response->json()[0];
+
+            $latitude = $location['lat'];
+            $longitude = $location['lon'];
+        }
+
+        Terminal::create([
+            'nama_terminal' => $request->nama_terminal,
+            'kode_terminal' => $request->kode_terminal,
+            'alamat' => $request->alamat,
+            'kota' => $request->kota,
+            'provinsi' => $request->provinsi,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'status' => $request->status,
+        ]);
+
+        return redirect()
+            ->route('admin.terminal.index')
+            ->with('message', 'store');
+    }
     public function edit(Terminal $terminal)
     {
         $menu = $this->menu;
@@ -62,7 +98,12 @@ class TerminalController extends Controller
         ]);
 
         $terminal->update($request->only([
-            'nama_terminal', 'kode_terminal', 'alamat', 'kota', 'provinsi', 'status',
+            'nama_terminal',
+            'kode_terminal',
+            'alamat',
+            'kota',
+            'provinsi',
+            'status',
         ]));
 
         return redirect()->route('admin.terminal.index')->with('message', 'update');

@@ -16,8 +16,6 @@ class Rute extends Model
     protected $fillable = [
         'terminal_asal_id',
         'terminal_tujuan_id',
-        'latitude',
-        'longitude',
         'jarak',
         'estimasi_durasi',
         'status',
@@ -27,7 +25,6 @@ class Rute extends Model
         'jarak' => 'float',
         'estimasi_durasi' => 'integer',
     ];
-
     public function terminalAsal()
     {
         return $this->belongsTo(Terminal::class, 'terminal_asal_id', 'id_terminal');
