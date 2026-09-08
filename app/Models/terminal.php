@@ -16,10 +16,16 @@ class Terminal extends Model
     protected $fillable = [
         'nama_terminal',
         'kode_terminal',
+        'latitude',
+        'longitude',
         'alamat',
         'kota',
         'provinsi',
         'status',
+    ];
+    protected $casts = [
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 
     public function routesAsal()
