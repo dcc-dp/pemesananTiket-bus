@@ -13,7 +13,7 @@ class RuteController extends Controller
     public function index()
     {
         $menu = $this->menu;
-        $datas = Rute::with(['terminalAsal', 'terminalTujuan'])->orderBy('id_rute')->get();
+        $datas = Rute::with(['terminalAsal', 'terminalTujuan'])->orderBy('id_rute', 'desc')->get();
 
         return view('pages.admin.rute.index', compact('datas', 'menu'));
     }
@@ -37,7 +37,11 @@ class RuteController extends Controller
         ]);
 
         Rute::create($request->only([
-            'terminal_asal_id', 'terminal_tujuan_id', 'jarak', 'estimasi_durasi', 'status',
+            'terminal_asal_id',
+            'terminal_tujuan_id',
+            'jarak',
+            'estimasi_durasi',
+            'status',
         ]));
 
         return redirect()->route('admin.rute.index')->with('message', 'store');
@@ -63,7 +67,11 @@ class RuteController extends Controller
         ]);
 
         $rute->update($request->only([
-            'terminal_asal_id', 'terminal_tujuan_id', 'jarak', 'estimasi_durasi', 'status',
+            'terminal_asal_id',
+            'terminal_tujuan_id',
+            'jarak',
+            'estimasi_durasi',
+            'status',
         ]));
 
         return redirect()->route('admin.rute.index')->with('message', 'update');
