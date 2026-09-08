@@ -13,7 +13,7 @@
             </div>
 
             <div class="row">
-                <div class="col-12 col-md-8 col-lg-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <h4>Form Operator</h4>
