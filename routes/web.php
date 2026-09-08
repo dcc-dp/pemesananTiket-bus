@@ -109,6 +109,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['ValidasiUser', 'CheckRole:a
         Route::get('/', [RuteController::class, 'index'])->name('admin.rute.index');
         Route::get('/create', [RuteController::class, 'create'])->name('admin.rute.create');
         Route::post('/store', [RuteController::class, 'store'])->name('admin.rute.store');
+        // HITUNG JARAK + DURASI OTOMATIS
+        Route::get('/calculate-distance', [RuteController::class, 'calculateDistance'])->name('admin.rute.calculate-distance');
         Route::get('/edit/{rute}', [RuteController::class, 'edit'])->name('admin.rute.edit');
         Route::put('/update/{rute}', [RuteController::class, 'update'])->name('admin.rute.update');
         Route::post('/hapus/{rute}', [RuteController::class, 'destroy'])->name('admin.rute.destroy');

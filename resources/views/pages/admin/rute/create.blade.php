@@ -67,9 +67,12 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Estimasi Durasi</label>
-                                            <input type="number" name="estimasi_durasi" class="form-control"
-                                                value="{{ old('estimasi_durasi') }}" min="1">
+                                            <label>Estimasi Durasi (menit)</label>
+                                            <input type="text" name="estimasi_durasi" id="estimasi_durasi"
+                                                class="form-control" readonly>
+                                            <small class="text-muted">
+                                                Durasi dihitung otomatis berdasarkan rute perjalanan.
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -99,72 +102,130 @@
 
 
 
-    {{-- untuk jarak --}}
+    {{-- untuk jarak & durasi --}}
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
             const asal = document.querySelector('select[name="terminal_asal_id"]');
             const tujuan = document.querySelector('select[name="terminal_tujuan_id"]');
+
             const jarak = document.getElementById('jarak');
+            const durasi = document.getElementById('estimasi_durasi');
 
-            function hitungJarak() {
 
-                const asalOption = asal.options[asal.selectedIndex];
-                const tujuanOption = tujuan.options[tujuan.selectedIndex];
+            async function hitungRute() {
 
-                if (!asalOption.value || !tujuanOption.value) {
-                    jarak.value = '';
+                // Kosongkan hasil sebelumnya
+                jarak.value = '';
+                durasi.value = '';
+
+                // Belum memilih terminal
+                if (!asal.value || !tujuan.value) {
                     return;
                 }
 
-                const lat1 = parseFloat(asalOption.dataset.lat);
-                const lon1 = parseFloat(asalOption.dataset.lng);
+                // Terminal asal dan tujuan tidak boleh sama
+                if (asal.value === tujuan.value) {
 
-                const lat2 = parseFloat(tujuanOption.dataset.lat);
-                const lon2 = parseFloat(tujuanOption.dataset.lng);
+                    alert('Terminal asal dan tujuan tidak boleh sama.');
 
-                console.log('Asal:', lat1, lon1);
-                console.log('Tujuan:', lat2, lon2);
+                    tujuan.value = '';
 
-                if (
-                    isNaN(lat1) ||
-                    isNaN(lon1) ||
-                    isNaN(lat2) ||
-                    isNaN(lon2)
-                ) {
-                    jarak.value = '';
-                    alert('Koordinat terminal belum tersedia.');
                     return;
                 }
 
-                // Radius bumi dalam kilometer
-                const R = 6371;
+                // Tampilkan proses
+                jarak.placeholder = 'Menghitung...';
+                durasi.placeholder = 'Menghitung...';
 
-                const dLat = (lat2 - lat1) * Math.PI / 180;
-                const dLon = (lon2 - lon1) * Math.PI / 180;
+                try {
 
-                const a =
-                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(lat1 * Math.PI / 180) *
-                    Math.cos(lat2 * Math.PI / 180) *
-                    Math.sin(dLon / 2) *
-                    Math.sin(dLon / 2);
+                    // URL ke Laravel
+                    const url = new URL(
+                        "{{ route('admin.rute.calculate-distance') }}"
+                    );
 
-                const c = 2 * Math.atan2(
-                    Math.sqrt(a),
-                    Math.sqrt(1 - a)
-                );
+                    url.searchParams.append('asal', asal.value);
+                    url.searchParams.append('tujuan', tujuan.value);
 
-                const hasil = R * c;
+                    console.log('Request:', url.toString());
 
-                // Masukkan hasil ke input jarak
-                jarak.value = hasil.toFixed(2);
+
+                    // Kirim request ke Laravel
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+
+                    // Ambil response JSON
+                    const data = await response.json();
+
+                    console.log('Response:', data);
+
+
+                    // Jika terjadi error
+                    if (!response.ok || !data.success) {
+
+                        jarak.value = '';
+                        durasi.value = '';
+
+                        alert(
+                            data.message ||
+                            'Gagal menghitung jarak dan durasi.'
+                        );
+
+                        return;
+                    }
+
+
+                    // =========================
+                    // ISI JARAK
+                    // =========================
+
+                    jarak.value = Number(data.jarak).toFixed(2);
+
+
+                    // =========================
+                    // ISI DURASI
+                    // =========================
+
+                    const totalMenit = Number(data.estimasi_durasi);
+
+                    durasi.value = totalMenit;
+
+
+                    console.log('Jarak:', data.jarak + ' km');
+                    console.log('Durasi:', totalMenit + ' menit');
+
+
+                } catch (error) {
+
+                    console.error('Error:', error);
+
+                    alert(
+                        'Tidak dapat menghitung rute. ' +
+                        'Pastikan koneksi internet tersedia.'
+                    );
+
+                } finally {
+
+                    // Hilangkan placeholder
+                    jarak.placeholder = '';
+                    durasi.placeholder = '';
+
+                }
+
             }
 
-            // Jalankan ketika terminal berubah
-            asal.addEventListener('change', hitungJarak);
-            tujuan.addEventListener('change', hitungJarak);
+            asal.addEventListener('change', hitungRute);
+            tujuan.addEventListener('change', hitungRute);
 
         });
     </script>
+
+    {{--  --}}
 @endsection
