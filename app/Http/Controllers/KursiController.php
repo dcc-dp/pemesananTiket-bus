@@ -50,7 +50,7 @@ class KursiController extends Controller
             return back()->with('message', 'kursi sudah ada');
         }
 
-        Kursi::create($request->only(['id_bus', 'nomor_kursi', 'posisi', 'status']));
+        Kursi::create($request->only(['id_bus', 'nomor_kursi', 'kelas', 'harga', 'posisi', 'status']));
 
         return redirect()->route('admin.kursi.index', ['bus' => $request->id_bus])->with('message', 'store');
     }
@@ -82,7 +82,7 @@ class KursiController extends Controller
             return back()->with('message', 'kursi sudah ada');
         }
 
-        $kursi->update($request->only(['nomor_kursi', 'posisi', 'status']));
+        $kursi->update($request->only(['nomor_kursi', 'kelas', 'harga', 'posisi', 'status']));
 
         return redirect()->route('admin.kursi.index', ['bus' => $kursi->id_bus])->with('message', 'update');
     }
