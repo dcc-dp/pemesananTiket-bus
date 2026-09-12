@@ -13,7 +13,7 @@
             </div>
 
             <div class="row">
-                <div class="col-12 col-md-8 col-lg-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <h4>Form Kursi</h4>
@@ -24,29 +24,66 @@
                                 @method('PUT')
                                 <div class="form-group">
                                     <label>Bus</label>
-                                    <input type="text" class="form-control" value="{{ $data->bus->nama_bus }} ({{ $data->bus->nomor_polisi }})" disabled>
+                                    <input type="text" class="form-control"
+                                        value="{{ $data->bus->nama_bus }} ({{ $data->bus->nomor_polisi }})" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label>Nomor Kursi <span class="text-danger">*</span></label>
-                                    <input type="text" name="nomor_kursi" class="form-control @error('nomor_kursi') is-invalid @enderror"
+                                    <input type="text" name="nomor_kursi"
+                                        class="form-control @error('nomor_kursi') is-invalid @enderror"
                                         value="{{ old('nomor_kursi', $data->nomor_kursi) }}" required maxlength="10">
                                     @error('nomor_kursi')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Kelas <span class="text-danger">*</span></label>
+                                            <select name="kelas" class="form-control">
+                                                <option value="ekonomi" {{ old('kelas') == 'ekonomi' ? 'selected' : '' }}>
+                                                    Ekonomi</option>
+                                                <option value="bisnis" {{ old('kelas') == 'bisnis' ? 'selected' : '' }}>
+                                                    Bisnis</option>
+                                                <option value="executive"
+                                                    {{ old('kelas') == 'executive' ? 'selected' : '' }}>Executive</option>
+                                                <option value="sleeper" {{ old('kelas') == 'sleeper' ? 'selected' : '' }}>
+                                                    Sleeper</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Harga <span class="text-danger">*</span></label>
+                                            <input type="number" name="harga"
+                                                class="form-control @error('harga') is-invalid @enderror"
+                                                value="{{ old('harga') }}" required min="0">
+                                            @error('harga')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label>Posisi</label>
-                                    <input type="text" name="posisi" class="form-control" value="{{ old('posisi', $data->posisi) }}" maxlength="20">
+                                    <input type="text" name="posisi" class="form-control"
+                                        value="{{ old('posisi', $data->posisi) }}" maxlength="20">
                                 </div>
                                 <div class="form-group">
                                     <label>Status <span class="text-danger">*</span></label>
                                     <select name="status" class="form-control">
-                                        <option value="tersedia" {{ old('status', $data->status) == 'tersedia' ? 'selected' : '' }}>Tersedia</option>
-                                        <option value="rusak" {{ old('status', $data->status) == 'rusak' ? 'selected' : '' }}>Rusak</option>
+                                        <option value="tersedia"
+                                            {{ old('status', $data->status) == 'tersedia' ? 'selected' : '' }}>Tersedia
+                                        </option>
+                                        <option value="rusak"
+                                            {{ old('status', $data->status) == 'rusak' ? 'selected' : '' }}>Rusak</option>
                                     </select>
                                 </div>
                                 <div class="form-group mb-0">
-                                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #123E73, #1E5AA8); border: none;">
+                                    <button type="submit" class="btn btn-primary"
+                                        style="background: linear-gradient(135deg, #123E73, #1E5AA8); border: none;">
                                         <i class="fas fa-save"></i> Simpan Perubahan
                                     </button>
                                     <a href="{{ route('admin.kursi.index') }}" class="btn btn-secondary">Batal</a>

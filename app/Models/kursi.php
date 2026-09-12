@@ -16,6 +16,8 @@ class Kursi extends Model
     protected $fillable = [
         'id_bus',
         'nomor_kursi',
+        'kelas',
+        'harga',
         'posisi',
         'status',
     ];

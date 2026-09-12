@@ -17,6 +17,7 @@ class KursiController extends Controller
 
         $bus = $busId ? Bus::findOrFail($busId) : null;
         $buses = Bus::orderBy('nama_bus')->get();
+    
         $datas = $bus ? Kursi::where('id_bus', $bus->id_bus)->orderBy('nomor_kursi')->get() : collect();
 
         return view('pages.admin.kursi.index', compact('menu', 'buses', 'bus', 'datas'));
@@ -35,6 +36,8 @@ class KursiController extends Controller
         $request->validate([
             'id_bus' => 'required|exists:buses,id_bus',
             'nomor_kursi' => 'required|string|max:10',
+            'kelas' => 'required|in:ekonomi,bisnis,executive,sleeper',
+            'harga' => 'required|integer|min:0',
             'posisi' => 'nullable|string|max:20',
             'status' => 'required|in:tersedia,rusak',
         ]);
@@ -65,6 +68,8 @@ class KursiController extends Controller
         $request->validate([
             'nomor_kursi' => 'required|string|max:10',
             'posisi' => 'nullable|string|max:20',
+            'kelas' => 'required|in:ekonomi,bisnis,executive,sleeper',
+            'harga' => 'required|integer|min:0',
             'status' => 'required|in:tersedia,rusak',
         ]);
 

@@ -66,7 +66,7 @@
                                     @enderror
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Kelas <span class="text-danger">*</span></label>
                                             <select name="kelas" class="form-control">
@@ -76,7 +76,7 @@
                                                 <option value="sleeper" {{ old('kelas') == 'sleeper' ? 'selected' : '' }}>Sleeper</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Kapasitas (kursi) <span class="text-danger">*</span></label>
