@@ -30,7 +30,7 @@ class JadwalController extends Controller
         }
 
         $datas = $query->orderByDesc('tanggal')->orderBy('jam_berangkat')->get();
-        $buses = Bus::orderBy('nama_bus')->get();
+        $buses = Bus::orderBy('nama_bus','asc')->get();
         $rutes = Rute::with(['terminalAsal', 'terminalTujuan'])->get();
 
         return view('pages.admin.jadwal.index', compact('datas', 'menu', 'buses', 'rutes'));

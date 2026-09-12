@@ -13,7 +13,7 @@ class TerminalController extends Controller
     public function index()
     {
         $menu = $this->menu;
-        $datas = Terminal::orderBy('kota')->get();
+        $datas = Terminal::orderBy('kota','asc')->get();
 
         return view('pages.admin.terminal.index', compact('datas', 'menu'));
     }

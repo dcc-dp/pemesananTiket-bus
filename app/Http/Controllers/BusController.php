@@ -13,7 +13,7 @@ class BusController extends Controller
     public function index()
     {
         $menu = $this->menu;
-        $datas = Bus::with('operator')->orderBy('nama_bus')->get();
+        $datas = Bus::with('operator')->orderBy('nama_bus','asc')->get();
 
         return view('pages.admin.bus.index', compact('datas', 'menu'));
     }
