@@ -13,19 +13,19 @@ class BusSeeder extends Seeder
     {
         $configs = [
             ['operator' => 'OP-DAMRI', 'buses' => [
-                ['nomor_polisi' => 'DD 1012 AB', 'nama_bus' => 'Damri Ekspres 1', 'kelas' => 'ekonomi', 'kapasitas' => 40, 'fasilitas' => 'AC, Wifi, Reclining Seat'],
-                ]],
+                ['nomor_polisi' => 'DD 1012 AB', 'nama_bus' => 'Damri Ekspres 1', 'kapasitas' => 40, 'fasilitas' => 'AC, Wifi, Reclining Seat'],
+            ]],
             ['operator' => 'OP-SINARJAYA', 'buses' => [
-                ['nomor_polisi' => 'AG 2345 BD', 'nama_bus' => 'Sinar Jaya Raya', 'kelas' => 'executive', 'kapasitas' => 30, 'fasilitas' => 'AC, Wifi, Toilet, Reclining Seat, TV'],
+                ['nomor_polisi' => 'AG 2345 BD', 'nama_bus' => 'Sinar Jaya Raya', 'kapasitas' => 30, 'fasilitas' => 'AC, Wifi, Toilet, Reclining Seat, TV'],
             ]],
             ['operator' => 'OP-GUNUNGHARTA', 'buses' => [
-                ['nomor_polisi' => 'AG 3456 CF', 'nama_bus' => 'Gunung Harta Nusantara', 'kelas' => 'executive', 'kapasitas' => 30, 'fasilitas' => 'AC, Wifi, Toilet, Reclining Seat'],
+                ['nomor_polisi' => 'AG 3456 CF', 'nama_bus' => 'Gunung Harta Nusantara', 'kapasitas' => 30, 'fasilitas' => 'AC, Wifi, Toilet, Reclining Seat'],
             ]],
             ['operator' => 'OP-ROSALIA', 'buses' => [
-                ['nomor_polisi' => 'AD 4567 DH', 'nama_bus' => 'Rosalia Indah 88', 'kelas' => 'sleeper', 'kapasitas' => 24, 'fasilitas' => 'AC, Wifi, Toilet, Sleeper Bed'],
+                ['nomor_polisi' => 'AD 4567 DH', 'nama_bus' => 'Rosalia Indah 88', 'kapasitas' => 24, 'fasilitas' => 'AC, Wifi, Toilet, Sleeper Bed'],
             ]],
             ['operator' => 'OP-HARAPANJAYA', 'buses' => [
-                ['nomor_polisi' => 'B 5678 EK', 'nama_bus' => 'Harapan Jaya Ekonomi', 'kelas' => 'ekonomi', 'kapasitas' => 40, 'fasilitas' => 'AC'],
+                ['nomor_polisi' => 'B 5678 EK', 'nama_bus' => 'Harapan Jaya Ekonomi', 'kapasitas' => 40, 'fasilitas' => 'AC'],
             ]],
         ];
 
@@ -68,6 +68,37 @@ class BusSeeder extends Seeder
             Kursi::updateOrCreate(
                 ['id_bus' => $bus->id_bus, 'nomor_kursi' => $nomor],
                 ['posisi' => 'jendela', 'status' => 'tersedia']
+            );
+        }
+
+        foreach ($seats as $index => $nomor) {
+
+            // Tentukan kelas berdasarkan nomor baris
+            if ($index < $kapasitas * 0.5) {
+                $kelas = 'ekonomi';
+                $harga = 100000;
+            } elseif ($index < $kapasitas * 0.75) {
+                $kelas = 'bisnis';
+                $harga = 125000;
+            } elseif ($index < $kapasitas * 0.9) {
+                $kelas = 'executive';
+                $harga = 150000;
+            } else {
+                $kelas = 'sleeper';
+                $harga = 200000;
+            }
+
+            Kursi::updateOrCreate(
+                [
+                    'id_bus' => $bus->id_bus,
+                    'nomor_kursi' => $nomor
+                ],
+                [
+                    'kelas' => $kelas,
+                    'harga' => $harga,
+                    'posisi' => 'jendela',
+                    'status' => 'tersedia'
+                ]
             );
         }
     }

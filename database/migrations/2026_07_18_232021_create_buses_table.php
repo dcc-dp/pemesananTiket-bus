@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nomor_polisi', 20)->unique();
             $table->string('kode_bus', 30)->unique();
             $table->string('nama_bus', 100);
-            $table->enum('kelas', ['ekonomi', 'bisnis', 'executive', 'sleeper'])->default('ekonomi');
+            // $table->enum('kelas', ['ekonomi', 'bisnis', 'executive', 'sleeper'])->default('ekonomi');
             $table->integer('kapasitas');
             $table->text('fasilitas')->nullable();
             $table->enum('status', ['aktif', 'nonaktif', 'perbaikan'])->default('aktif');

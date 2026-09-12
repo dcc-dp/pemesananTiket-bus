@@ -19,12 +19,14 @@
                     <form action="{{ route('admin.kursi.index') }}" method="GET" class="form-inline">
                         <select name="bus" class="form-control" onchange="this.form.submit()">
                             @foreach ($buses as $b)
-                                <option value="{{ $b->id_bus }}" {{ $bus && $bus->id_bus == $b->id_bus ? 'selected' : '' }}>
+                                <option value="{{ $b->id_bus }}"
+                                    {{ $bus && $bus->id_bus == $b->id_bus ? 'selected' : '' }}>
                                     {{ $b->nama_bus }} ({{ $b->nomor_polisi }})
                                 </option>
                             @endforeach
                         </select>
-                        <a href="{{ route('admin.kursi.create') }}" class="btn btn-primary ml-auto" style="background: #1E5AA8; border: none;">
+                        <a href="{{ route('admin.kursi.create') }}" class="btn btn-primary ml-auto"
+                            style="background: #1E5AA8; border: none;">
                             <i class="fas fa-plus"></i> Tambah Kursi
                         </a>
                     </form>
@@ -47,6 +49,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nomor Kursi</th>
+                                    <th>Kelas</th>
+                                    <th>Harga</th>
                                     <th>Posisi</th>
                                     <th>Status</th>
                                     <th class="text-right">Aksi</th>
@@ -56,18 +60,24 @@
                                 @forelse ($datas as $i => $data)
                                     <tr>
                                         <td>{{ $i + 1 }}</td>
-                                        <td><span class="badge badge-primary" style="font-size: 1rem;">{{ $data->nomor_kursi }}</span></td>
+                                        <td><span class="badge badge-primary"
+                                                style="font-size: 1rem;">{{ $data->nomor_kursi }}</span></td>
+                                        <td>{{ $data->kelas ?? '-' }}</td>
+                                        <td>Rp {{ number_format($data->harga ?? 0, 0, ',', '.') }}</td>
                                         <td>{{ $data->posisi ?? '-' }}</td>
                                         <td>
-                                            <span class="badge badge-{{ $data->status == 'tersedia' ? 'success' : 'danger' }}">
+                                            <span
+                                                class="badge badge-{{ $data->status == 'tersedia' ? 'success' : 'danger' }}">
                                                 {{ $data->status_label }}
                                             </span>
                                         </td>
                                         <td class="text-right">
-                                            <a href="{{ route('admin.kursi.edit', $data->id_kursi) }}" class="btn btn-sm btn-warning">
+                                            <a href="{{ route('admin.kursi.edit', $data->id_kursi) }}"
+                                                class="btn btn-sm btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('admin.kursi.destroy', $data->id_kursi) }}" method="POST" class="d-inline"
+                                            <form action="{{ route('admin.kursi.destroy', $data->id_kursi) }}"
+                                                method="POST" class="d-inline"
                                                 onsubmit="return confirm('Yakin hapus kursi {{ $data->nomor_kursi }}?');">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-danger">
@@ -78,7 +88,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center py-4 text-muted">Belum ada data kursi untuk bus ini</td>
+                                        <td colspan="5" class="text-center py-4 text-muted">Belum ada data kursi untuk
+                                            bus ini</td>
                                     </tr>
                                 @endforelse
                             </tbody>

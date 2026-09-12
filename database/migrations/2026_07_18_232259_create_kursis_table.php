@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('kursis', function (Blueprint $table) {
             $table->id('id_kursi');
-            $table->foreignId('id_bus')
-                ->constrained('buses', 'id_bus')
-                ->cascadeOnDelete();
+            $table->foreignId('id_bus')->constrained('buses', 'id_bus')->cascadeOnDelete();
             $table->string('nomor_kursi', 10);
+            $table->enum('kelas', ['ekonomi', 'bisnis', 'executive', 'sleeper'])->default('ekonomi');
+            $table->integer('harga')->default(0);
             $table->string('posisi', 20)->nullable();
             $table->enum('status', ['tersedia', 'rusak'])->default('tersedia');
             $table->unique(['id_bus', 'nomor_kursi']);
