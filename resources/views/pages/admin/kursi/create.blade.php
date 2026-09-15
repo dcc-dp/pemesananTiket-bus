@@ -43,6 +43,31 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Kelas <span class="text-danger">*</span></label>
+                                            <select name="kelas" class="form-control">
+                                                <option value="ekonomi" {{ old('kelas') == 'ekonomi' ? 'selected' : '' }}>Ekonomi</option>
+                                                <option value="bisnis" {{ old('kelas') == 'bisnis' ? 'selected' : '' }}>Bisnis</option>
+                                                <option value="executive" {{ old('kelas') == 'executive' ? 'selected' : '' }}>Executive</option>
+                                                <option value="sleeper" {{ old('kelas') == 'sleeper' ? 'selected' : '' }}>Sleeper</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Harga <span class="text-danger">*</span></label>
+                                            <input type="number" name="harga" class="form-control @error('harga') is-invalid @enderror"
+                                                value="{{ old('harga') }}" required min="0">
+                                            @error('harga')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="form-group">
                                     <label>Posisi</label>
                                     <input type="text" name="posisi" class="form-control" value="{{ old('posisi') }}" maxlength="20"
