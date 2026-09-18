@@ -33,6 +33,17 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tiket', [TicketController::class, 'search'])->name('tiket.search.form');
 Route::get('/tiket/search', [TicketController::class, 'search'])->name('tiket.search');
 
+Route::get('/tiket/{jadwal}/kursi', [TicketController::class, 'seats'])->name('tiket.seats');
+Route::get('/booking/{jadwal}/form', [BookingController::class, 'passengerForm'])->name('booking.form');
+Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
+
+Route::get('/booking/{booking}', [BookingController::class, 'detail'])->name('customer.booking.detail');
+Route::get('/booking/{booking}/bayar', [BookingController::class, 'pay'])->name('customer.booking.pay');
+Route::get('/booking/{booking}/tiket', [BookingController::class, 'ticket'])->name('customer.booking.ticket');
+
+    Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
+
+
 // ===================== AUTH =====================
 Route::prefix('auth')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -50,15 +61,15 @@ Route::group(['middleware' => ['ValidasiUser', 'CheckRole:customer']], function 
     Route::get('/customer/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
 
     // Pemilihan kursi & booking
-    Route::get('/tiket/{jadwal}/kursi', [TicketController::class, 'seats'])->name('tiket.seats');
-    Route::get('/booking/{jadwal}/form', [BookingController::class, 'passengerForm'])->name('booking.form');
-    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
+    // Route::get('/tiket/{jadwal}/kursi', [TicketController::class, 'seats'])->name('tiket.seats');
+    // Route::get('/booking/{jadwal}/form', [BookingController::class, 'passengerForm'])->name('booking.form');
+    // Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
 
-    Route::get('/booking/{booking}', [BookingController::class, 'detail'])->name('customer.booking.detail');
-    Route::get('/booking/{booking}/bayar', [BookingController::class, 'pay'])->name('customer.booking.pay');
-    Route::get('/booking/{booking}/tiket', [BookingController::class, 'ticket'])->name('customer.booking.ticket');
+    // Route::get('/booking/{booking}', [BookingController::class, 'detail'])->name('customer.booking.detail');
+    // Route::get('/booking/{booking}/bayar', [BookingController::class, 'pay'])->name('customer.booking.pay');
+    // Route::get('/booking/{booking}/tiket', [BookingController::class, 'ticket'])->name('customer.booking.ticket');
 
-    Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
+    // Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
     Route::get('/customer/tickets', [CustomerController::class, 'tickets'])->name('customer.tickets');
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::post('/customer/profile/update', [CustomerController::class, 'profileUpdate'])->name('customer.profile.update');
