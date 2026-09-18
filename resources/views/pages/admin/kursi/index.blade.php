@@ -50,7 +50,7 @@
                                     <th>No</th>
                                     <th>Nomor Kursi</th>
                                     <th>Kelas</th>
-                                    <th>Harga</th>
+                                    <th>Harg a</th>
                                     <th>Posisi</th>
                                     <th>Status</th>
                                     <th class="text-right">Aksi</th>
