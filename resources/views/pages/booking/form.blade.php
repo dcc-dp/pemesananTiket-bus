@@ -22,7 +22,7 @@
             <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
 
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-7">
                     @foreach ($kursis as $i => $kursi)
                         <div class="card border-0 shadow-sm mb-3" style="border-radius: 12px;">
                             <div class="card-header" style="background: #f8fafc; border-radius: 12px 12px 0 0; border-bottom: 1px solid #e9ecef;">
@@ -101,7 +101,7 @@
                     @endforeach
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <div class="card border-0 shadow-sm sticky-top" style="border-radius: 12px; top: 20px;">
                         <div class="card-body">
                             <h6 class="font-weight-bold" style="color: #0B1F3A;">Ringkasan</h6>
@@ -115,7 +115,7 @@
                                 <span class="font-weight-bold">{{ $jadwal->tanggal->format('d M Y') }} &middot; {{ $jadwal->jam_berangkat->format('H:i') }}</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted">Bus</span>
+                                <span class="text-muted">Bus </span>
                                 <span class="font-weight-bold">{{ $jadwal->bus->nama_bus }} ({{ $jadwal->bus->nomor_polisi }})</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">

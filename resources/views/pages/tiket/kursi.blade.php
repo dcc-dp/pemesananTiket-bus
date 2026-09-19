@@ -64,15 +64,24 @@
                                             $isAvailable = in_array($kursi->id_kursi, $availableIds);
                                         @endphp
                                         <button type="button"
-                                            class="seat-btn btn btn-sm font-weight-bold"
-                                            data-id="{{ $kursi->id_kursi }}"
-                                            data-nomor="{{ $kursi->nomor_kursi }}"
-                                            data-available="{{ $isAvailable ? 1 : 0 }}"
-                                            style="width: 52px; height: 52px; border-radius: 10px; font-size: 0.85rem;
-                                                {{ $isUnavailable ? 'background: #e53e3e; color: #fff; border-color: #e53e3e; cursor: not-allowed; opacity: 0.75;'
-                                                   : 'background: #2dce89; color: #fff; border-color: #2dce89;' }}">
-                                            {{ $kursi->nomor_kursi }}
-                                        </button>
+    class="seat-btn btn btn-sm font-weight-bold"
+    data-id="{{ $kursi->id_kursi }}"
+    data-nomor="{{ $kursi->nomor_kursi }}"
+    data-harga="{{ $kursi->harga ?? 0 }}"
+    data-available="{{ $isAvailable ? 1 : 0 }}"
+    style="width: 70px; height: 62px; border-radius: 10px; font-size: 0.8rem;
+        {{ $isUnavailable ? 'background: #e53e3e; color: #fff; border-color: #e53e3e; cursor: not-allowed; opacity: 0.75;'
+           : 'background: #2dce89; color: #fff; border-color: #2dce89;' }}">
+
+    <div style="font-size: 0.9rem; font-weight: 700;">
+        {{ $kursi->nomor_kursi }}
+    </div>
+
+    <div style="font-size: 0.65rem; margin-top: 2px;">
+        Rp {{ number_format($kursi->harga ?? 0, 0, ',', '.') }}
+    </div>
+
+</button>
                                     @endforeach
                                     <div class="small text-muted" style="width: 22px; text-align: right;">{{ $row }}</div>
                                 </div>

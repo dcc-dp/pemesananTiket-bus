@@ -30,7 +30,7 @@
                                     <th>Nama Bus</th>
                                     <th>Plat Nomor</th>
                                     <th>Operator</th>
-                                    <th>Kelas</th>
+                                    {{-- <th>Kelas</th> --}}
                                     <th>Kapasitas</th>
                                     <th>Status</th>
                                     <th class="text-right">Aksi</th>
@@ -44,7 +44,7 @@
                                         <td class="font-weight-bold">{{ $data->nama_bus }}</td>
                                         <td>{{ $data->nomor_polisi }}</td>
                                         <td>{{ $data->operator->nama_operator }}</td>
-                                        <td><span class="badge badge-info">{{ $data->kelas_label }}</span></td>
+                                        {{-- <td><span class="badge badge-info">{{ $data->kelas_label }}</span></td> --}}
                                         <td>{{ $data->kapasitas }} kursi</td>
                                         <td>
                                             <span class="badge badge-{{ $data->status == 'aktif' ? 'success' : ($data->status == 'perbaikan' ? 'warning' : 'secondary') }}">

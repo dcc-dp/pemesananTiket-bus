@@ -36,7 +36,7 @@ class BookingController extends Controller
 
         $seatIds = array_values(array_filter(
             (array) $request->query('seats', []),
-            fn ($v) => is_numeric($v)
+            fn($v) => is_numeric($v)
         ));
 
         if (empty($seatIds)) {
