@@ -25,7 +25,7 @@ class AdminCustomerController extends Controller
             });
         }
 
-        $datas = $query->orderBy('name')->paginate(15)->withQueryString();
+        $datas = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 
         return view('pages.admin.customer.index', [
             'menu' => $menu,
