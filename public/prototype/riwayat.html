@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Riwayat Pemesanan Saya - BusTicket</title>
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#006194",
+            "primary-container": "#007bb9",
+            "secondary": "#565e74",
+            "background": "#f6faff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#edf4fc",
+            "surface-container": "#e8eff7",
+            "surface-container-high": "#e2e9f1",
+            "on-surface": "#151c22",
+            "on-surface-variant": "#3f4850",
+            "on-primary": "#ffffff",
+            "outline-variant": "#bfc7d2",
+            "outline": "#707881"
+          },
+          fontFamily: {
+            headline: ["Plus Jakarta Sans", "sans-serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col antialiased">
+
+  <!-- NAVBAR -->
+  <header class="docked full-width top-0 sticky z-40 bg-surface-container-lowest shadow-sm border-b border-surface-container">
+    <div class="w-full px-6 max-w-7xl mx-auto flex justify-between items-center h-16">
+      <a class="flex items-center gap-2 group" href="index.html">
+        <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm shadow-primary/20">
+          <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">directions_bus</span>
+        </div>
+        <span class="font-headline text-xl font-bold text-primary tracking-tight">BusTicket</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8">
+        <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="index.html">Beranda</a>
+        <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="pemesanan.html">Pesan Tiket</a>
+        <a class="text-primary font-bold border-b-2 border-primary pb-1 text-sm" href="riwayat.html">Riwayat Pemesanan</a>
+      </nav>
+
+      <!-- Customer Profile Dropdown Pill -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5 bg-surface-container-low py-1.5 px-3 rounded-full border border-surface-container">
+          <div class="w-7 h-7 rounded-full bg-primary text-white font-bold text-xs flex items-center justify-center">
+            AF
+          </div>
+          <div class="hidden sm:block text-left">
+            <p class="text-xs font-bold text-on-surface leading-none">Andi Muh. Fikri</p>
+            <p class="text-[10px] text-emerald-600 font-semibold leading-none mt-0.5">● Akun Terverifikasi</p>
+          </div>
+        </div>
+        <a href="login.html" title="Keluar Akun" class="text-secondary hover:text-red-600 transition-colors p-1.5 rounded-lg hover:bg-surface-container-low">
+          <span class="material-symbols-outlined text-xl">logout</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
+
+    <!-- BREADCRUMB & PAGE TITLE -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 text-xs text-secondary mb-1">
+          <a href="index.html" class="hover:text-primary transition-colors">Beranda</a>
+          <span>/</span>
+          <span class="text-on-surface font-semibold">Riwayat Pemesanan</span>
+        </div>
+        <h1 class="font-headline text-2xl sm:text-3xl font-extrabold text-on-surface">
+          Riwayat Pemesanan Tiket
+        </h1>
+        <p class="text-xs sm:text-sm text-secondary mt-1">
+          Kelola tiket bus aktif, unduh e-tiket resmi, dan cek histori perjalanan Anda.
+        </p>
+      </div>
+
+      <a href="pemesanan.html" class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-container text-white rounded-xl font-headline text-xs font-bold shadow-md shadow-primary/20 transition-all active:scale-95 w-fit">
+        <span class="material-symbols-outlined text-base">add</span>
+        Pesan Tiket Baru
+      </a>
+    </div>
+
+    <!-- QUICK STATS TILES -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-surface-container-lowest p-4 rounded-2xl border border-surface-container shadow-sm flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-2xl">confirmation_number</span>
+        </div>
+        <div>
+          <p class="text-[11px] font-semibold text-secondary uppercase tracking-wider">Tiket Aktif</p>
+          <p class="font-headline text-xl font-black text-on-surface">1 Tiket</p>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-lowest p-4 rounded-2xl border border-surface-container shadow-sm flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-2xl">task_alt</span>
+        </div>
+        <div>
+          <p class="text-[11px] font-semibold text-secondary uppercase tracking-wider">Tiket Selesai</p>
+          <p class="font-headline text-xl font-black text-on-surface">4 Perjalanan</p>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-lowest p-4 rounded-2xl border border-surface-container shadow-sm flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-2xl">stars</span>
+        </div>
+        <div>
+          <p class="text-[11px] font-semibold text-secondary uppercase tracking-wider">Point Reward</p>
+          <p class="font-headline text-xl font-black text-on-surface">1.250 Poin</p>
+        </div>
+      </div>
+
+      <div class="bg-surface-container-lowest p-4 rounded-2xl border border-surface-container shadow-sm flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-2xl">verified</span>
+        </div>
+        <div>
+          <p class="text-[11px] font-semibold text-secondary uppercase tracking-wider">Status Midtrans</p>
+          <p class="font-headline text-xl font-black text-emerald-600">100% Lunas</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER TABS & SEARCH BAR -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+      <!-- Tabs -->
+      <div class="flex items-center gap-2 border-b border-surface-container overflow-x-auto pb-1">
+        <button onclick="filterTickets('all')" id="tabAll" class="px-4 py-2 font-headline text-xs font-bold border-b-2 border-primary text-primary transition-all whitespace-nowrap">
+          Semua Tiket (5)
+        </button>
+        <button onclick="filterTickets('active')" id="tabActive" class="px-4 py-2 font-headline text-xs font-medium text-secondary hover:text-on-surface transition-all whitespace-nowrap">
+          Mendatang / Aktif (1)
+        </button>
+        <button onclick="filterTickets('completed')" id="tabCompleted" class="px-4 py-2 font-headline text-xs font-medium text-secondary hover:text-on-surface transition-all whitespace-nowrap">
+          Selesai (4)
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative w-full sm:w-64">
+        <span class="material-symbols-outlined absolute left-3 top-2.5 text-secondary text-base">search</span>
+        <input oninput="searchTickets(this.value)" class="w-full pl-9 pr-3 py-2 rounded-xl border border-outline-variant bg-surface-container-lowest text-xs text-on-surface focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none" placeholder="Cari kode booking / rute..." type="text"/>
+      </div>
+    </div>
+
+    <!-- TICKETS LIST -->
+    <div class="space-y-4" id="ticketsContainer">
+
+      <!-- TICKET 1: AKTIF (Bintang Prima Executive) -->
+      <div class="ticket-card bg-surface-container-lowest rounded-3xl p-5 sm:p-6 border-2 border-primary/20 shadow-md shadow-primary/5 hover:border-primary transition-all space-y-4" data-status="active" data-query="BUS-20260925-BTP01 makassar toraja bintang prima">
+        <!-- Top bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-surface-container">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-mono font-bold text-primary bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-100">
+              BUS-20260925-BTP01
+            </span>
+            <span class="text-xs text-secondary">• Dipesan 23 Sep 2026</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Menunggu Keberangkatan
+            </span>
+          </div>
+        </div>
+
+        <!-- Body Trip Info -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+          <!-- Operator & Route -->
+          <div class="md:col-span-5 space-y-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-blue-900 text-white font-black text-xs flex items-center justify-center">BP</div>
+              <div>
+                <h3 class="font-headline text-sm font-bold text-on-surface">Bintang Prima</h3>
+                <p class="text-[11px] text-secondary">Executive Class 2+2 (AC, Reclining Seat, Leg Rest, Toilet)</p>
+              </div>
+            </div>
+
+            <!-- Route Timeline -->
+            <div class="pt-2 flex items-center justify-between max-w-sm">
+              <div>
+                <p class="font-headline text-lg font-black text-on-surface">20:00</p>
+                <p class="text-xs font-bold text-primary">Makassar</p>
+                <p class="text-[10px] text-secondary">Terminal Daya</p>
+              </div>
+              <div class="flex-1 px-4 text-center">
+                <span class="text-[10px] text-secondary font-semibold">9j 30m</span>
+                <div class="relative flex items-center justify-center my-1">
+                  <div class="w-full border-t-2 border-dashed border-outline-variant"></div>
+                  <span class="material-symbols-outlined absolute text-primary text-base bg-surface-container-lowest px-1">directions_bus</span>
+                </div>
+                <span class="text-[10px] text-emerald-600 font-bold">Langsung</span>
+              </div>
+              <div class="text-right">
+                <p class="font-headline text-lg font-black text-on-surface">05:30</p>
+                <p class="text-xs font-bold text-primary">Toraja</p>
+                <p class="text-[10px] text-secondary">Terminal Makale</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seats & Passenger Info -->
+          <div class="md:col-span-4 bg-surface-container-low/50 p-4 rounded-2xl border border-surface-container space-y-2 text-xs">
+            <div class="flex justify-between items-center">
+              <span class="text-secondary">Nomor Kursi:</span>
+              <div class="flex gap-1.5">
+                <span class="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-xs shadow-sm">2B</span>
+                <span class="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-xs shadow-sm">3D</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-secondary">Penumpang:</span>
+              <span class="font-semibold text-on-surface">Andi Muh. Fikri (2 org)</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-secondary">Pembayaran:</span>
+              <span class="font-bold text-emerald-700 flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">check_circle</span> QRIS Midtrans Lunas
+              </span>
+            </div>
+            <div class="border-t border-surface-container pt-1.5 flex justify-between items-center">
+              <span class="font-bold text-on-surface">Total:</span>
+              <span class="font-headline text-base font-black text-primary">Rp 577.500</span>
+            </div>
+          </div>
+
+          <!-- Action CTA -->
+          <div class="md:col-span-3 flex flex-col gap-2">
+            <button onclick="openETicketModal('BUS-20260925-BTP01', 'Bintang Prima (Executive)', 'Makassar → Toraja', '25 Mei 2026, 20:00 WITA', '2B, 3D', 'Andi Muh. Fikri', 'Rp 577.500')" class="w-full py-2.5 px-3 bg-primary hover:bg-primary-container text-on-primary rounded-xl font-headline text-xs font-bold shadow-md shadow-primary/20 flex items-center justify-center gap-1.5 transition-all active:scale-95">
+              <span class="material-symbols-outlined text-base">qr_code_2</span>
+              <span>Tampilkan E-Tiket</span>
+            </button>
+            <a href="pemesanan.html" class="w-full py-2 px-3 rounded-xl border border-outline-variant hover:bg-surface-container-low text-xs font-semibold text-center text-on-surface transition-colors flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-sm">download</span>
+              <span>Unduh PDF</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- TICKET 2: SELESAI (Borlindo Sleeper) -->
+      <div class="ticket-card bg-surface-container-lowest rounded-3xl p-5 sm:p-6 border border-surface-container shadow-sm hover:border-outline-variant transition-all space-y-4" data-status="completed" data-query="BUS-20260814-BOR09 makassar palopo borlindo">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-surface-container">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-mono font-bold text-secondary bg-surface-container-low px-2.5 py-1 rounded-lg">
+              BUS-20260814-BOR09
+            </span>
+            <span class="text-xs text-secondary">• Dipesan 10 Ags 2026</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
+            <span class="material-symbols-outlined text-sm">done_all</span> Selesai
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+          <div class="md:col-span-5 space-y-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-red-800 text-white font-black text-xs flex items-center justify-center">BL</div>
+              <div>
+                <h3 class="font-headline text-sm font-bold text-on-surface">Borlindo</h3>
+                <p class="text-[11px] text-secondary">Sleeper Bus Executive (Single Bed Cabin)</p>
+              </div>
+            </div>
+            <div class="pt-2 flex items-center justify-between max-w-sm">
+              <div>
+                <p class="font-headline text-base font-bold text-on-surface">21:00</p>
+                <p class="text-xs font-semibold text-secondary">Makassar</p>
+              </div>
+              <div class="flex-1 px-4 text-center">
+                <span class="text-[10px] text-secondary">8j 00m</span>
+                <div class="w-full border-t border-dashed border-outline-variant my-1"></div>
+              </div>
+              <div class="text-right">
+                <p class="font-headline text-base font-bold text-on-surface">05:00</p>
+                <p class="text-xs font-semibold text-secondary">Palopo</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-4 bg-surface-container-low/30 p-3.5 rounded-2xl border border-surface-container space-y-1.5 text-xs">
+            <div class="flex justify-between">
+              <span class="text-secondary">Kursi:</span>
+              <span class="font-bold text-on-surface">1A (Sleeper)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-secondary">Total:</span>
+              <span class="font-bold text-on-surface">Rp 280.000</span>
+            </div>
+          </div>
+
+          <div class="md:col-span-3 flex flex-col gap-2">
+            <a href="pemesanan.html" class="w-full py-2 px-3 bg-surface-container-low hover:bg-surface-container text-primary font-headline text-xs font-bold rounded-xl text-center transition-colors">
+              Pesan Lagi Rute Ini
+            </a>
+            <button onclick="openETicketModal('BUS-20260814-BOR09', 'Borlindo (Sleeper)', 'Makassar → Palopo', '14 Ags 2026, 21:00 WITA', '1A', 'Andi Muh. Fikri', 'Rp 280.000')" class="text-xs text-secondary hover:text-on-surface font-semibold text-center">
+              Lihat Tiket Lama
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TICKET 3: SELESAI (Primadona) -->
+      <div class="ticket-card bg-surface-container-lowest rounded-3xl p-5 sm:p-6 border border-surface-container shadow-sm hover:border-outline-variant transition-all space-y-4" data-status="completed" data-query="BUS-20260602-PRM03 makassar toraja primadona">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-surface-container">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-mono font-bold text-secondary bg-surface-container-low px-2.5 py-1 rounded-lg">
+              BUS-20260602-PRM03
+            </span>
+            <span class="text-xs text-secondary">• Dipesan 28 Mei 2026</span>
+          </div>
+          <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
+            <span class="material-symbols-outlined text-sm">done_all</span> Selesai
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+          <div class="md:col-span-5 space-y-2">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-emerald-800 text-white font-black text-xs flex items-center justify-center">PM</div>
+              <div>
+                <h3 class="font-headline text-sm font-bold text-on-surface">Primadona</h3>
+                <p class="text-[11px] text-secondary">High Decker Executive (AC, Toilet, Wi-Fi)</p>
+              </div>
+            </div>
+            <div class="pt-2 flex items-center justify-between max-w-sm">
+              <div>
+                <p class="font-headline text-base font-bold text-on-surface">09:00</p>
+                <p class="text-xs font-semibold text-secondary">Makassar</p>
+              </div>
+              <div class="flex-1 px-4 text-center">
+                <span class="text-[10px] text-secondary">8j 30m</span>
+                <div class="w-full border-t border-dashed border-outline-variant my-1"></div>
+              </div>
+              <div class="text-right">
+                <p class="font-headline text-base font-bold text-on-surface">17:30</p>
+                <p class="text-xs font-semibold text-secondary">Toraja</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-4 bg-surface-container-low/30 p-3.5 rounded-2xl border border-surface-container space-y-1.5 text-xs">
+            <div class="flex justify-between">
+              <span class="text-secondary">Kursi:</span>
+              <span class="font-bold text-on-surface">3C</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-secondary">Total:</span>
+              <span class="font-bold text-on-surface">Rp 250.000</span>
+            </div>
+          </div>
+
+          <div class="md:col-span-3 flex flex-col gap-2">
+            <a href="pemesanan.html" class="w-full py-2 px-3 bg-surface-container-low hover:bg-surface-container text-primary font-headline text-xs font-bold rounded-xl text-center transition-colors">
+              Pesan Lagi Rute Ini
+            </a>
+            <button onclick="openETicketModal('BUS-20260602-PRM03', 'Primadona (Executive)', 'Makassar → Toraja', '02 Juni 2026, 09:00 WITA', '3C', 'Andi Muh. Fikri', 'Rp 250.000')" class="text-xs text-secondary hover:text-on-surface font-semibold text-center">
+              Lihat Tiket Lama
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- E-TICKET DETAIL MODAL POPUP -->
+  <div id="ticketModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all animate-scaleIn max-h-[90vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="bg-primary px-6 py-4 text-white flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-xl">confirmation_number</span>
+          <span class="font-headline font-bold text-sm">Boarding Pass Resmi BusTicket</span>
+        </div>
+        <button onclick="closeTicketModal()" class="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white text-xs">✕</button>
+      </div>
+
+      <!-- Ticket Body Card -->
+      <div class="p-6 overflow-y-auto space-y-4">
+        <!-- Ticket Border Design -->
+        <div class="border-2 border-dashed border-primary/30 rounded-2xl p-5 bg-sky-50/40 relative">
+          <div class="flex justify-between items-start pb-3 border-b border-sky-100">
+            <div>
+              <p id="modalBusName" class="font-headline font-bold text-base text-on-surface">Bintang Prima (Executive)</p>
+              <p id="modalRoute" class="text-xs font-semibold text-primary">Makassar → Toraja</p>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] uppercase font-bold text-secondary">Kode Booking</span>
+              <p id="modalBookingCode" class="font-mono font-bold text-xs text-primary">BUS-20260925-BTP01</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 py-3 text-xs border-b border-sky-100">
+            <div>
+              <p class="text-[10px] text-secondary uppercase font-semibold">Jadwal Keberangkatan</p>
+              <p id="modalTime" class="font-bold text-on-surface">25 Mei 2026, 20:00 WITA</p>
+            </div>
+            <div>
+              <p class="text-[10px] text-secondary uppercase font-semibold">Nomor Kursi</p>
+              <p id="modalSeats" class="font-bold text-amber-600 font-headline text-sm">2B, 3D</p>
+            </div>
+            <div>
+              <p class="text-[10px] text-secondary uppercase font-semibold">Nama Penumpang</p>
+              <p id="modalPassenger" class="font-bold text-on-surface">Andi Muh. Fikri</p>
+            </div>
+            <div>
+              <p class="text-[10px] text-secondary uppercase font-semibold">Status Tiket</p>
+              <p class="font-bold text-emerald-600 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">check_circle</span> Lunas Midtrans
+              </p>
+            </div>
+          </div>
+
+          <!-- QR Code Center -->
+          <div class="pt-4 text-center">
+            <div class="inline-block p-3 bg-white rounded-xl shadow-sm border border-slate-200">
+              <svg class="w-32 h-32 mx-auto" viewBox="0 0 100 100">
+                <rect width="100" height="100" fill="#fff"/>
+                <path d="M10,10 h25 v25 h-25 z M15,15 v15 h15 v-15 z M20,20 h5 v5 h-5 z" fill="#000"/>
+                <path d="M65,10 h25 v25 h-25 z M70,15 v15 h15 v-15 z M75,20 h5 v5 h-5 z" fill="#000"/>
+                <path d="M10,65 h25 v25 h-25 z M15,70 v15 h15 v-15 z M20,75 h5 v5 h-5 z" fill="#000"/>
+                <rect x="42" y="15" width="16" height="5" fill="#000"/>
+                <rect x="42" y="25" width="10" height="6" fill="#000"/>
+                <rect x="15" y="42" width="6" height="15" fill="#000"/>
+                <rect x="25" y="45" width="12" height="6" fill="#000"/>
+                <rect x="42" y="42" width="16" height="16" fill="#0284c7"/>
+                <rect x="65" y="42" width="20" height="6" fill="#000"/>
+                <rect x="75" y="55" width="10" height="15" fill="#000"/>
+                <rect x="42" y="65" width="8" height="20" fill="#000"/>
+                <rect x="55" y="75" width="15" height="10" fill="#000"/>
+              </svg>
+            </div>
+            <p class="text-[11px] text-secondary mt-1.5 font-medium">Tunjukkan kode QR ini kepada petugas terminal saat boarding.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button onclick="alert('E-Tiket PDF berhasil diunduh ke perangkat Anda.')" class="flex-1 py-2.5 bg-primary text-white rounded-xl text-xs font-bold shadow hover:bg-primary-container flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">download</span> Unduh PDF
+          </button>
+          <button onclick="alert('E-Tiket berhasil dikirim ke nomor WhatsApp Anda.')" class="flex-1 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow hover:bg-emerald-700 flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">share</span> Kirim WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-surface-container-lowest border-t border-surface-container py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-secondary">
+      <p>© 2026 BusTicket Platform. Hak Cipta Dilindungi Undang-Undang.</p>
+      <div class="flex items-center gap-6">
+        <a href="index.html" class="hover:text-primary transition-colors">Beranda</a>
+        <a href="pemesanan.html" class="hover:text-primary transition-colors">Pesan Tiket</a>
+        <a href="riwayat.html" class="hover:text-primary transition-colors">Riwayat</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Prototype Switcher -->
+  <div class="fixed bottom-5 right-5 z-50 bg-slate-900/95 backdrop-blur-md text-white text-xs px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-700/80">
+    <div class="flex items-center gap-2 font-bold text-sky-400">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span>Stitch Prototype</span>
+    </div>
+    <div class="h-4 w-px bg-slate-700"></div>
+    <div class="flex items-center gap-1.5">
+      <a href="index.html" class="px-2 py-1 rounded-lg hover:bg-slate-800 text-slate-300">1. Beranda</a>
+      <a href="pemesanan.html" class="px-2 py-1 rounded-lg hover:bg-slate-800 text-slate-300">2. Pemesanan</a>
+      <a href="login.html" class="px-2 py-1 rounded-lg hover:bg-slate-800 text-slate-300">3. Login/Register</a>
+      <a href="riwayat.html" class="px-2 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30">4. Riwayat</a>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function filterTickets(status) {
+      const cards = document.querySelectorAll('.ticket-card');
+      const tabs = {
+        all: document.getElementById('tabAll'),
+        active: document.getElementById('tabActive'),
+        completed: document.getElementById('tabCompleted')
+      };
+
+      Object.keys(tabs).forEach(k => {
+        if (k === status) {
+          tabs[k].className = 'px-4 py-2 font-headline text-xs font-bold border-b-2 border-primary text-primary transition-all whitespace-nowrap';
+        } else {
+          tabs[k].className = 'px-4 py-2 font-headline text-xs font-medium text-secondary hover:text-on-surface transition-all whitespace-nowrap';
+        }
+      });
+
+      cards.forEach(card => {
+        if (status === 'all' || card.getAttribute('data-status') === status) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    function searchTickets(keyword) {
+      const query = keyword.toLowerCase().trim();
+      const cards = document.querySelectorAll('.ticket-card');
+      cards.forEach(card => {
+        const text = card.getAttribute('data-query') || card.innerText.toLowerCase();
+        if (!query || text.includes(query)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    function openETicketModal(code, bus, route, time, seats, passenger, total) {
+      document.getElementById('modalBookingCode').textContent = code;
+      document.getElementById('modalBusName').textContent = bus;
+      document.getElementById('modalRoute').textContent = route;
+      document.getElementById('modalTime').textContent = time;
+      document.getElementById('modalSeats').textContent = seats;
+      document.getElementById('modalPassenger').textContent = passenger;
+      document.getElementById('ticketModal').classList.remove('hidden');
+    }
+
+    function closeTicketModal() {
+      document.getElementById('ticketModal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

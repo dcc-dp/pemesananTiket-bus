@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>BusTicket - Pilih Bus & Kursi (Makassar ke Toraja)</title>
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: "#f0f7ff",
+              100: "#e0effe",
+              200: "#bae0fd",
+              500: "#0284c7",
+              600: "#006194",
+              700: "#004b73",
+              800: "#003554",
+              900: "#002237",
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50/70 text-slate-800 font-sans antialiased selection:bg-brand-100 selection:text-brand-800 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <header class="bg-white sticky top-0 z-40 border-b border-slate-200/80 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="index.html" class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-600/20">
+          <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">directions_bus</span>
+        </div>
+        <span class="text-2xl font-extrabold tracking-tight text-slate-900">BusTicket</span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-[15px] font-medium text-slate-600">
+        <a href="index.html" class="hover:text-brand-600 transition-colors">Beranda</a>
+        <a href="pemesanan.html" class="text-brand-600 font-bold border-b-2 border-brand-600 py-1 transition-colors">Pesan Tiket</a>
+        <a href="index.html#rute-populer" class="hover:text-brand-600 transition-colors">Rute</a>
+        <a href="index.html#faq-section" class="hover:text-brand-600 transition-colors">Bantuan</a>
+      </nav>
+
+      <!-- Auth Actions -->
+      <div class="flex items-center gap-3">
+        <a href="login.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600 transition-colors">Masuk</a>
+        <a href="login.html" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-sm transition-all duration-150 active:scale-95">Daftar</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    
+    <!-- STEPPER (Horizontal 4-Step Header) -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs mb-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
+        
+        <!-- Step 1: Done -->
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+            <span class="material-symbols-outlined text-base">check</span>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 1</p>
+            <p class="text-sm font-bold text-slate-900">Pilih Bus</p>
+          </div>
+        </div>
+
+        <!-- Step 2: Active -->
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100">
+            2
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-brand-600 uppercase tracking-wider">LANGKAH 2</p>
+            <p class="text-sm font-bold text-brand-600">Pilih Kursi</p>
+          </div>
+        </div>
+
+        <!-- Step 3: Pending -->
+        <div class="flex items-center gap-3 opacity-60">
+          <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+            3
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 3</p>
+            <p class="text-sm font-semibold text-slate-600">Data Pemesan</p>
+          </div>
+        </div>
+
+        <!-- Step 4: Pending -->
+        <div class="flex items-center gap-3 opacity-60">
+          <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+            4
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 4</p>
+            <p class="text-sm font-semibold text-slate-600">Pembayaran</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MAIN GRID LAYOUT (Left Sidebar Filter + Right Main Content) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT SIDEBAR: FILTERS -->
+      <aside class="lg:col-span-3 space-y-6">
+        
+        <!-- Filter Card -->
+        <div class="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-6">
+          
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span class="material-symbols-outlined text-brand-600 text-lg">filter_list</span>
+              Filter
+            </h3>
+            <button type="button" class="text-xs font-semibold text-brand-600 hover:underline">Reset</button>
+          </div>
+
+          <!-- Filter Kelas Bus -->
+          <div>
+            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Kelas Bus</h4>
+            <div class="space-y-2.5">
+              <label class="flex items-center justify-between text-xs font-medium cursor-pointer">
+                <span class="flex items-center gap-2 text-slate-700">
+                  <input type="checkbox" checked class="rounded border-slate-300 text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                  Sleeper Suite
+                </span>
+                <span class="text-[11px] bg-slate-100 px-2 py-0.5 rounded-full text-slate-500 font-bold">3</span>
+              </label>
+
+              <label class="flex items-center justify-between text-xs font-medium cursor-pointer">
+                <span class="flex items-center gap-2 text-slate-700">
+                  <input type="checkbox" checked class="rounded border-slate-300 text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                  Executive Class
+                </span>
+                <span class="text-[11px] bg-slate-100 px-2 py-0.5 rounded-full text-slate-500 font-bold">5</span>
+              </label>
+
+              <label class="flex items-center justify-between text-xs font-medium cursor-pointer">
+                <span class="flex items-center gap-2 text-slate-700">
+                  <input type="checkbox" checked class="rounded border-slate-300 text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                  Super VIP
+                </span>
+                <span class="text-[11px] bg-slate-100 px-2 py-0.5 rounded-full text-slate-500 font-bold">2</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Waktu Keberangkatan -->
+          <div class="pt-4 border-t border-slate-100">
+            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Waktu Keberangkatan</h4>
+            <div class="space-y-2">
+              <button type="button" class="w-full flex items-center justify-between px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition-colors">
+                <span class="flex items-center gap-2 text-xs font-medium text-slate-600">
+                  <span class="material-symbols-outlined text-base text-slate-400">wb_twilight</span>
+                  Pagi (06:00 - 12:00)
+                </span>
+              </button>
+
+              <button type="button" class="w-full flex items-center justify-between px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition-colors">
+                <span class="flex items-center gap-2 text-xs font-medium text-slate-600">
+                  <span class="material-symbols-outlined text-base text-slate-400">wb_sunny</span>
+                  Siang (12:00 - 18:00)
+                </span>
+              </button>
+
+              <!-- Selected Option: Malam -->
+              <button type="button" class="w-full flex items-center justify-between px-3 py-2 rounded-xl border-2 border-brand-600 bg-brand-50/50 text-left transition-colors">
+                <span class="flex items-center gap-2 text-xs font-bold text-brand-700">
+                  <span class="material-symbols-outlined text-base text-brand-600">bedtime</span>
+                  Malam (18:00 - 24:00)
+                </span>
+                <span class="material-symbols-outlined text-brand-600 text-base">check_circle</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Fasilitas Utama -->
+          <div class="pt-4 border-t border-slate-100">
+            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Fasilitas Utama</h4>
+            <div class="space-y-2.5 text-xs font-medium text-slate-700">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked class="rounded border-slate-300 text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                AC Dingin &amp; Reclining Seat
+              </label>
+
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked class="rounded border-slate-300 text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                Toilet di Dalam Bus
+              </label>
+
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked class="rounded border-slate-300 text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                Port USB &amp; Bantal Selimut
+              </label>
+
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" class="rounded border-slate-300 text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                WiFi Onboard
+              </label>
+
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" class="rounded border-slate-300 text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                Snack &amp; Air Mineral
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Garansi Kursi Pasti Ada Box -->
+        <div class="bg-brand-50/60 rounded-2xl p-4 border border-brand-100 flex items-start gap-3">
+          <span class="material-symbols-outlined text-brand-600 text-2xl" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+          <div>
+            <h5 class="text-xs font-bold text-slate-900">Garansi Kursi Pasti Ada</h5>
+            <p class="text-[11px] text-slate-500 font-body mt-0.5 leading-relaxed">
+              Tiket diterbitkan langsung oleh operator mitra resmi dengan QR terverifikasi.
+            </p>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- RIGHT FEED: STEP 1 (PILIH ARMADA) & STEP 2 (PILIH NOMOR KURSI) -->
+      <div class="lg:col-span-9 space-y-8">
+        
+        <!-- STEP 1 SECTION: PILIH ARMADA BUS -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-1.5 h-5 bg-brand-600 rounded-full inline-block"></span>
+              Langkah 1: Pilih Armada Bus yang Tersedia
+            </h2>
+            <span class="text-xs text-slate-400 font-medium font-body">Menampilkan 3 bus terbaik</span>
+          </div>
+
+          <!-- Bus Card 1 (Armada Terpilih / Highlighted) -->
+          <div class="bg-white border-2 border-brand-600 rounded-2xl p-5 sm:p-6 shadow-sm relative overflow-hidden transition-all">
+            <!-- Top Right Ribbon Badge -->
+            <div class="absolute top-0 right-0 bg-brand-600 text-white text-[11px] font-bold px-3 py-1 rounded-bl-xl flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">thumb_up</span>
+              Armada Terpilih
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+              
+              <!-- PO Name & Rating -->
+              <div class="md:col-span-4">
+                <div class="flex items-center gap-2">
+                  <h3 class="text-lg font-bold text-slate-900">Bintang Prima</h3>
+                </div>
+              </div>
+
+              <!-- Departure Schedule Timeline -->
+              <div class="md:col-span-5 flex items-center justify-between px-2">
+                <div class="text-left">
+                  <div class="text-lg font-black text-slate-900">20:00</div>
+                  <div class="text-xs text-slate-400 font-body">Terminal Daya</div>
+                </div>
+
+                <div class="flex-1 flex flex-col items-center px-4">
+                  <span class="text-[11px] font-semibold text-slate-400 mb-1">8j 30m (Langsung)</span>
+                  <div class="w-full flex items-center">
+                    <div class="w-2 h-2 rounded-full bg-brand-600"></div>
+                    <div class="flex-1 h-0.5 bg-brand-200"></div>
+                    <span class="material-symbols-outlined text-brand-600 text-sm -mx-1">directions_bus</span>
+                    <div class="flex-1 h-0.5 bg-brand-200"></div>
+                    <div class="w-2 h-2 rounded-full bg-brand-600"></div>
+                  </div>
+                </div>
+
+                <div class="text-right">
+                  <div class="text-lg font-black text-slate-900">04:30</div>
+                  <div class="text-xs text-slate-400 font-body">Rantepao Toraja</div>
+                </div>
+              </div>
+
+              <!-- Price & CTA -->
+              <div class="md:col-span-3 md:border-l md:border-slate-100 md:pl-5 flex md:flex-col justify-between items-end">
+                <div class="text-right">
+                  <span class="text-[11px] text-slate-400 block">Mulai dari</span>
+                  <div class="text-xl font-black text-brand-600">Rp 190.000</div>
+                  <span class="text-[11px] font-bold text-rose-500 block">Tersisa 8 Kursi</span>
+                </div>
+                <button type="button" class="mt-2.5 w-full py-2 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all">
+                  <span class="material-symbols-outlined text-sm">check</span>
+                  Terpilih
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Bus Card 2 (Borlindo Express) -->
+          <div class="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-xs hover:border-slate-300 transition-all">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+              
+              <!-- PO Name -->
+              <div class="md:col-span-4">
+                <h3 class="text-lg font-bold text-slate-900">Borlindo Express</h3>
+              </div>
+
+              <!-- Departure Schedule Timeline -->
+              <div class="md:col-span-5 flex items-center justify-between px-2">
+                <div class="text-left">
+                  <div class="text-lg font-black text-slate-900">21:00</div>
+                  <div class="text-xs text-slate-400 font-body">Terminal Daya</div>
+                </div>
+
+                <div class="flex-1 flex flex-col items-center px-4">
+                  <span class="text-[11px] font-semibold text-slate-400 mb-1">8j 30m</span>
+                  <div class="w-full flex items-center">
+                    <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                    <div class="flex-1 h-0.5 bg-slate-200"></div>
+                    <span class="material-symbols-outlined text-slate-400 text-sm -mx-1">directions_bus</span>
+                    <div class="flex-1 h-0.5 bg-slate-200"></div>
+                    <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                  </div>
+                </div>
+
+                <div class="text-right">
+                  <div class="text-lg font-black text-slate-900">05:30</div>
+                  <div class="text-xs text-slate-400 font-body">Rantepao Toraja</div>
+                </div>
+              </div>
+
+              <!-- Price & CTA -->
+              <div class="md:col-span-3 md:border-l md:border-slate-100 md:pl-5 flex md:flex-col justify-between items-end">
+                <div class="text-right">
+                  <span class="text-[11px] text-slate-400 block">Mulai dari</span>
+                  <div class="text-xl font-black text-slate-900">Rp 160.000</div>
+                  <span class="text-[11px] font-medium text-slate-400 block">12 Kursi Tersedia</span>
+                </div>
+                <button type="button" class="mt-2.5 w-full py-2 px-4 rounded-xl border border-brand-600 text-brand-600 hover:bg-brand-50 text-xs font-bold transition-all">
+                  Pilih Bus
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Bus Card 3 (Lithium Royal Coach) -->
+          <div class="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-xs hover:border-slate-300 transition-all">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+              
+              <!-- PO Name -->
+              <div class="md:col-span-4">
+                <h3 class="text-lg font-bold text-slate-900">Lithium Royal Coach</h3>
+              </div>
+
+              <!-- Departure Schedule Timeline -->
+              <div class="md:col-span-5 flex items-center justify-between px-2">
+                <div class="text-left">
+                  <div class="text-lg font-black text-slate-900">21:30</div>
+                  <div class="text-xs text-slate-400 font-body">Terminal Daya</div>
+                </div>
+
+                <div class="flex-1 flex flex-col items-center px-4">
+                  <span class="text-[11px] font-semibold text-slate-400 mb-1">8j 30m</span>
+                  <div class="w-full flex items-center">
+                    <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                    <div class="flex-1 h-0.5 bg-slate-200"></div>
+                    <span class="material-symbols-outlined text-slate-400 text-sm -mx-1">directions_bus</span>
+                    <div class="flex-1 h-0.5 bg-slate-200"></div>
+                    <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                  </div>
+                </div>
+
+                <div class="text-right">
+                  <div class="text-lg font-black text-slate-900">06:00</div>
+                  <div class="text-xs text-slate-400 font-body">Rantepao Toraja</div>
+                </div>
+              </div>
+
+              <!-- Price & CTA -->
+              <div class="md:col-span-3 md:border-l md:border-slate-100 md:pl-5 flex md:flex-col justify-between items-end">
+                <div class="text-right">
+                  <span class="text-[11px] text-slate-400 block">Mulai dari</span>
+                  <div class="text-xl font-black text-slate-900">Rp 210.000</div>
+                  <span class="text-[11px] font-bold text-rose-500 block">Sisa 4 Kursi</span>
+                </div>
+                <button type="button" class="mt-2.5 w-full py-2 px-4 rounded-xl border border-brand-600 text-brand-600 hover:bg-brand-50 text-xs font-bold transition-all">
+                  Pilih Bus
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+        <!-- STEP 2 SECTION: PILIH NOMOR KURSI BUS ANDA -->
+        <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-6">
+          
+          <!-- Header & Legend Bar -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+            <div>
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <span class="material-symbols-outlined text-brand-600 text-xl">airline_seat_recline_extra</span>
+                Langkah 2: Pilih Nomor Kursi Bus Anda
+              </h3>
+              <p class="text-xs text-slate-500 font-body mt-0.5">Konfigurasi Executive Class (2 + 2 Formasi Kursi Standar)</p>
+            </div>
+
+            <!-- Legend -->
+            <div class="flex flex-wrap items-center gap-4 text-xs font-medium">
+              <div class="flex items-center gap-1.5">
+                <div class="w-4 h-4 rounded-md bg-white border border-slate-300"></div>
+                <span class="text-slate-600">Tersedia</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <div class="w-4 h-4 rounded-md bg-amber-500 text-white flex items-center justify-center font-bold text-[10px]">✓</div>
+                <span class="text-amber-600 font-bold">Dipilih (2 Kursi)</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <div class="w-4 h-4 rounded-md bg-slate-200 border border-slate-300 text-slate-400 flex items-center justify-center text-[10px]">✕</div>
+                <span class="text-slate-400">Terisi</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seat Grid & Summary Dual-Column -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Deck Graphic (2+2 Layout) -->
+            <div class="md:col-span-7 bg-slate-50/80 border border-slate-200/80 rounded-2xl p-5">
+              
+              <!-- Front Deck Header -->
+              <div class="flex justify-between items-center pb-3 mb-5 border-b border-slate-200/80">
+                <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-widest">
+                  <span class="material-symbols-outlined text-base text-brand-600">arrow_upward</span>
+                  DEPAN
+                </div>
+                <div class="flex items-center gap-1.5 bg-slate-200/70 px-3 py-1 rounded-lg text-xs font-bold text-slate-700">
+                  <span class="material-symbols-outlined text-sm text-brand-600">sports_motorsports</span>
+                  Sopir 🚌
+                </div>
+              </div>
+
+              <!-- Rows of Seats -->
+              <div class="space-y-3" id="seatMatrix">
+                
+                <!-- Row 1 -->
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex gap-2">
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="1A">
+                      <span class="text-xs font-bold">1A</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                    <button type="button" class="w-13 h-13 rounded-xl bg-slate-200 border border-slate-300 text-slate-400 flex flex-col items-center justify-center cursor-not-allowed" disabled>
+                      <span class="text-xs font-bold">1B</span>
+                      <span class="text-[9px]">Terisi</span>
+                    </button>
+                  </div>
+                  <div class="text-[10px] font-bold text-slate-300 tracking-widest uppercase px-2">LORONG</div>
+                  <div class="flex gap-2">
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="1C">
+                      <span class="text-xs font-bold">1C</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="1D">
+                      <span class="text-xs font-bold">1D</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Row 2 (Contains 2B Dipilih) -->
+                <div class="flex items-center justify-between gap-2 bg-amber-50/60 p-1.5 rounded-xl border border-amber-200/50">
+                  <div class="flex gap-2">
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="2A">
+                      <span class="text-xs font-bold">2A</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                    <!-- 2B SELECTED -->
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-amber-500 text-white border-2 border-amber-500 flex flex-col items-center justify-center shadow-sm font-bold scale-105" data-seat="2B">
+                      <span class="text-xs">2B ✓</span>
+                      <span class="text-[9px] text-amber-100">Rp285k</span>
+                    </button>
+                  </div>
+                  <div class="text-[10px] font-bold text-amber-500 tracking-widest uppercase px-2">PILIHAN</div>
+                  <div class="flex gap-2">
+                    <button type="button" class="w-13 h-13 rounded-xl bg-slate-200 border border-slate-300 text-slate-400 flex flex-col items-center justify-center cursor-not-allowed" disabled>
+                      <span class="text-xs font-bold">2C</span>
+                      <span class="text-[9px]">Terisi</span>
+                    </button>
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="2D">
+                      <span class="text-xs font-bold">2D</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Row 3 (Contains 3D Dipilih) -->
+                <div class="flex items-center justify-between gap-2 bg-amber-50/60 p-1.5 rounded-xl border border-amber-200/50">
+                  <div class="flex gap-2">
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="3A">
+                      <span class="text-xs font-bold">3A</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="3B">
+                      <span class="text-xs font-bold">3B</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                  </div>
+                  <div class="text-[10px] font-bold text-amber-500 tracking-widest uppercase px-2">PILIHAN</div>
+                  <div class="flex gap-2">
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="3C">
+                      <span class="text-xs font-bold">3C</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                    <!-- 3D SELECTED -->
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-amber-500 text-white border-2 border-amber-500 flex flex-col items-center justify-center shadow-sm font-bold scale-105" data-seat="3D">
+                      <span class="text-xs">3D ✓</span>
+                      <span class="text-[9px] text-amber-100">Rp285k</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex gap-2">
+                    <button type="button" class="w-13 h-13 rounded-xl bg-slate-200 border border-slate-300 text-slate-400 flex flex-col items-center justify-center cursor-not-allowed" disabled>
+                      <span class="text-xs font-bold">4A</span>
+                      <span class="text-[9px]">Terisi</span>
+                    </button>
+                    <button type="button" class="w-13 h-13 rounded-xl bg-slate-200 border border-slate-300 text-slate-400 flex flex-col items-center justify-center cursor-not-allowed" disabled>
+                      <span class="text-xs font-bold">4B</span>
+                      <span class="text-[9px]">Terisi</span>
+                    </button>
+                  </div>
+                  <div class="text-[10px] font-bold text-slate-300 tracking-widest uppercase px-2">LORONG</div>
+                  <div class="flex gap-2">
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="4C">
+                      <span class="text-xs font-bold">4C</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="4D">
+                      <span class="text-xs font-bold">4D</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Row 5 -->
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex gap-2">
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="5A">
+                      <span class="text-xs font-bold">5A</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="5B">
+                      <span class="text-xs font-bold">5B</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                  </div>
+                  <div class="text-[10px] font-bold text-slate-300 tracking-widest uppercase px-2">LORONG</div>
+                  <div class="flex gap-2">
+                    <button type="button" class="w-13 h-13 rounded-xl bg-slate-200 border border-slate-300 text-slate-400 flex flex-col items-center justify-center cursor-not-allowed" disabled>
+                      <span class="text-xs font-bold">5C</span>
+                      <span class="text-[9px]">Terisi</span>
+                    </button>
+                    <button type="button" class="seat-btn w-13 h-13 rounded-xl bg-white border-2 border-slate-200 hover:border-brand-600 text-slate-800 flex flex-col items-center justify-center transition-all shadow-2xs" data-seat="5D">
+                      <span class="text-xs font-bold">5D</span>
+                      <span class="text-[9px] text-slate-400">285k</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Deck Footer Info -->
+              <div class="flex justify-between items-center pt-4 mt-5 border-t border-slate-200/80 text-xs text-slate-500 font-medium">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-brand-600">airline_seat_recline_normal</span>
+                  Bus AC Executive 2+2
+                </div>
+                <div class="flex items-center gap-1.5 bg-slate-200/60 px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-600">
+                  <span class="material-symbols-outlined text-sm">wc</span>
+                  Toilet Penumpang
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Seat Selection Summary Panel -->
+            <div class="md:col-span-5 bg-slate-50/90 rounded-2xl p-5 border border-slate-200/80 space-y-4">
+              
+              <div class="flex items-center justify-between">
+                <h4 class="text-sm font-bold text-slate-900">Rincian Kursi Dipilih</h4>
+                <span class="bg-amber-100 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full" id="seatCountBadge">2 Kursi</span>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 border border-slate-200/80 space-y-3 text-xs">
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-500 font-body">Kursi dipilih:</span>
+                  <div class="flex gap-1.5" id="selectedSeatsList">
+                    <span class="px-2.5 py-1 bg-amber-500 text-white font-bold text-xs rounded-md shadow-xs">2B</span>
+                    <span class="px-2.5 py-1 bg-amber-500 text-white font-bold text-xs rounded-md shadow-xs">3D</span>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-500 font-body">Harga per kursi:</span>
+                  <span class="font-bold text-slate-800" id="seatPriceText">Rp285.000</span>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-500 font-body">Jumlah kursi:</span>
+                  <span class="font-bold text-slate-800" id="seatCountText">2</span>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-500 font-body">Biaya layanan:</span>
+                  <span class="font-semibold text-slate-800">Rp7.500</span>
+                </div>
+
+                <div class="border-t border-slate-100 pt-3 flex items-center justify-between">
+                  <span class="font-bold text-slate-900 text-sm">Total:</span>
+                  <span class="text-xl font-black text-brand-600" id="totalPriceText">Rp577.500</span>
+                </div>
+
+              </div>
+
+              <!-- Reservation Expiry Banner -->
+              <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs p-3 rounded-xl flex items-center gap-2 font-medium">
+                <span class="material-symbols-outlined text-emerald-600 text-base" style="font-variation-settings: 'FILL' 1;">lock</span>
+                <span>Kursi 2B dan 3D tersimpan untuk pemesanan Anda selama 15 menit.</span>
+              </div>
+
+              <!-- Next Action Button (Proceed to Step 4 / Payment) -->
+              <a href="pembayaran.html" class="w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-brand-600/25 transition-all active:scale-98">
+                <span>Lanjut ke Data Pemesan (Langkah 3)</span>
+                <span class="material-symbols-outlined text-base">arrow_forward</span>
+              </a>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-300 mt-20 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
+        
+        <!-- Brand Info -->
+        <div class="md:col-span-4 space-y-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white">
+              <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">directions_bus</span>
+            </div>
+            <span class="text-xl font-extrabold text-white tracking-tight">BusTicket</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-400 font-body leading-relaxed max-w-sm">
+            Platform pemesanan tiket bus antarkota dan provinsi terpercaya di Indonesia. Perjalanan nyaman, jadwal akurat, dan pembayaran instan dengan jaminan kursi 100%.
+          </p>
+        </div>
+
+        <!-- Links -->
+        <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-6">
+          <div>
+            <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Tentang Layanan</h5>
+            <ul class="space-y-2 text-xs font-body text-slate-400">
+              <li><a href="#" class="hover:text-white transition-colors">Tentang Kami</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Syarat &amp; Ketentuan</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Kebijakan Privasi</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Dukungan Pelanggan</h5>
+            <ul class="space-y-2 text-xs font-body text-slate-400">
+              <li><a href="#" class="hover:text-white transition-colors">Hubungi Kami</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Pusat Bantuan</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Mitra Operator</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Rute Terpopuler</h5>
+            <ul class="space-y-2 text-xs font-body text-slate-400">
+              <li>Makassar - Toraja</li>
+              <li>Makassar - Palopo</li>
+              <li>Jakarta - Surabaya</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-body">
+        <p>&copy; 2024 BusTicket Platform. Hak Cipta Dilindungi Undang-Undang.</p>
+        <p class="text-slate-400">Sistem Terintegrasi Midtrans &amp; Jasa Raharja</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Floating Prototype Switcher Widget -->
+  <div class="fixed bottom-5 right-5 z-50 bg-slate-900/95 backdrop-blur-md text-white text-xs px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-700/80">
+    <div class="flex items-center gap-2 font-bold text-sky-400">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="hidden sm:inline">Prototype Flow</span>
+    </div>
+    <div class="h-4 w-px bg-slate-700"></div>
+    <div class="flex items-center gap-1.5">
+      <a href="index.html" class="px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors">1. Beranda</a>
+      <a href="pemesanan.html" class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30">2. Pilih Bus & Kursi</a>
+      <a href="pembayaran.html" class="px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors">3. Bayar & E-Tiket</a>
+    </div>
+  </div>
+
+  <style>
+    .w-13 { width: 3.25rem; }
+    .h-13 { height: 3.25rem; }
+  </style>
+
+</body>
+</html>

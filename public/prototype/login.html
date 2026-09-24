@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Masuk & Daftar Akun - BusTicket</title>
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#006194",
+            "primary-container": "#007bb9",
+            "secondary": "#565e74",
+            "background": "#f6faff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#edf4fc",
+            "surface-container": "#e8eff7",
+            "surface-container-high": "#e2e9f1",
+            "on-surface": "#151c22",
+            "on-surface-variant": "#3f4850",
+            "on-primary": "#ffffff",
+            "outline-variant": "#bfc7d2",
+            "outline": "#707881"
+          },
+          fontFamily: {
+            headline: ["Plus Jakarta Sans", "sans-serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col antialiased">
+
+  <!-- NAVBAR -->
+  <header class="docked full-width top-0 sticky z-40 bg-surface-container-lowest shadow-sm border-b border-surface-container">
+    <div class="w-full px-6 max-w-7xl mx-auto flex justify-between items-center h-16">
+      <a class="flex items-center gap-2 group" href="index.html">
+        <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm shadow-primary/20">
+          <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">directions_bus</span>
+        </div>
+        <span class="font-headline text-xl font-bold text-primary tracking-tight">BusTicket</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8">
+        <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="index.html">Beranda</a>
+        <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="pemesanan.html">Pesan Tiket</a>
+        <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="riwayat.html">Riwayat Pemesanan</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-semibold text-secondary hover:text-primary transition-colors">
+          <span class="material-symbols-outlined text-base">arrow_back</span>
+          Kembali ke Beranda
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN AUTH CONTAINER -->
+  <main class="flex-1 flex items-center justify-center py-10 px-4 sm:px-6 relative overflow-hidden">
+    <!-- Subtle Background Travel Ornaments -->
+    <div class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#006194_1px,transparent_1px)] [background-size:24px_24px]"></div>
+    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-sky-200/40 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+      
+      <!-- LEFT HERO INFOGRAPHIC (Desktop) -->
+      <div class="lg:col-span-5 hidden lg:flex flex-col justify-center space-y-6 pr-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold w-fit">
+          <span class="material-symbols-outlined text-sm">verified_user</span>
+          Akun Resmi BusTicket
+        </div>
+
+        <div>
+          <h1 class="font-headline text-3xl font-extrabold text-on-surface leading-tight">
+            Satu Akun untuk Semua Perjalanan Bus Anda
+          </h1>
+          <p class="text-secondary text-sm mt-3 leading-relaxed">
+            Dapatkan kemudahan akses e-tiket digital, riwayat transaksi tanpa kertas, dan pemesanan kursi lebih cepat.
+          </p>
+        </div>
+
+        <div class="space-y-4 pt-2">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-lg">qr_code_2</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-on-surface">E-Tiket & Boarding Pass Instan</h4>
+              <p class="text-xs text-secondary mt-0.5">Tunjukkan barcode langsung ke petugas terminal tanpa perlu cetak tiket fisik.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-lg">event_seat</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-on-surface">Pilih Kursi Favorit Anda</h4>
+              <p class="text-xs text-secondary mt-0.5">Peta kursi interaktif 2+2 dengan ketersediaan real-time.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-lg">history_edu</span>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-on-surface">Riwayat & Invoice Terpusat</h4>
+              <p class="text-xs text-secondary mt-0.5">Semua bukti pembayaran Midtrans dan tiket lama tersimpan rapi selamanya.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-surface-container-low border border-surface-container flex items-center gap-3">
+          <span class="material-symbols-outlined text-amber-500 text-2xl">star</span>
+          <div class="text-xs">
+            <p class="font-bold text-on-surface">Dipercaya 50.000+ Penumpang</p>
+            <p class="text-secondary mt-0.5">Mitra resmi PO Primadona, Borlindo, Litha & Co, Bintang Prima.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT CARD: LOGIN & REGISTER TABS -->
+      <div class="lg:col-span-7 bg-surface-container-lowest rounded-3xl p-6 sm:p-8 shadow-xl shadow-primary/5 border border-surface-container-high transition-all">
+        
+        <!-- Tab Navigation Buttons -->
+        <div class="flex rounded-2xl bg-surface-container-low p-1.5 mb-6 border border-surface-container">
+          <button id="tabMasukBtn" onclick="switchAuthTab('masuk')" class="flex-1 py-2.5 rounded-xl font-headline text-sm font-bold transition-all shadow-sm bg-white text-primary">
+            Masuk ke Akun
+          </button>
+          <button id="tabDaftarBtn" onclick="switchAuthTab('daftar')" class="flex-1 py-2.5 rounded-xl font-headline text-sm font-medium transition-all text-secondary hover:text-on-surface">
+            Daftar Akun Baru
+          </button>
+        </div>
+
+        <!-- TAB CONTENT 1: FORM MASUK (LOGIN) -->
+        <div id="formMasuk" class="space-y-4">
+          <div class="mb-4">
+            <h2 class="font-headline text-xl font-bold text-on-surface">Selamat Datang Kembali!</h2>
+            <p class="text-xs text-secondary mt-1">Masukkan email atau nomor handphone Anda untuk mengakses tiket.</p>
+          </div>
+
+          <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-secondary uppercase mb-1.5">Email atau No. Handphone</label>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-secondary text-lg">mail</span>
+                <input id="loginIdentifier" class="w-full pl-11 pr-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="contoh: fikri@gmail.com" type="text" value="customer@busticket.test" required/>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center mb-1.5">
+                <label class="block text-xs font-semibold text-secondary uppercase">Kata Sandi</label>
+                <a href="#" class="text-xs text-primary font-semibold hover:underline">Lupa Sandi?</a>
+              </div>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-secondary text-lg">lock</span>
+                <input id="loginPassword" class="w-full pl-11 pr-11 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Masukkan kata sandi" type="password" value="password" required/>
+                <button type="button" onclick="togglePasswordVisibility('loginPassword', this)" class="absolute right-3.5 text-secondary hover:text-on-surface">
+                  <span class="material-symbols-outlined text-lg">visibility</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs pt-1">
+              <label class="flex items-center gap-2 cursor-pointer select-none text-secondary">
+                <input type="checkbox" checked class="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"/>
+                <span>Ingat saya di perangkat ini</span>
+              </label>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-4 bg-primary hover:bg-primary-container text-on-primary rounded-xl font-headline text-sm font-bold flex items-center justify-center gap-2 shadow-md shadow-primary/20 hover:shadow-lg transition-all active:scale-98">
+              <span>Masuk Sekarang</span>
+              <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </button>
+          </form>
+
+          <!-- Quick Demo Tip -->
+          <div class="p-3 bg-sky-50 rounded-xl border border-sky-100 flex items-center justify-between text-xs text-sky-800">
+            <span>💡 <strong>Akun Demo:</strong> <code>customer@busticket.test</code> / <code>password</code></span>
+            <button onclick="handleLoginSubmit(event)" class="text-xs font-bold text-sky-600 hover:underline">Klik Masuk Langsung &rarr;</button>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT 2: FORM DAFTAR (REGISTER) -->
+        <div id="formDaftar" class="space-y-4 hidden">
+          <div class="mb-4">
+            <h2 class="font-headline text-xl font-bold text-on-surface">Buat Akun BusTicket</h2>
+            <p class="text-xs text-secondary mt-1">Daftar dalam 1 menit untuk kemudahan pemesanan tiket bus.</p>
+          </div>
+
+          <form onsubmit="handleRegisterSubmit(event)" class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-semibold text-secondary uppercase mb-1">Nama Lengkap Sesuai KTP</label>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-secondary text-lg">person</span>
+                <input class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="contoh: Andi Muh. Fikri" type="text" value="Andi Muh. Fikri" required/>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-secondary uppercase mb-1">Nomor WhatsApp Aktif</label>
+                <div class="relative flex items-center">
+                  <span class="absolute left-3.5 text-secondary text-xs font-bold">+62</span>
+                  <input class="w-full pl-12 pr-3 py-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="81244892211" type="tel" value="81244892211" required/>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-secondary uppercase mb-1">Email</label>
+                <div class="relative flex items-center">
+                  <span class="material-symbols-outlined absolute left-3.5 text-secondary text-lg">mail</span>
+                  <input class="w-full pl-11 pr-3 py-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="fikri@gmail.com" type="email" value="fikri@gmail.com" required/>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-secondary uppercase mb-1">Kata Sandi</label>
+              <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3.5 text-secondary text-lg">lock</span>
+                <input id="regPassword" class="w-full pl-11 pr-11 py-2.5 rounded-xl border border-outline-variant bg-surface-container-lowest text-on-surface text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="Minimal 8 karakter" type="password" value="rahasia123" required/>
+                <button type="button" onclick="togglePasswordVisibility('regPassword', this)" class="absolute right-3.5 text-secondary hover:text-on-surface">
+                  <span class="material-symbols-outlined text-lg">visibility</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="pt-1">
+              <label class="flex items-start gap-2 cursor-pointer select-none text-xs text-secondary">
+                <input type="checkbox" checked class="mt-0.5 rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"/>
+                <span>Saya menyetujui <a href="#" class="text-primary font-semibold hover:underline">Syarat & Ketentuan</a> serta <a href="#" class="text-primary font-semibold hover:underline">Kebijakan Privasi</a> BusTicket.</span>
+              </label>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-4 bg-primary hover:bg-primary-container text-on-primary rounded-xl font-headline text-sm font-bold flex items-center justify-center gap-2 shadow-md shadow-primary/20 hover:shadow-lg transition-all active:scale-98">
+              <span>Daftar Akun Sekarang</span>
+              <span class="material-symbols-outlined text-base">check_circle</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Social Divider -->
+        <div class="relative my-6 text-center">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-surface-container"></div></div>
+          <span class="relative bg-surface-container-lowest px-4 text-xs text-secondary font-medium">atau masuk dengan</span>
+        </div>
+
+        <!-- Google OAuth Button -->
+        <button onclick="handleLoginSubmit(event)" type="button" class="w-full py-2.5 px-4 rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors flex items-center justify-center gap-3 text-xs font-semibold text-on-surface">
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          Google Account
+        </button>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-surface-container-lowest border-t border-surface-container py-6">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-secondary">
+      <p>© 2026 BusTicket Platform. Hak Cipta Dilindungi Undang-Undang.</p>
+      <div class="flex items-center gap-6">
+        <a href="index.html" class="hover:text-primary transition-colors">Beranda</a>
+        <a href="pemesanan.html" class="hover:text-primary transition-colors">Pesan Tiket</a>
+        <a href="riwayat.html" class="hover:text-primary transition-colors">Riwayat</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Prototype Switcher -->
+  <div class="fixed bottom-5 right-5 z-50 bg-slate-900/95 backdrop-blur-md text-white text-xs px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-700/80">
+    <div class="flex items-center gap-2 font-bold text-sky-400">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span>Stitch Prototype</span>
+    </div>
+    <div class="h-4 w-px bg-slate-700"></div>
+    <div class="flex items-center gap-1.5">
+      <a href="index.html" class="px-2 py-1 rounded-lg hover:bg-slate-800 text-slate-300">1. Beranda</a>
+      <a href="pemesanan.html" class="px-2 py-1 rounded-lg hover:bg-slate-800 text-slate-300">2. Pemesanan</a>
+      <a href="login.html" class="px-2 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30">3. Login/Register</a>
+      <a href="riwayat.html" class="px-2 py-1 rounded-lg hover:bg-slate-800 text-slate-300">4. Riwayat &rarr;</a>
+    </div>
+  </div>
+
+  <!-- Interactive Scripts -->
+  <script>
+    function switchAuthTab(tab) {
+      const masukBtn = document.getElementById('tabMasukBtn');
+      const daftarBtn = document.getElementById('tabDaftarBtn');
+      const formMasuk = document.getElementById('formMasuk');
+      const formDaftar = document.getElementById('formDaftar');
+
+      if (tab === 'masuk') {
+        masukBtn.className = 'flex-1 py-2.5 rounded-xl font-headline text-sm font-bold transition-all shadow-sm bg-white text-primary';
+        daftarBtn.className = 'flex-1 py-2.5 rounded-xl font-headline text-sm font-medium transition-all text-secondary hover:text-on-surface';
+        formMasuk.classList.remove('hidden');
+        formDaftar.classList.add('hidden');
+      } else {
+        daftarBtn.className = 'flex-1 py-2.5 rounded-xl font-headline text-sm font-bold transition-all shadow-sm bg-white text-primary';
+        masukBtn.className = 'flex-1 py-2.5 rounded-xl font-headline text-sm font-medium transition-all text-secondary hover:text-on-surface';
+        formDaftar.classList.remove('hidden');
+        formMasuk.classList.add('hidden');
+      }
+    }
+
+    function togglePasswordVisibility(id, btn) {
+      const input = document.getElementById(id);
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-20 right-6 z-50 bg-emerald-600 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-2 font-bold text-sm animate-bounce';
+      toast.innerHTML = `<span class="material-symbols-outlined">check_circle</span> ${message}`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    function handleLoginSubmit(e) {
+      if (e) e.preventDefault();
+      showToast('Login Berhasil! Mengalihkan ke Riwayat Pemesanan...');
+      setTimeout(() => {
+        window.location.href = 'riwayat.html';
+      }, 1200);
+    }
+
+    function handleRegisterSubmit(e) {
+      if (e) e.preventDefault();
+      showToast('Pendaftaran Berhasil! Mengalihkan ke Akun Anda...');
+      setTimeout(() => {
+        window.location.href = 'riwayat.html';
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
