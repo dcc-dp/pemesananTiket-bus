@@ -29,6 +29,23 @@ use Illuminate\Support\Facades\Route;
 // ===================== PUBLIC =====================
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// ===================== STITCH PROTOTYPE =====================
+Route::get('/prototype', function () {
+    return response()->file(public_path('prototype/index.html'));
+})->name('prototype.index');
+
+Route::get('/prototype/pemesanan', function () {
+    return response()->file(public_path('prototype/pemesanan.html'));
+})->name('prototype.pemesanan');
+
+Route::get('/prototype/login', function () {
+    return response()->file(public_path('prototype/login.html'));
+})->name('prototype.login');
+
+Route::get('/prototype/riwayat', function () {
+    return response()->file(public_path('prototype/riwayat.html'));
+})->name('prototype.riwayat');
+
 // Pencarian tiket
 Route::get('/tiket', [TicketController::class, 'search'])->name('tiket.search.form');
 Route::get('/tiket/search', [TicketController::class, 'search'])->name('tiket.search');

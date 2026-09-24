@@ -1,72 +1,84 @@
-<footer id="footer" class="footer">
-    <div class="footer-main" style="background: linear-gradient(135deg, #0B1F3A 0%, #123E73 50%, #1E5AA8 100%);">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-lg-4 col-md-6 footer-widget footer-about">
-                    <h3 class="widget-title" style="color: #ffffff;">Tentang BusTicket</h3>
-                    <span style="font-size: 1.4rem; font-weight: 800; color: #ffffff;">
-                        <i class="fas fa-bus" style="color: #7FA8E0;"></i> BusTicket
-                    </span>
-                    <p style="color: rgba(255,255,255,0.75); margin-top: 0.8rem;">
-                        Aplikasi pemesanan tiket bus online. Pilih jadwal, pilih kursi, bayar, dan dapatkan tiket digital dengan mudah.
-                    </p>
-                    <div class="footer-social">
-                        <ul>
-                            <li><a href="#" aria-label="Facebook" style="color: rgba(255,255,255,0.75);"><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a href="#" aria-label="Instagram" style="color: rgba(255,255,255,0.75);"><i class="fab fa-instagram"></i></a></li>
-                            <li><a href="#" aria-label="Twitter" style="color: rgba(255,255,255,0.75);"><i class="fab fa-twitter"></i></a></li>
-                        </ul>
+<!-- FOOTER (PROTOTYPE DESIGN SYSTEM) -->
+<footer class="bg-slate-900 text-slate-300 mt-auto border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-800">
+            
+            <!-- Col 1: Brand & Desc -->
+            <div class="md:col-span-4 space-y-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white">
+                        <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">directions_bus</span>
                     </div>
+                    <span class="text-xl font-extrabold text-white tracking-tight">BusTicket</span>
                 </div>
-
-                <div class="col-lg-4 col-md-6 footer-widget mt-5 mt-md-0">
-                    <h3 class="widget-title" style="color: #ffffff;">Hubungi Kami</h3>
-                    <div class="working-hours">
-                        <ul class="list-arrow" style="list-style: none; padding: 0; margin: 0;">
-                            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.75); font-size: 0.9rem; line-height: 1.6; display: flex; align-items: flex-start; gap: 0.5rem;">
-                                <i class="fas fa-map-marker-alt" style="color: rgba(255,255,255,0.4); margin-top: 0.2rem;"></i>
-                                <span>Jl. Perintis Kemerdekaan KM 11, Makassar, Sulawesi Selatan</span>
-                            </li>
-                            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.75); font-size: 0.9rem; line-height: 1.6; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-phone-alt" style="color: rgba(255,255,255,0.4);"></i>
-                                <a href="tel:04111234567" style="color: rgba(255,255,255,0.75); text-decoration: none;">(0411) 123-4567</a>
-                            </li>
-                            <li style="padding: 0.5rem 0; border-bottom: none; color: rgba(255,255,255,0.75); font-size: 0.9rem; line-height: 1.6; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-envelope" style="color: rgba(255,255,255,0.4);"></i>
-                                <a href="mailto:cs@busticket.test" style="color: rgba(255,255,255,0.75); text-decoration: none;">cs@busticket.test</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 footer-widget mt-5 mt-md-0">
-                    <h3 class="widget-title" style="color: #ffffff;">Layanan</h3>
-                    <div class="working-hours" style="color: rgba(255,255,255,0.75);">
-                        <ul style="list-style: none; padding: 0; margin: 0;">
-                            <li style="padding: 0.4rem 0;"><a href="{{ route('tiket.search') }}" style="color: rgba(255,255,255,0.75); text-decoration: none;">Cari Tiket Bus</a></li>
-                            @if (Session('cek'))
-                                <li style="padding: 0.4rem 0;"><a href="{{ route('customer.bookings') }}" style="color: rgba(255,255,255,0.75); text-decoration: none;">Booking Saya</a></li>
-                                <li style="padding: 0.4rem 0;"><a href="{{ route('customer.tickets') }}" style="color: rgba(255,255,255,0.75); text-decoration: none;">Tiket Saya</a></li>
-                            @endif
-                            <li style="padding: 0.4rem 0;"><a href="{{ route('register') }}" style="color: rgba(255,255,255,0.75); text-decoration: none;">Daftar Akun</a></li>
-                        </ul>
-                    </div>
+                <p class="text-xs sm:text-sm text-slate-400 font-body leading-relaxed max-w-sm">
+                    Platform pemesanan tiket bus online terdepan di Indonesia. Nikmati kemudahan mencari rute, memilih kursi nyaman, dan pembayaran instan dengan kepastian berangkat.
+                </p>
+                <div class="flex items-center gap-2 text-xs font-semibold text-slate-400 pt-1">
+                    <span class="material-symbols-outlined text-brand-500 text-base">support_agent</span>
+                    <span>Layanan Pelanggan Siaga 24/7</span>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="copyright" style="background: linear-gradient(135deg, #0B1F3A 0%, #123E73 50%, #1E5AA8 100%);">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-12 text-center">
-                    <div class="copyright-info">
-                        <span style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">
-                            Copyright &copy; <script>document.write(new Date().getFullYear())</script> BusTicket. All rights reserved.
-                        </span>
-                    </div>
+            <!-- Col 2: Navigasi Cepat -->
+            <div class="md:col-span-2 space-y-3">
+                <h4 class="text-sm font-bold text-white uppercase tracking-wider">Navigasi Cepat</h4>
+                <ul class="space-y-2 text-xs font-body text-slate-400">
+                    <li><a href="{{ route('home') }}" class="hover:text-white transition-colors">Beranda</a></li>
+                    <li><a href="{{ route('tiket.search') }}" class="hover:text-white transition-colors">Pesan Tiket</a></li>
+                    <li><a href="{{ route('home') }}#rute-populer" class="hover:text-white transition-colors">Rute Populer</a></li>
+                    @if (Session('cek'))
+                        <li><a href="{{ route('customer.bookings') }}" class="hover:text-white transition-colors">Pesanan Saya</a></li>
+                        <li><a href="{{ route('customer.tickets') }}" class="hover:text-white transition-colors">Tiket Saya</a></li>
+                    @else
+                        <li><a href="{{ route('login') }}" class="hover:text-white transition-colors">Masuk Akun</a></li>
+                        <li><a href="{{ route('register') }}" class="hover:text-white transition-colors">Daftar Akun</a></li>
+                    @endif
+                </ul>
+            </div>
+
+            <!-- Col 3: Bantuan & Hubungi Kami -->
+            <div class="md:col-span-3 space-y-3">
+                <h4 class="text-sm font-bold text-white uppercase tracking-wider">Bantuan &amp; Hubungi Kami</h4>
+                <ul class="space-y-2 text-xs font-body text-slate-400">
+                    <li><a href="#" class="hover:text-white transition-colors">Tentang Kami</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Mitra Operator</a></li>
+                    <li><span class="text-slate-400">info@busticket.id</span></li>
+                    <li><span class="text-slate-300 font-medium">+62 811-8800-0007</span></li>
+                </ul>
+            </div>
+
+            <!-- Col 4: Mitra & Pembayaran Resmi -->
+            <div class="md:col-span-3 space-y-3">
+                <h4 class="text-sm font-bold text-white uppercase tracking-wider">Mitra &amp; Pembayaran Resmi</h4>
+                <p class="text-xs text-slate-400 font-body">
+                    Keamanan pembayaran didukung oleh sistem Payment Gateway Midtrans.
+                </p>
+                <div class="grid grid-cols-3 gap-2 pt-2">
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-md py-1.5 px-2 text-center text-[10px] font-bold text-slate-300">QRIS</div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-md py-1.5 px-2 text-center text-[10px] font-bold text-slate-300">BCA VA</div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-md py-1.5 px-2 text-center text-[10px] font-bold text-slate-300">Mandiri</div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-md py-1.5 px-2 text-center text-[10px] font-bold text-slate-300">GoPay</div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-md py-1.5 px-2 text-center text-[10px] font-bold text-slate-300">ShopeePay</div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-md py-1.5 px-2 text-center text-[10px] font-bold text-slate-300">Midtrans</div>
                 </div>
             </div>
+
         </div>
+
+        <!-- Copyright Bottom Bar -->
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-body">
+            <p>&copy; {{ date('Y') }} BusTicket Platform. Hak Cipta Dilindungi Undang-Undang.</p>
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-slate-400 transition-colors">Ketentuan Tiket</a>
+                <a href="#" class="hover:text-slate-400 transition-colors">Privasi</a>
+                <span class="flex items-center gap-1.5 text-emerald-400">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    Status Server: Normal
+                </span>
+            </div>
+        </div>
+
     </div>
 </footer>

@@ -1,329 +1,489 @@
 @extends('layouts.landing.app', ['menu' => 'home'])
 
 @section('content')
-    {{-- HERO --}}
-    <div class="hero-area" style="background: linear-gradient(160deg, #0B1F3A 0%, #0d2847 40%, #1a4a7a 70%, #1E5AA8 100%); padding: 80px 0 120px; position: relative; overflow: hidden;">
-        {{-- Decorative Elements --}}
-        <div style="position: absolute; top: -50%; right: -10%; width: 600px; height: 600px; background: rgba(255,255,255,0.03); border-radius: 50%; pointer-events: none;"></div>
-        <div style="position: absolute; bottom: -30%; left: -5%; width: 400px; height: 400px; background: rgba(255,255,255,0.02); border-radius: 50%; pointer-events: none;"></div>
-        <div style="position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 800px; height: 800px; background: radial-gradient(circle, rgba(30,90,168,0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+    <!-- HERO SECTION (PROTOTYPE DESIGN SYSTEM) -->
+    <section class="relative overflow-hidden pt-12 pb-20 lg:pt-16 lg:pb-24 hero-radial-glow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            
+            <!-- Pill Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-brand-600 text-xs font-bold tracking-wider uppercase mb-6 shadow-xs">
+                <span class="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
+                Platform Reservasi Bus Resmi
+            </div>
 
-        <div class="container position-relative" style="z-index: 2;">
-            <div class="row align-items-center">
-                <div class="col-lg-7 mx-auto text-center">
-                    <div style="display: inline-block; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 6px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.15); margin-bottom: 24px;">
-                        <span style="color: rgba(255,255,255,0.8); font-size: 0.85rem; letter-spacing: 0.5px;">
-                            <i class="fas fa-bus" style="margin-right: 8px;"></i> #1 Platform Pemesanan Tiket Bus
-                        </span>
+            <!-- Main Headline -->
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight max-w-3xl mx-auto mb-4">
+                Pesan Tiket Bus dengan Mudah dan Cepat
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-base sm:text-lg text-slate-500 font-normal max-w-2xl mx-auto mb-10 leading-relaxed font-body">
+                Cari rute, pilih bus, tentukan kursi, dan lakukan pembayaran secara online tanpa ribet.
+            </p>
+
+            <!-- SEARCH CARD COMPONENT -->
+            <div class="max-w-5xl mx-auto bg-white rounded-2xl p-6 sm:p-7 shadow-xl shadow-slate-200/50 border border-slate-200/90 text-left">
+                <form action="{{ route('tiket.search') }}" method="GET">
+                    <!-- Top Row Inputs -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center">
+                        
+                        <!-- Kota Asal -->
+                        <div class="md:col-span-3">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Kota Asal</label>
+                            <div class="relative flex items-center">
+                                <span class="material-symbols-outlined absolute left-3.5 text-brand-600 text-[20px] pointer-events-none">location_on</span>
+                                <select name="terminal_asal" id="originSelect" required class="w-full pl-11 pr-8 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 text-sm font-semibold focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none transition-all appearance-none cursor-pointer">
+                                    <option value="">Pilih Asal</option>
+                                    @foreach ($terminals as $terminal)
+                                        <option value="{{ $terminal->id_terminal }}" {{ $loop->first ? 'selected' : '' }}>
+                                            {{ $terminal->kota }} - {{ $terminal->nama_terminal }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 text-slate-400 text-[18px] pointer-events-none">expand_more</span>
+                            </div>
+                        </div>
+
+                        <!-- Swap Button -->
+                        <div class="md:col-span-1 flex justify-center -my-2 md:my-0 pt-3 md:pt-4">
+                            <button type="button" id="swapRouteBtn" class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 flex items-center justify-center shadow-xs transition-transform duration-300 hover:rotate-180 active:scale-95" title="Tukar Rute">
+                                <span class="material-symbols-outlined text-[20px]">sync_alt</span>
+                            </button>
+                        </div>
+
+                        <!-- Kota Tujuan -->
+                        <div class="md:col-span-3">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Kota Tujuan</label>
+                            <div class="relative flex items-center">
+                                <span class="material-symbols-outlined absolute left-3.5 text-brand-600 text-[20px] pointer-events-none">pin_drop</span>
+                                <select name="terminal_tujuan" id="destSelect" required class="w-full pl-11 pr-8 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 text-sm font-semibold focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none transition-all appearance-none cursor-pointer">
+                                    <option value="">Pilih Tujuan</option>
+                                    @foreach ($terminals as $terminal)
+                                        <option value="{{ $terminal->id_terminal }}" {{ ($loop->iteration == 2 || $loop->count == 1) ? 'selected' : '' }}>
+                                            {{ $terminal->kota }} - {{ $terminal->nama_terminal }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 text-slate-400 text-[18px] pointer-events-none">expand_more</span>
+                            </div>
+                        </div>
+
+                        <!-- Keberangkatan -->
+                        <div class="md:col-span-3">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Keberangkatan</label>
+                            <div class="relative flex items-center">
+                                <span class="material-symbols-outlined absolute left-3.5 text-brand-600 text-[20px] pointer-events-none">calendar_today</span>
+                                <input type="date" name="tanggal" value="{{ now()->addDay()->format('Y-m-d') }}" min="{{ now()->format('Y-m-d') }}" required class="w-full pl-11 pr-3.5 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 text-sm font-semibold focus:bg-white focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none transition-all cursor-pointer" />
+                            </div>
+                        </div>
+
+                        <!-- Tombol Cari Tiket -->
+                        <div class="md:col-span-2 pt-3 md:pt-4">
+                            <button type="submit" class="w-full py-3.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-md shadow-brand-600/25 transition-all active:scale-95">
+                                <span class="material-symbols-outlined text-[20px]">search</span>
+                                <span>Cari Tiket</span>
+                            </button>
+                        </div>
                     </div>
-                    <h1 style="color: #ffffff; font-size: 3.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.5px;">
-                        Perjalanan Nyaman<br>
-                        <span style="color: #c8c3c3;">Dimulai dari Sini</span>
-                    </h1>
-                    <p style="color: rgba(255,255,255,0.75); font-size: 1.15rem; max-width: 560px; margin: 0 auto 0; line-height: 1.7;">
-                        Temukan jadwal keberangkatan, pilih kursi favorit, dan dapatkan tiket digital instan — semua dalam satu platform.
+
+                </form>
+            </div>
+
+            <!-- Trust Badges Bar -->
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-slate-500 text-xs sm:text-sm font-medium font-body">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-600 text-[18px]">verified</span>
+                    <span>1.000.000+ Tiket Terjual</span>
+                </div>
+                <span class="hidden sm:inline text-slate-300">•</span>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-600 text-[18px]">shield</span>
+                    <span>100% Pembayaran Aman &amp; Mudah</span>
+                </div>
+                <span class="hidden sm:inline text-slate-300">•</span>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-brand-600 text-[18px]">confirmation_number</span>
+                    <span>E-Tiket Resmi Langsung Terbit</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- KENAPA MEMILIH BUSTICKET SECTION -->
+    <section class="py-20 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
+                    Kenapa Memilih BusTicket?
+                </h2>
+                <p class="text-sm sm:text-base text-slate-500 font-body">
+                    Nikmati standar baru reservasi tiket perjalanan darat antar kota dengan kenyamanan dan kepastian penuh.
+                </p>
+            </div>
+
+            <!-- 4 Value Proposition Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Card 1 -->
+                <div class="p-7 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-5 border border-brand-100/50">
+                        <span class="material-symbols-outlined text-[26px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Operator Bus Terpercaya</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-body">
+                        Bekerja sama dengan puluhan PO Bus berizin resmi dengan armada prima dan standar keselamatan teruji.
                     </p>
-                    <div style="display: flex; gap: 12px; justify-content: center; margin-top: 28px; flex-wrap: wrap;">
-                        <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6); font-size: 0.9rem;">
-                            <i class="fas fa-check-circle" style="color: #4CAF50;"></i> Tanpa Antri
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6); font-size: 0.9rem;">
-                            <i class="fas fa-check-circle" style="color: #4CAF50;"></i> Pembayaran Aman
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6); font-size: 0.9rem;">
-                            <i class="fas fa-check-circle" style="color: #4CAF50;"></i> Tiket Digital
-                        </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="p-7 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-5 border border-brand-100/50">
+                        <span class="material-symbols-outlined text-[26px]" style="font-variation-settings: 'FILL' 1;">payments</span>
                     </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Harga Transparan</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-body">
+                        Tidak ada biaya tersembunyi. Harga yang tertera adalah tarif resmi yang Anda bayarkan tanpa tambahan aneh.
+                    </p>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    {{-- SEARCH BOX --}}
-    <div style="margin-top: -60px; position: relative; z-index: 10;">
-        <div class="container">
-            <div class="card border-0 rounded-4 shadow-lg" style="background: #ffffff; box-shadow: 0 20px 60px rgba(11,31,58,0.15) !important;">
-                <div class="card-body p-4 p-md-5">
-                    <form action="{{ route('tiket.search') }}" method="GET">
-                        @csrf
-                        <div class="row g-3 align-items-end">
-                            <div class="col-md-3">
-                                <label class="text-muted small fw-semibold mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                                    <i class="fas fa-map-pin text-primary me-1"></i> Dari
-                                </label>
-                                <select name="terminal_asal" class="form-select form-select-lg border-0 bg-light rounded-3" style="padding: 12px 16px; font-size: 0.95rem; background: #f5f7fa !important;" required>
-                                    <option value="">Pilih Terminal Asal</option>
-                                    @foreach ($terminals as $terminal)
-                                        <option value="{{ $terminal->id_terminal }}">{{ $terminal->kota }} - {{ $terminal->nama_terminal }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="text-muted small fw-semibold mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                                    <i class="fas fa-location-dot text-danger me-1"></i> Ke
-                                </label>
-                                <select name="terminal_tujuan" class="form-select form-select-lg border-0 bg-light rounded-3" style="padding: 12px 16px; font-size: 0.95rem; background: #f5f7fa !important;" required>
-                                    <option value="">Pilih Terminal Tujuan</option>
-                                    @foreach ($terminals as $terminal)
-                                        <option value="{{ $terminal->id_terminal }}">{{ $terminal->kota }} - {{ $terminal->nama_terminal }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="text-muted small fw-semibold mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                                    <i class="fas fa-calendar-day me-1"></i> Tanggal
-                                </label>
-                                <input type="date" name="tanggal" class="form-control form-control-lg border-0 bg-light rounded-3" style="padding: 12px 16px; font-size: 0.95rem; background: #f5f7fa !important;" min="{{ now()->format('Y-m-d') }}" required>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="text-muted small fw-semibold mb-1" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                                    <i class="fas fa-user me-1"></i> Penumpang
-                                </label>
-                                <input type="number" name="penumpang" class="form-control form-control-lg border-0 bg-light rounded-3" style="padding: 12px 16px; font-size: 0.95rem; background: #f5f7fa !important;" min="1" max="5" value="1" required>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary btn-lg w-100 rounded-3 fw-semibold" style="background: linear-gradient(135deg, #123E73, #1E5AA8); border: none; padding: 12px; font-size: 1rem; transition: all 0.3s ease;">
-                                    <i class="fas fa-search me-2"></i> Cari Tiket
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                <!-- Card 3 -->
+                <div class="p-7 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-5 border border-brand-100/50">
+                        <span class="material-symbols-outlined text-[26px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Pemesanan Mudah &amp; Cepat</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-body">
+                        Pesan tiket dan pilih nomor kursi kesukaan Anda secara visual hanya dalam hitungan kurang dari 3 menit.
+                    </p>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    {{-- STATISTIK --}}
-    <section class="py-4" style="border-bottom: 1px solid #f0f2f5;">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-4 col-md-3 mx-auto">
-                    <div style="font-size: 1.5rem; font-weight: 700; color: #0B1F3A;">50+</div>
-                    <div style="font-size: 0.85rem; color: #6C757D;">Rute Tersedia</div>
+                <!-- Card 4 -->
+                <div class="p-7 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200">
+                    <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-5 border border-brand-100/50">
+                        <span class="material-symbols-outlined text-[26px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Pembayaran Aman</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 leading-relaxed font-body">
+                        Didukung sistem pembayaran terlengkap dengan enkripsi standar perbankan via berbagai QRIS, VA, dan E-Wallet.
+                    </p>
                 </div>
-                <div class="col-4 col-md-3 mx-auto">
-                    <div style="font-size: 1.5rem; font-weight: 700; color: #0B1F3A;">100+</div>
-                    <div style="font-size: 0.85rem; color: #6C757D;">Armada Bus</div>
-                </div>
-                <div class="col-4 col-md-3 mx-auto">
-                    <div style="font-size: 1.5rem; font-weight: 700; color: #0B1F3A;">10K+</div>
-                    <div style="font-size: 0.85rem; color: #6C757D;">Pelanggan Puas</div>
-                </div>
+
             </div>
         </div>
     </section>
 
-    {{-- KENAPA MEMILIH KAMI --}}
-    <section class="py-5">
-        <div class="container">
-            <div class="text-center mb-5">
-                <span style="display: inline-block; background: #e8f0fe; color: #1E5AA8; font-size: 0.8rem; font-weight: 600; padding: 4px 16px; border-radius: 50px; letter-spacing: 0.5px; text-transform: uppercase;">Keunggulan</span>
-                <h2 style="color: #0B1F3A; font-weight: 700; margin-top: 12px;">Kenapa Memilih <span style="color: #1E5AA8;">BusTicket?</span></h2>
-                <p style="color: #6C757D; max-width: 500px; margin: 8px auto 0;">Nikmati pengalaman pemesanan tiket bus yang cepat, aman, dan nyaman</p>
+    <!-- RUTE POPULER FAVORIT PENUMPANG SECTION -->
+    <section class="py-20 bg-slate-50/70 border-t border-slate-200/80" id="rute-populer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                <div>
+                    <span class="text-xs font-bold text-brand-600 uppercase tracking-widest block mb-2">Destinasi Favorit</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                        Rute Populer Favorit Penumpang
+                    </h2>
+                </div>
+                <p class="text-sm text-slate-500 font-body max-w-md">
+                    Pilihan perjalanan darat paling sering dipesan dengan armada bus terbaik di kelasnya.
+                </p>
             </div>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="p-4 h-100 rounded-4" style="background: #ffffff; border: 1px solid #f0f2f5; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03);" onmouseenter="this.style.boxShadow='0 12px 40px rgba(30,90,168,0.12)'" onmouseleave="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.03)'">
-                        <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #e8f0fe, #d4e2f7); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                            <i class="fas fa-chair" style="font-size: 1.5rem; color: #1E5AA8;"></i>
-                        </div>
-                        <h5 class="fw-bold" style="color: #0B1F3A;">Pilih Kursi Sendiri</h5>
-                        <p style="color: #6C757D; font-size: 0.95rem; margin-bottom: 0;">Pilih kursi favorit Anda secara visual sebelum memesan, bebas menentukan posisi duduk.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-4 h-100 rounded-4" style="background: #ffffff; border: 1px solid #f0f2f5; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03);" onmouseenter="this.style.boxShadow='0 12px 40px rgba(30,90,168,0.12)'" onmouseleave="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.03)'">
-                        <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #e8f0fe, #d4e2f7); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                            <i class="fas fa-shield-alt" style="font-size: 1.5rem; color: #1E5AA8;"></i>
-                        </div>
-                        <h5 class="fw-bold" style="color: #0B1F3A;">Pembayaran Aman</h5>
-                        <p style="color: #6C757D; font-size: 0.95rem; margin-bottom: 0;">Pembayaran terintegrasi dengan gateway pembayaran terpercaya dan terenkripsi.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-4 h-100 rounded-4" style="background: #ffffff; border: 1px solid #f0f2f5; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.03);" onmouseenter="this.style.boxShadow='0 12px 40px rgba(30,90,168,0.12)'" onmouseleave="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.03)'">
-                        <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #e8f0fe, #d4e2f7); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                            <i class="fas fa-qrcode" style="font-size: 1.5rem; color: #1E5AA8;"></i>
-                        </div>
-                        <h5 class="fw-bold" style="color: #0B1F3A;">Tiket Digital</h5>
-                        <p style="color: #6C757D; font-size: 0.95rem; margin-bottom: 0;">Tiket dengan QR Code langsung bisa diakses dan dicetak kapan saja.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    {{-- OPERATOR --}}
-    <section class="py-5" style="background: #f8fafc;">
-        <div class="container">
-            <div class="text-center mb-5">
-                <span style="display: inline-block; background: #e8f0fe; color: #1E5AA8; font-size: 0.8rem; font-weight: 600; padding: 4px 16px; border-radius: 50px; letter-spacing: 0.5px; text-transform: uppercase;">Mitra Kami</span>
-                <h2 style="color: #0B1F3A; font-weight: 700; margin-top: 12px;">Operator Bus Terpercaya</h2>
-            </div>
-            <div class="row g-3 justify-content-center">
-                @foreach ($operators as $operator)
-                    <div class="col-md-3 col-lg-2">
-                        <div class="card border-0 rounded-4 text-center p-3 h-100" style="background: #ffffff; box-shadow: 0 2px 12px rgba(0,0,0,0.04); transition: all 0.3s ease;" onmouseenter="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 30px rgba(0,0,0,0.08)'" onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(0,0,0,0.04)'">
-                            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #e8f0fe, #d4e2f7); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
-                                <i class="fas fa-bus" style="font-size: 1.3rem; color: #1E5AA8;"></i>
-                            </div>
-                            <h6 class="fw-bold mb-0" style="color: #0B1F3A; font-size: 0.9rem;">{{ $operator->nama_operator }}</h6>
-                            <small class="text-muted" style="font-size: 0.75rem;">{{ $operator->buses_count ?? '' }} armada</small>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    {{-- RUTE POPULER --}}
-    <section class="py-5">
-        <div class="container">
-            <div class="text-center mb-5">
-                <span style="display: inline-block; background: #e8f0fe; color: #1E5AA8; font-size: 0.8rem; font-weight: 600; padding: 4px 16px; border-radius: 50px; letter-spacing: 0.5px; text-transform: uppercase;">Rute Favorit</span>
-                <h2 style="color: #0B1F3A; font-weight: 700; margin-top: 12px;">Rute Populer</h2>
-                <p style="color: #6C757D; max-width: 500px; margin: 8px auto 0;">Rute yang paling sering dipesan oleh pelanggan setia kami</p>
-            </div>
-            <div class="row g-3">
-                @foreach ($popularRoutes as $route)
-                    <div class="col-md-4">
-                        <div class="card border-0 rounded-4 p-3" style="background: #ffffff; box-shadow: 0 2px 12px rgba(0,0,0,0.04); transition: all 0.3s ease;" onmouseenter="this.style.boxShadow='0 8px 30px rgba(0,0,0,0.08)'" onmouseleave="this.style.boxShadow='0 2px 12px rgba(0,0,0,0.04)'">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 8px;">
-                                        <span style="font-weight: 600; color: #0B1F3A;">{{ $route->terminalAsal->kota }}</span>
-                                        <span style="color: #1E5AA8;"><i class="fas fa-arrow-right"></i></span>
-                                        <span style="font-weight: 600; color: #0B1F3A;">{{ $route->terminalTujuan->kota }}</span>
-                                    </div>
-                                    <div style="font-size: 0.8rem; color: #6C757D; margin-top: 4px;">
-                                        <i class="fas fa-route me-1"></i> {{ $route->jarak ?? '-' }} km 
-                                        &middot; <i class="far fa-clock me-1"></i> {{ gmdate('H:i', ($route->estimasi_durasi ?? 0) * 60) }}
-                                    </div>
+            <!-- Grid 4 Route Cards (From Database / Fallback) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @forelse ($popularRoutes as $index => $route)
+                    <div class="bg-white rounded-2xl border {{ $index == 2 ? 'border-2 border-brand-600/70 shadow-md' : 'border-slate-200/90 shadow-xs' }} overflow-hidden hover:shadow-lg transition-all duration-200 flex flex-col justify-between">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-brand-50 text-brand-600">
+                                        {{ $index % 2 == 0 ? 'Executive 2+2' : 'Sleeper Suite' }}
+                                    </span>
+                                    @if ($index == 2)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-cyan-500 text-white tracking-wider">TERPOPULER</span>
+                                    @endif
                                 </div>
-                                <a href="{{ route('tiket.search', ['terminal_asal' => $route->terminal_asal_id, 'terminal_tujuan' => $route->terminal_tujuan_id, 'tanggal' => now()->addDay()->format('Y-m-d'), 'penumpang' => 1]) }}"
-                                   class="btn btn-sm rounded-3 fw-semibold" style="background: #e8f0fe; color: #1E5AA8; border: none; padding: 6px 18px;">
-                                    Cari
-                                </a>
+
                             </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
 
-    {{-- CARA PEMESANAN --}}
-    <section class="py-5" style="background: #f8fafc;">
-        <div class="container">
-            <div class="text-center mb-5">
-                <span style="display: inline-block; background: #e8f0fe; color: #1E5AA8; font-size: 0.8rem; font-weight: 600; padding: 4px 16px; border-radius: 50px; letter-spacing: 0.5px; text-transform: uppercase;">Panduan</span>
-                <h2 style="color: #0B1F3A; font-weight: 700; margin-top: 12px;">Cara Pemesanan</h2>
-            </div>
-            <div class="row g-4">
-                <div class="col-md-3 text-center">
-                    <div style="position: relative; display: inline-block;">
-                        <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #123E73, #1E5AA8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.5rem; margin: 0 auto; box-shadow: 0 8px 24px rgba(30,90,168,0.25);">1</div>
-                    </div>
-                    <h6 class="fw-bold mt-3" style="color: #0B1F3A;">Cari Jadwal</h6>
-                    <p style="color: #6C757D; font-size: 0.9rem; max-width: 200px; margin: 4px auto 0;">Masukkan asal, tujuan, dan tanggal</p>
-                </div>
-                <div class="col-md-3 text-center">
-                    <div style="position: relative; display: inline-block;">
-                        <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #123E73, #1E5AA8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.5rem; margin: 0 auto; box-shadow: 0 8px 24px rgba(30,90,168,0.25);">2</div>
-                    </div>
-                    <h6 class="fw-bold mt-3" style="color: #0B1F3A;">Pilih Kursi</h6>
-                    <p style="color: #6C757D; font-size: 0.9rem; max-width: 200px; margin: 4px auto 0;">Pilih kursi dan isi data penumpang</p>
-                </div>
-                <div class="col-md-3 text-center">
-                    <div style="position: relative; display: inline-block;">
-                        <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #123E73, #1E5AA8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.5rem; margin: 0 auto; box-shadow: 0 8px 24px rgba(30,90,168,0.25);">3</div>
-                    </div>
-                    <h6 class="fw-bold mt-3" style="color: #0B1F3A;">Bayar</h6>
-                    <p style="color: #6C757D; font-size: 0.9rem; max-width: 200px; margin: 4px auto 0;">Lakukan pembayaran secara online</p>
-                </div>
-                <div class="col-md-3 text-center">
-                    <div style="position: relative; display: inline-block;">
-                        <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #123E73, #1E5AA8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.5rem; margin: 0 auto; box-shadow: 0 8px 24px rgba(30,90,168,0.25);">4</div>
-                    </div>
-                    <h6 class="fw-bold mt-3" style="color: #0B1F3A;">Dapatkan Tiket</h6>
-                    <p style="color: #6C757D; font-size: 0.9rem; max-width: 200px; margin: 4px auto 0;">Tiket digital + QR Code siap cetak</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- FAQ --}}
-    <section class="py-5">
-        <div class="container">
-            <div class="text-center mb-5">
-                <span style="display: inline-block; background: #e8f0fe; color: #1E5AA8; font-size: 0.8rem; font-weight: 600; padding: 4px 16px; border-radius: 50px; letter-spacing: 0.5px; text-transform: uppercase;">Tanya Jawab</span>
-                <h2 style="color: #0B1F3A; font-weight: 700; margin-top: 12px;">Pertanyaan yang Sering Diajukan</h2>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    @php
-                        $faqs = [
-                            ['q' => 'Bagaimana cara memesan tiket bus?', 'a' => 'Pilih rute asal dan tujuan, tentukan tanggal keberangkatan, pilih jadwal, pilih kursi, isi data penumpang, lalu lakukan pembayaran.'],
-                            ['q' => 'Apakah kursi yang sudah dipesan bisa dipilih orang lain?', 'a' => 'Tidak. Sistem kami mencegah kursi yang sama dipesan dua kali pada jadwal yang sama.'],
-                            ['q' => 'Bagaimana cara mendapatkan tiket setelah bayar?', 'a' => 'Setelah pembayaran berhasil, tiket digital beserta QR Code akan tersedia di menu Tiket Saya dan bisa langsung dicetak.'],
-                            ['q' => 'Apakah bisa membatalkan pemesanan?', 'a' => 'Ya, silakan menghubungi admin untuk pembatalan sebelum jadwal keberangkatan.'],
-                        ];
-                    @endphp
-                    <div class="accordion" id="faqAccordion">
-                        @foreach ($faqs as $i => $faq)
-                            <div class="card border-0 rounded-4 mb-2" style="background: #ffffff; box-shadow: 0 2px 12px rgba(0,0,0,0.04); overflow: hidden;">
-                                <div class="card-header" style="background: #ffffff; border: none; padding: 16px 20px;" id="faq{{ $i }}">
-                                    <h6 class="mb-0">
-                                        <button class="btn btn-link fw-semibold w-100 text-start d-flex justify-content-between align-items-center" type="button" data-toggle="collapse"
-                                            data-target="#faqCollapse{{ $i }}" aria-expanded="{{ $i == 0 ? 'true' : 'false' }}"
-                                            aria-controls="faqCollapse{{ $i }}" style="color: #0B1F3A; text-decoration: none; padding: 0;">
-                                            {{ $faq['q'] }}
-                                            <span style="color: #1E5AA8; font-size: 1rem;">
-                                                <i class="fas fa-chevron-down" style="transition: transform 0.3s ease;" id="faqIcon{{ $i }}"></i>
-                                            </span>
-                                        </button>
-                                    </h6>
+                            <!-- Route Stop Visual -->
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-3 h-3 rounded-full border-2 border-brand-600 bg-white"></div>
+                                    <span class="text-sm font-bold text-slate-800">{{ $route->terminalAsal->kota ?? 'Makassar' }}</span>
                                 </div>
-                                <div id="faqCollapse{{ $i }}" class="collapse {{ $i == 0 ? 'show' : '' }}"
-                                    aria-labelledby="faq{{ $i }}" data-parent="#faqAccordion">
-                                    <div class="card-body pt-0 pb-4 px-20" style="color: #6C757D; padding: 0 20px 20px;">
-                                        {{ $faq['a'] }}
-                                    </div>
+                                <div class="pl-1.5 -my-2.5">
+                                    <div class="w-0.5 h-6 bg-slate-200 ml-1"></div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-3 h-3 rounded-full bg-brand-600"></div>
+                                    <span class="text-sm font-bold text-slate-800">{{ $route->terminalTujuan->kota ?? 'Toraja' }}</span>
                                 </div>
                             </div>
-                        @endforeach
+
+                            <div class="flex items-center gap-4 text-slate-500 text-xs font-body border-t border-slate-100 pt-3.5">
+                                <div class="flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[17px] text-slate-400">schedule</span>
+                                    <span>{{ $route->estimasi_durasi ? gmdate('H:i', $route->estimasi_durasi * 60) . ' Jam' : '~8 Jam' }}</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[17px] text-slate-400">route</span>
+                                    <span>{{ $route->jarak ?? '-' }} km</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="px-6 py-4 {{ $index == 2 ? 'bg-brand-50/50 border-t border-brand-100' : 'bg-slate-50/80 border-t border-slate-100' }} flex items-center justify-between">
+                            <div>
+                                <span class="block text-[11px] text-slate-400">Mulai dari</span>
+                                <span class="text-base font-extrabold {{ $index == 2 ? 'text-brand-700' : 'text-slate-900' }}">
+                                    Rp {{ number_format(150000 + ($index * 30000), 0, ',', '.') }}
+                                </span>
+                            </div>
+                            <a href="{{ route('tiket.search', ['terminal_asal' => $route->terminal_asal_id, 'terminal_tujuan' => $route->terminal_tujuan_id, 'tanggal' => now()->addDay()->format('Y-m-d'), 'penumpang' => 1]) }}"
+                               class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs">
+                                Lihat Tiket
+                            </a>
+                        </div>
                     </div>
-                </div>
+                @empty
+                    <!-- Fallback 4 Default Popular Routes if none configured in DB yet -->
+                    <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-5">
+                            </div>
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-3 h-3 rounded-full border-2 border-brand-600 bg-white"></div>
+                                    <span class="text-sm font-bold text-slate-800">Makassar</span>
+                                </div>
+                                <div class="pl-1.5 -my-2.5"><div class="w-0.5 h-6 bg-slate-200 ml-1"></div></div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-3 h-3 rounded-full bg-brand-600"></div>
+                                    <span class="text-sm font-bold text-slate-800">Parepare</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 text-slate-500 text-xs font-body border-t border-slate-100 pt-3.5">
+                                <span>~3.5 Jam</span><span>Tersedia 12 Kursi</span>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+                            <div><span class="block text-[11px] text-slate-400">Mulai dari</span><span class="text-base font-extrabold text-slate-900">Rp 95.000</span></div>
+                            <a href="{{ route('tiket.search') }}" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold">Lihat Tiket</a>
+                        </div>
+                    </div>
+                @endforelse
             </div>
+
         </div>
     </section>
+
+    <!-- 4 LANGKAH MUDAH MEMESAN TIKET BUS SECTION -->
+    <section class="py-20 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-widest block mb-2">Panduan Cepat</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
+                    4 Langkah Mudah Memesan Tiket Bus
+                </h2>
+                <p class="text-sm sm:text-base text-slate-500 font-body">
+                    Alur reservasi praktis dirancang agar perjalanan Anda terencana hanya dalam beberapa klik saja.
+                </p>
+            </div>
+
+            <!-- 4 Circular Step Steps -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Step 1 -->
+                <div class="text-center flex flex-col items-center">
+                    <div class="w-14 h-14 rounded-full border-2 border-brand-600 text-brand-600 font-extrabold text-xl flex items-center justify-center mb-5 bg-white shadow-xs">
+                        1
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Cari Rute</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 font-body max-w-xs leading-relaxed">
+                        Tentukan kota asal, destinasi, dan tanggal perjalanan impian Anda di form pencarian.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="text-center flex flex-col items-center">
+                    <div class="w-14 h-14 rounded-full border-2 border-brand-600 text-brand-600 font-extrabold text-xl flex items-center justify-center mb-5 bg-white shadow-xs">
+                        2
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Pilih Bus &amp; Jadwal</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 font-body max-w-xs leading-relaxed">
+                        Bandingkan kelas armada, jadwal keberangkatan, fasilitas, dan harga tiket terbaik.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="text-center flex flex-col items-center">
+                    <div class="w-14 h-14 rounded-full border-2 border-brand-600 text-brand-600 font-extrabold text-xl flex items-center justify-center mb-5 bg-white shadow-xs">
+                        3
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Pilih Kursi &amp; Isi Data</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 font-body max-w-xs leading-relaxed">
+                        Tentukan posisi kursi favorit pada denah bus interaktif dan lengkapi data pemesan.
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="text-center flex flex-col items-center">
+                    <div class="w-14 h-14 rounded-full bg-brand-600 text-white font-extrabold text-xl flex items-center justify-center mb-5 shadow-md shadow-brand-600/30">
+                        4
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Lakukan Pembayaran</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 font-body max-w-xs leading-relaxed">
+                        Bayar instan via Midtrans (QRIS, VA, E-Wallet) dan e-tiket langsung terbit ke email/WhatsApp.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- OPERATOR MITRA RESMI SECTION -->
+    @if ($operators->count() > 0)
+        <section class="py-16 bg-slate-50/70 border-t border-slate-200/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-xl mx-auto mb-10">
+                    <span class="text-xs font-bold text-brand-600 uppercase tracking-widest block mb-1">Mitra Resmi</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Operator Bus Terpercaya</h2>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    @foreach ($operators as $operator)
+                        <div class="bg-white border border-slate-200/90 rounded-2xl px-5 py-3.5 shadow-xs flex items-center gap-3 hover:border-brand-600 transition-all">
+                            <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-xl">directions_bus</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">{{ $operator->nama_operator }}</h4>
+                                <span class="text-[11px] text-slate-400 font-body">{{ $operator->buses_count ?? 'Armada prima' }} bus</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    <!-- PERTANYAAN YANG SERING DIAJUKAN (FAQ) SECTION -->
+    <section class="py-20 bg-white border-t border-slate-100" id="faq-section">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center mb-14">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-widest block mb-2">Pusat Bantuan</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
+                    Pertanyaan yang Sering Diajukan
+                </h2>
+                <p class="text-sm sm:text-base text-slate-500 font-body">
+                    Segala hal yang perlu Anda ketahui mengenai pemesanan tiket, kebijakan bagasi, dan metode pembayaran.
+                </p>
+            </div>
+
+            <!-- FAQ Accordion List -->
+            <div class="space-y-4">
+                
+                <!-- Item 1 (Default Open) -->
+                <div class="faq-item bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+                    <button type="button" class="faq-toggle w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 hover:text-brand-600 transition-colors">
+                        <span>Bagaimana cara memesan tiket?</span>
+                        <span class="material-symbols-outlined text-brand-600 text-xl transition-transform duration-300 transform -rotate-180 faq-icon">expand_more</span>
+                    </button>
+                    <div class="faq-body px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-500 leading-relaxed font-body">
+                        Proses pemesanan sangat sederhana: masukkan kota keberangkatan dan tujuan, pilih tanggal jalan, tentukan armada bus dan jadwal yang Anda inginkan. Kemudian pilih nomor kursi secara visual di layar denah, masukkan detail data diri penumpang, lalu selesaikan pembayaran. E-tiket resmi akan segera diterbitkan.
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="faq-item bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+                    <button type="button" class="faq-toggle w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 hover:text-brand-600 transition-colors">
+                        <span>Apakah bisa memilih kursi sendiri?</span>
+                        <span class="material-symbols-outlined text-slate-400 text-xl transition-transform duration-300 faq-icon">expand_more</span>
+                    </button>
+                    <div class="faq-body px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-500 leading-relaxed font-body hidden">
+                        Ya! Anda dapat memilih sendiri kursi yang masih tersedia melalui denah kursi bus interaktif yang kami sediakan secara real-time sebelum melanjutkan ke pengisian data penumpang.
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="faq-item bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+                    <button type="button" class="faq-toggle w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 hover:text-brand-600 transition-colors">
+                        <span>Bagaimana cara pembayaran?</span>
+                        <span class="material-symbols-outlined text-slate-400 text-xl transition-transform duration-300 faq-icon">expand_more</span>
+                    </button>
+                    <div class="faq-body px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-500 leading-relaxed font-body hidden">
+                        Kami menyediakan sistem pembayaran online instan dan aman terintegrasi dengan Payment Gateway Midtrans. Anda dapat membayar melalui QRIS (GoPay, OVO, ShopeePay, Dana, LinkAja), Virtual Account seluruh bank nasional, maupun Kartu Kredit / Debit.
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="faq-item bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+                    <button type="button" class="faq-toggle w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 hover:text-brand-600 transition-colors">
+                        <span>Apakah tiket bisa dibatalkan atau reschedule?</span>
+                        <span class="material-symbols-outlined text-slate-400 text-xl transition-transform duration-300 faq-icon">expand_more</span>
+                    </button>
+                    <div class="faq-body px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-500 leading-relaxed font-body hidden">
+                        Kebijakan pembatalan dan perubahan jadwal tiket mengikuti syarat dan ketentuan masing-masing operator PO bus mitra. Anda dapat menghubungi customer support 24/7 kami untuk panduan proses pembatalan atau perubahan tanggal.
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="faq-item bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+                    <button type="button" class="faq-toggle w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-slate-900 hover:text-brand-600 transition-colors">
+                        <span>Bagaimana mendapatkan tiket setelah pembayaran?</span>
+                        <span class="material-symbols-outlined text-slate-400 text-xl transition-transform duration-300 faq-icon">expand_more</span>
+                    </button>
+                    <div class="faq-body px-5 sm:px-6 pb-6 text-xs sm:text-sm text-slate-500 leading-relaxed font-body hidden">
+                        Begitu pembayaran Anda terverifikasi (rata-rata di bawah 10 detik), e-tiket resmi beserta QR code boarding pass akan langsung terbit di layar Anda, terkirim ke alamat email, serta pesan WhatsApp yang terdaftar.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Swap Route & FAQ JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Swap Origin & Destination
+            const swapBtn = document.getElementById('swapRouteBtn');
+            const originSelect = document.getElementById('originSelect');
+            const destSelect = document.getElementById('destSelect');
+
+            if (swapBtn && originSelect && destSelect) {
+                swapBtn.addEventListener('click', () => {
+                    const temp = originSelect.value;
+                    originSelect.value = destSelect.value;
+                    destSelect.value = temp;
+                });
+            }
+
+            // FAQ Toggle functionality
+            document.querySelectorAll('.faq-toggle').forEach(button => {
+                button.addEventListener('click', () => {
+                    const body = button.nextElementSibling;
+                    const icon = button.querySelector('.faq-icon');
+                    const isOpen = !body.classList.contains('hidden');
+
+                    // Close all first
+                    document.querySelectorAll('.faq-body').forEach(b => b.classList.add('hidden'));
+                    document.querySelectorAll('.faq-icon').forEach(i => {
+                        i.classList.remove('-rotate-180', 'text-brand-600');
+                        i.classList.add('text-slate-400');
+                    });
+
+                    if (!isOpen) {
+                        body.classList.remove('hidden');
+                        icon.classList.add('-rotate-180', 'text-brand-600');
+                        icon.classList.remove('text-slate-400');
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
-
-{{-- Script untuk interaksi FAQ --}}
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle FAQ icon
-        document.querySelectorAll('[data-toggle="collapse"]').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var icon = this.querySelector('.fa-chevron-down');
-                if (icon) {
-                    icon.style.transition = 'transform 0.3s ease';
-                    var isExpanded = this.getAttribute('aria-expanded') === 'true';
-                    icon.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)';
-                }
-            });
-        });
-
-        // Hover effect for cards
-        document.querySelectorAll('.card-hover').forEach(function(card) {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
-    });
-</script>
-@endpush

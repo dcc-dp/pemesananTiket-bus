@@ -1,25 +1,84 @@
 @extends('layouts.landing.app', ['menu' => 'tiket'])
 
 @section('content')
-    <div style="background: linear-gradient(135deg, #0B1F3A 0%, #123E73 50%, #1E5AA8 100%); padding: 50px 0; margin-bottom: 40px;">
-        <div class="container">
-            <h1 style="color: #ffffff; font-weight: 800; margin-bottom: 0.25rem;">Cari Tiket Bus</h1>
-            <p style="color: rgba(255,255,255,0.8); margin: 0;">Temukan jadwal keberangkatan terbaik untuk perjalanan Anda</p>
-        </div>
-    </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- STEPPER (Horizontal 4-Step Header) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
+                
+                <!-- Step 1: Active -->
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100">
+                        1
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-brand-600 uppercase tracking-wider">LANGKAH 1</p>
+                        <p class="text-sm font-bold text-brand-600">Pilih Bus</p>
+                    </div>
+                </div>
 
-    <div class="container" style="margin-bottom: 60px;">
-        <div class="row">
-            <div class="col-lg-3 mb-4">
-                <div class="card border-0 shadow-sm" style="border-radius: 12px;">
-                    <div class="card-body">
-                        <h6 class="font-weight-bold" style="color: #0B1F3A;"><i class="fas fa-filter"></i> Filter Pencarian</h6>
-                        <hr>
-                        <form action="{{ route('tiket.search') }}" method="GET">
-                            <div class="form-group">
-                                <label class="small font-weight-bold text-muted">Dari</label>
-                                <select name="terminal_asal" class="form-control" required>
-                                    <option value="">-- Pilih --</option>
+                <!-- Step 2: Next -->
+                <div class="flex items-center gap-3 opacity-60">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                        2
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 2</p>
+                        <p class="text-sm font-semibold text-slate-600">Pilih Kursi</p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Pending -->
+                <div class="flex items-center gap-3 opacity-60">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                        3
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 3</p>
+                        <p class="text-sm font-semibold text-slate-600">Data Pemesan</p>
+                    </div>
+                </div>
+
+                <!-- Step 4: Pending -->
+                <div class="flex items-center gap-3 opacity-60">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                        4
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 4</p>
+                        <p class="text-sm font-semibold text-slate-600">Pembayaran</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MAIN GRID LAYOUT (Left Sidebar Filter + Right Main Content) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT SIDEBAR: FILTERS -->
+            <aside class="lg:col-span-3 space-y-6">
+                
+                <div class="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-6">
+                    
+                    <form action="{{ route('tiket.search') }}" method="GET" id="searchFilterForm" class="space-y-5">
+                        
+                        <!-- Header -->
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-brand-600 text-lg">filter_list</span>
+                                Filter
+                            </h3>
+                            <a href="{{ route('tiket.search') }}" class="text-xs font-semibold text-brand-600 hover:underline">Reset</a>
+                        </div>
+
+                        <!-- Rute & Tanggal Form Fields -->
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Dari</label>
+                                <select name="terminal_asal" class="w-full text-xs py-2 px-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 font-semibold focus:border-brand-600 outline-none" required>
+                                    <option value="">Pilih Terminal Asal</option>
                                     @foreach ($terminals as $terminal)
                                         <option value="{{ $terminal->id_terminal }}" {{ ($params['terminal_asal'] ?? '') == $terminal->id_terminal ? 'selected' : '' }}>
                                             {{ $terminal->kota }} - {{ $terminal->nama_terminal }}
@@ -27,10 +86,11 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class="small font-weight-bold text-muted">Ke</label>
-                                <select name="terminal_tujuan" class="form-control" required>
-                                    <option value="">-- Pilih --</option>
+
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ke</label>
+                                <select name="terminal_tujuan" class="w-full text-xs py-2 px-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 font-semibold focus:border-brand-600 outline-none" required>
+                                    <option value="">Pilih Terminal Tujuan</option>
                                     @foreach ($terminals as $terminal)
                                         <option value="{{ $terminal->id_terminal }}" {{ ($params['terminal_tujuan'] ?? '') == $terminal->id_terminal ? 'selected' : '' }}>
                                             {{ $terminal->kota }} - {{ $terminal->nama_terminal }}
@@ -38,121 +98,213 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class="small font-weight-bold text-muted">Tanggal</label>
-                                <input type="date" name="tanggal" class="form-control" min="{{ now()->format('Y-m-d') }}"
-                                    value="{{ $params['tanggal'] ?? now()->format('Y-m-d') }}" required>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tanggal</label>
+                                    <input type="date" name="tanggal" min="{{ now()->format('Y-m-d') }}" value="{{ $params['tanggal'] ?? now()->addDay()->format('Y-m-d') }}" class="w-full text-xs py-2 px-2.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 font-semibold focus:border-brand-600 outline-none" required />
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Penumpang</label>
+                                    <select name="penumpang" class="w-full text-xs py-2 px-2.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 font-semibold focus:border-brand-600 outline-none">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <option value="{{ $i }}" {{ ($params['penumpang'] ?? 1) == $i ? 'selected' : '' }}>{{ $i }} Penumpang</option>
+                                        @endfor
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label class="small font-weight-bold text-muted">Penumpang</label>
-                                <input type="number" name="penumpang" class="form-control" min="1" max="5"
-                                    value="{{ $params['penumpang'] ?? 1 }}" required>
+                        </div>
+
+                        <!-- Filter Kelas Bus -->
+                        <div class="pt-3 border-t border-slate-100">
+                            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Kelas Bus</h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center justify-between text-xs font-medium cursor-pointer">
+                                    <span class="flex items-center gap-2 text-slate-700">
+                                        <input type="radio" name="kelas" value="" {{ empty(request('kelas')) ? 'checked' : '' }} onchange="this.form.submit()" class="text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                                        Semua Kelas
+                                    </span>
+                                </label>
+                                <label class="flex items-center justify-between text-xs font-medium cursor-pointer">
+                                    <span class="flex items-center gap-2 text-slate-700">
+                                        <input type="radio" name="kelas" value="sleeper" {{ request('kelas') == 'sleeper' ? 'checked' : '' }} onchange="this.form.submit()" class="text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                                        Sleeper Suite
+                                    </span>
+                                </label>
+                                <label class="flex items-center justify-between text-xs font-medium cursor-pointer">
+                                    <span class="flex items-center gap-2 text-slate-700">
+                                        <input type="radio" name="kelas" value="executive" {{ request('kelas') == 'executive' ? 'checked' : '' }} onchange="this.form.submit()" class="text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                                        Executive Class
+                                    </span>
+                                </label>
+                                <label class="flex items-center justify-between text-xs font-medium cursor-pointer">
+                                    <span class="flex items-center gap-2 text-slate-700">
+                                        <input type="radio" name="kelas" value="bisnis" {{ request('kelas') == 'bisnis' ? 'checked' : '' }} onchange="this.form.submit()" class="text-brand-600 focus:ring-brand-600 h-4 w-4" />
+                                        Super VIP (Bisnis)
+                                    </span>
+                                </label>
                             </div>
-                            <hr>
-                            <div class="form-group">
-                                <label class="small font-weight-bold text-muted">Operator</label>
-                                <select name="operator_id" class="form-control">
+                        </div>
+
+                        <!-- Operator Bus Filter -->
+                        @if ($operators->count() > 0)
+                            <div class="pt-3 border-t border-slate-100">
+                                <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">Operator Bus</h4>
+                                <select name="operator_id" onchange="this.form.submit()" class="w-full text-xs py-2 px-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 font-semibold focus:border-brand-600 outline-none">
                                     <option value="">Semua Operator</option>
-                                    @foreach ($operators as $operator)
-                                        <option value="{{ $operator->id }}" {{ ($params['operator_id'] ?? '') == $operator->id ? 'selected' : '' }}>
-                                            {{ $operator->nama_operator }}
+                                    @foreach ($operators as $op)
+                                        <option value="{{ $op->id }}" {{ request('operator_id') == $op->id ? 'selected' : '' }}>
+                                            {{ $op->nama_operator }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class="small font-weight-bold text-muted">Kelas Bus</label>
-                                <select name="kelas" class="form-control">
-                                    <option value="">Semua Kelas</option>
-                                    <option value="ekonomi" {{ ($params['kelas'] ?? '') == 'ekonomi' ? 'selected' : '' }}>Ekonomi</option>
-                                    <option value="bisnis" {{ ($params['kelas'] ?? '') == 'bisnis' ? 'selected' : '' }}>Bisnis</option>
-                                    <option value="executive" {{ ($params['kelas'] ?? '') == 'executive' ? 'selected' : '' }}>Executive</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="small font-weight-bold text-muted">Maks. Harga (Rp)</label>
-                                <input type="number" name="harga_max" class="form-control" min="0"
-                                    value="{{ $params['harga_max'] ?? '' }}" placeholder="500000">
-                            </div>
-                            <div class="form-group">
-                                <label class="small font-weight-bold text-muted">Berangkat Setelah</label>
-                                <input type="time" name="jam_mulai" class="form-control"
-                                    value="{{ $params['jam_mulai'] ?? '' }}">
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block font-weight-bold" style="background: linear-gradient(135deg, #123E73, #1E5AA8); border: none;">
-                                <i class="fas fa-search"></i> Cari
-                            </button>
-                        </form>
+                        @endif
+
+                        <button type="submit" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all">
+                            Terapkan Filter
+                        </button>
+                    </form>
+
+                </div>
+
+                <!-- Garansi Kursi Pasti Ada Box -->
+                <div class="bg-brand-50/60 rounded-2xl p-4 border border-brand-100 flex items-start gap-3">
+                    <span class="material-symbols-outlined text-brand-600 text-2xl" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-900">Garansi Kursi Pasti Ada</h5>
+                        <p class="text-[11px] text-slate-500 font-body mt-0.5 leading-relaxed">
+                            Tiket diterbitkan langsung oleh operator mitra resmi dengan QR terverifikasi.
+                        </p>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-lg-9">
+            </aside>
+
+            <!-- RIGHT FEED: STEP 1 (PILIH ARMADA BUS YANG TERSEDIA) -->
+            <div class="lg:col-span-9 space-y-6">
+                
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-1.5 h-5 bg-brand-600 rounded-full inline-block"></span>
+                        Langkah 1: Pilih Armada Bus yang Tersedia
+                    </h2>
+                    <span class="text-xs text-slate-400 font-medium font-body">
+                        Menampilkan {{ $jadwals->count() }} bus tersedia
+                    </span>
+                </div>
+
                 @if (is_null($params))
-                    <div class="card border-0 shadow-sm text-center p-5" style="border-radius: 12px;">
-                        <i class="fas fa-search" style="font-size: 3rem; color: #c0c9d6; margin-bottom: 1rem;"></i>
-                        <h5 style="color: #0B1F3A;">Mulai Pencarian</h5>
-                        <p style="color: #6C757D;">Gunakan form filter di samping untuk mencari jadwal bus tersedia.</p>
+                    <!-- Empty State: Not searched yet -->
+                    <div class="bg-white border border-slate-200/90 rounded-2xl p-12 text-center shadow-xs">
+                        <div class="w-16 h-16 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-4">
+                            <span class="material-symbols-outlined text-3xl">search</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">Mulai Pencarian Tiket Bus</h3>
+                        <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 font-body">
+                            Pilih terminal asal, tujuan, dan tanggal perjalanan di panel sebelah kiri untuk melihat jadwal armada yang tersedia.
+                        </p>
                     </div>
                 @elseif ($jadwals->count() === 0)
-                    <div class="card border-0 shadow-sm text-center p-5" style="border-radius: 12px;">
-                        <i class="fas fa-bus" style="font-size: 3rem; color: #c0c9d6; margin-bottom: 1rem;"></i>
-                        <h5 style="color: #0B1F3A;">Tidak Ada Jadwal Tersedia</h5>
-                        <p style="color: #6C757D;">Coba ubah tanggal, rute, atau filter pencarian Anda.</p>
+                    <!-- Empty State: No results -->
+                    <div class="bg-white border border-slate-200/90 rounded-2xl p-12 text-center shadow-xs">
+                        <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4">
+                            <span class="material-symbols-outlined text-3xl">directions_bus</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">Tidak Ada Jadwal Bus Tersedia</h3>
+                        <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 font-body">
+                            Maaf, belum ada jadwal bus aktif untuk rute dan tanggal yang Anda pilih. Coba sesuaikan tanggal atau pilihan filter.
+                        </p>
                     </div>
                 @else
-                    <div class="mb-3 text-muted small">
-                        Menampilkan {{ $jadwals->count() }} jadwal untuk <strong>{{ \Carbon\Carbon::parse($params['tanggal'])->format('d M Y') }}</strong>
-                    </div>
-                    @foreach ($jadwals as $jadwal)
-                        <div class="card border-0 shadow-sm mb-3" style="border-radius: 12px;">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-md-3 text-center">
-                                        <div class="d-inline-flex align-items-center justify-content-center"
-                                            style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #123E73, #1E5AA8); color: #fff; font-size: 1.3rem;">
-                                            <i class="fas fa-bus"></i>
+                    <!-- Bus Cards List (Matching Image 2 Prototype) -->
+                    <div class="space-y-4">
+                        @foreach ($jadwals as $jadwal)
+                            <div class="bg-white border {{ $loop->first ? 'border-2 border-brand-600 shadow-sm' : 'border-slate-200/90 shadow-xs' }} rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all hover:border-brand-600">
+                                
+                                @if ($loop->first)
+                                    <!-- Highlight Ribbon Badge -->
+                                    <div class="absolute top-0 right-0 bg-brand-600 text-white text-[11px] font-bold px-3 py-1 rounded-bl-xl flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs">thumb_up</span>
+                                        Armada Terpilih
+                                    </div>
+                                @endif
+
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                                    
+                                    <!-- PO Name & Class -->
+                                    <div class="md:col-span-4">
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="text-lg font-bold text-slate-900">{{ $jadwal->bus->nama_bus }}</h3>
                                         </div>
-                                        <h6 class="mt-2 mb-0 font-weight-bold" style="color: #0B1F3A;">{{ $jadwal->bus->nama_bus }}</h6>
-                                        <small class="text-muted">{{ $jadwal->bus->operator->nama_operator }}</small>
-                                        <div>
-                                            <span class="badge badge-info">{{ ucfirst($jadwal->bus->kelas) }}</span>
+                                        <p class="text-xs font-semibold text-brand-600 mt-0.5">
+                                            {{ $jadwal->bus->operator->nama_operator }} &middot; {{ ucfirst($jadwal->bus->kelas) }}
+                                        </p>
+                                        @if ($jadwal->bus->fasilitas)
+                                            <div class="flex flex-wrap gap-1 mt-2 text-[10px] text-slate-500 font-body">
+                                                @foreach (explode(',', $jadwal->bus->fasilitas) as $fasilitas)
+                                                    <span class="bg-slate-100 px-2 py-0.5 rounded">{{ trim($fasilitas) }}</span>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <!-- Departure Schedule Timeline -->
+                                    <div class="md:col-span-5 flex items-center justify-between px-2">
+                                        <div class="text-left">
+                                            <div class="text-lg font-black text-slate-900">{{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }}</div>
+                                            <div class="text-xs text-slate-400 font-body">{{ $jadwal->rute->terminalAsal->kota }}</div>
+                                        </div>
+
+                                        <div class="flex-1 flex flex-col items-center px-4">
+                                            <span class="text-[10px] font-semibold text-slate-400 mb-1">
+                                                {{ $jadwal->rute->estimasi_durasi ? gmdate('H:i', $jadwal->rute->estimasi_durasi * 60) . ' Jam' : '8j 30m' }}
+                                            </span>
+                                            <div class="w-full flex items-center">
+                                                <div class="w-2 h-2 rounded-full bg-brand-600"></div>
+                                                <div class="flex-1 h-0.5 bg-brand-200"></div>
+                                                <span class="material-symbols-outlined text-brand-600 text-sm -mx-1">directions_bus</span>
+                                                <div class="flex-1 h-0.5 bg-brand-200"></div>
+                                                <div class="w-2 h-2 rounded-full bg-brand-600"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-right">
+                                            <div class="text-lg font-black text-slate-900">
+                                                {{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->addMinutes(($jadwal->rute->estimasi_durasi ?? 8) * 60)->format('H:i') }}
+                                            </div>
+                                            <div class="text-xs text-slate-400 font-body">{{ $jadwal->rute->terminalTujuan->kota }}</div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="d-flex align-items-center">
-                                            <div class="text-center">
-                                                <h5 class="font-weight-bold mb-0" style="color: #0B1F3A;">{{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }}</h5>
-                                                <small class="text-muted">{{ $jadwal->rute->terminalAsal->kota }}</small>
+
+                                    <!-- Price & CTA -->
+                                    <div class="md:col-span-3 md:border-l md:border-slate-100 md:pl-5 flex md:flex-col justify-between items-end">
+                                        <div class="text-right">
+                                            <span class="text-[11px] text-slate-400 block">Mulai dari</span>
+                                            <div class="text-xl font-black text-brand-600">
+                                                Rp {{ number_format($jadwal->harga, 0, ',', '.') }}
                                             </div>
-                                            <div class="mx-3 text-center flex-grow-1">
-                                                <div class="small text-muted">{{ $jadwal->rute->estimasi_durasi ? \Carbon\Carbon::parse($jadwal->rute->estimasi_durasi)->format('H:i') . ' jam' : '' }}</div>
-                                                <div style="border-top: 2px solid #1E5AA8; position: relative; margin: 6px 0;">
-                                                    <i class="fas fa-circle" style="position: absolute; top: -6px; left: 0; color: #1E5AA8; font-size: 0.5rem;"></i>
-                                                    <i class="fas fa-bus" style="position: absolute; top: -9px; right: 0; color: #1E5AA8; font-size: 0.8rem;"></i>
-                                                </div>
-                                                <small class="text-muted">{{ $jadwal->rute->terminalAsal->nama_terminal }} &rarr; {{ $jadwal->rute->terminalTujuan->nama_terminal }}</small>
-                                            </div>
-                                            <div class="text-center">
-                                                <h5 class="font-weight-bold mb-0" style="color: #0B1F3A;">{{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->addMinutes($jadwal->rute->estimasi_durasi ?? 0)->format('H:i') }}</h5>
-                                                <small class="text-muted">{{ $jadwal->rute->terminalTujuan->kota }}</small>
-                                            </div>
+                                            <span class="text-[11px] font-bold {{ $jadwal->available_seats <= 5 ? 'text-rose-500' : 'text-emerald-600' }} block">
+                                                Tersisa {{ $jadwal->available_seats }} Kursi
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div class="col-md-3 text-center">
-                                        <div class="h5 font-weight-bold mb-1" style="color: #1E5AA8;">Rp {{ number_format($jadwal->harga, 0, ',', '.') }}</div>
-                                        <div class="small text-success mb-2"><i class="fas fa-chair"></i> {{ $jadwal->available_seats }} kursi tersisa</div>
-                                        <a href="{{ route('tiket.seats', $jadwal->id_jadwal) }}?penumpang={{ $params['penumpang'] }}"
-                                            class="btn btn-primary btn-block font-weight-bold" style="background: #1E5AA8; border: none;">
-                                            Pilih Kursi
+                                        <a href="{{ route('tiket.seats', $jadwal->id_jadwal) }}?penumpang={{ $params['penumpang'] ?? 1 }}"
+                                           class="mt-2.5 w-full py-2.5 px-4 rounded-xl {{ $loop->first ? 'bg-brand-600 hover:bg-brand-700 text-white' : 'border border-brand-600 text-brand-600 hover:bg-brand-50' }} text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all">
+                                            <span>Pilih Kursi</span>
+                                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
                                         </a>
                                     </div>
+
                                 </div>
+
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 @endif
+
             </div>
+
         </div>
-    </div>
+
+    </main>
 @endsection

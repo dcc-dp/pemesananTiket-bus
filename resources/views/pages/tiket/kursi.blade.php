@@ -1,198 +1,364 @@
 @extends('layouts.landing.app', ['menu' => 'tiket'])
 
 @section('content')
-    <div style="background: linear-gradient(135deg, #0B1F3A 0%, #123E73 50%, #1E5AA8 100%); padding: 40px 0; margin-bottom: 30px;">
-        <div class="container">
-            <div class="d-flex align-items-center">
-                <a href="{{ route('tiket.search') }}" class="btn btn-sm btn-outline-light mr-3"><i class="fas fa-arrow-left"></i></a>
-                <div>
-                    <h5 class="text-white font-weight-bold mb-0">
-                        <i class="fas fa-bus"></i> {{ $jadwal->bus->nama_bus }}
-                    </h5>
-                    <small class="text-white-50">
-                        {{ $jadwal->rute->terminalAsal->kota }} &rarr; {{ $jadwal->rute->terminalTujuan->kota }}
-                        &middot; {{ $jadwal->tanggal->format('d M Y') }} &middot; {{ $jadwal->jam_berangkat->format('H:i') }}
-                        &middot; {{ $jadwal->bus->operator->nama_operator }}
-                    </small>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
+        
+        <!-- STEPPER (Horizontal 4-Step Header) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
+                
+                <!-- Step 1: Checked -->
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('tiket.search') }}" class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs hover:bg-slate-700 transition-colors">
+                        <span class="material-symbols-outlined text-base">check</span>
+                    </a>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 1</p>
+                        <p class="text-sm font-bold text-slate-900">Pilih Bus</p>
+                    </div>
                 </div>
+
+                <!-- Step 2: Active -->
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100">
+                        2
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-brand-600 uppercase tracking-wider">LANGKAH 2</p>
+                        <p class="text-sm font-bold text-brand-600">Pilih Kursi</p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Pending -->
+                <div class="flex items-center gap-3 opacity-60">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                        3
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 3</p>
+                        <p class="text-sm font-semibold text-slate-600">Data Pemesan</p>
+                    </div>
+                </div>
+
+                <!-- Step 4: Pending -->
+                <div class="flex items-center gap-3 opacity-60">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                        4
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 4</p>
+                        <p class="text-sm font-semibold text-slate-600">Pembayaran</p>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
 
-    <div class="container" style="margin-bottom: 60px;">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm" style="border-radius: 12px;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="font-weight-bold" style="color: #0B1F3A;"><i class="fas fa-chair"></i> Pilih Kursi</h6>
-                            <div class="small">
-                                <span class="badge badge-success">Tersedia</span>
-                                <span class="badge badge-danger">Terisi</span>
-                                <span class="badge badge-warning">Dipilih</span>
-                            </div>
+        <!-- TRIP INFO BANNER -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center border border-brand-100">
+                    <span class="material-symbols-outlined text-xl">directions_bus</span>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">
+                        {{ $jadwal->bus->nama_bus }} &middot; <span class="text-brand-600">{{ $jadwal->bus->operator->nama_operator }}</span>
+                    </h3>
+                    <p class="text-xs text-slate-400 font-body">
+                        {{ $jadwal->rute->terminalAsal->kota }} &rarr; {{ $jadwal->rute->terminalTujuan->kota }} &middot; {{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d M Y') }} ({{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }} WITA)
+                    </p>
+                </div>
+            </div>
+            <a href="{{ route('tiket.search') }}" class="text-xs font-bold text-brand-600 hover:underline flex items-center gap-1">
+                <span class="material-symbols-outlined text-base">arrow_back</span>
+                Ganti Jadwal
+            </a>
+        </div>
+
+        <!-- STEP 2 SECTION: PILIH NOMOR KURSI BUS ANDA (PROTOTYPE DESIGN SYSTEM) -->
+        <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-6">
+            
+            <!-- Header & Legend Bar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                <div>
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-brand-600 text-xl">airline_seat_recline_extra</span>
+                        Langkah 2: Pilih Nomor Kursi Bus Anda
+                    </h3>
+                    <p class="text-xs text-slate-500 font-body mt-0.5">
+                        Konfigurasi {{ ucfirst($jadwal->bus->kelas) }} (Maksimal pemilihan: {{ $penumpang }} kursi)
+                    </p>
+                </div>
+
+                <!-- Legend -->
+                <div class="flex flex-wrap items-center gap-4 text-xs font-medium">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-4 h-4 rounded-md bg-white border border-slate-300"></div>
+                        <span class="text-slate-600">Tersedia</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-4 h-4 rounded-md bg-amber-500 text-white flex items-center justify-center font-bold text-[10px]">✓</div>
+                        <span class="text-amber-600 font-bold">Dipilih</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-4 h-4 rounded-md bg-slate-200 border border-slate-300 text-slate-400 flex items-center justify-center text-[10px]">✕</div>
+                        <span class="text-slate-400">Terisi</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seat Grid & Summary Dual-Column -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left Deck Graphic (2+2 Bus Layout) -->
+                <div class="md:col-span-7 bg-slate-50/80 border border-slate-200/80 rounded-2xl p-5">
+                    
+                    <!-- Front Deck Header -->
+                    <div class="flex justify-between items-center pb-3 mb-5 border-b border-slate-200/80">
+                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-widest">
+                            <span class="material-symbols-outlined text-base text-brand-600">arrow_upward</span>
+                            DEPAN
                         </div>
-
-                        {{-- driver --}}
-                        <div class="text-center mb-3">
-                            <div class="d-inline-flex align-items-center justify-content-center"
-                                style="width: 46px; height: 46px; border-radius: 50%; background: #e9ecef; color: #495057;">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="small text-muted mt-1">Kemudi</div>
+                        <div class="flex items-center gap-1.5 bg-slate-200/70 px-3 py-1 rounded-lg text-xs font-bold text-slate-700">
+                            <span class="material-symbols-outlined text-sm text-brand-600">sports_motorsports</span>
+                            Sopir 🚌
                         </div>
+                    </div>
 
-                        @php
-                            $availableIds = $available->pluck('id_kursi')->all();
-                            $unavailableIds = $unavailable->pluck('id_kursi')->all();
-                            $rows = collect($jadwal->bus->kursis)->sortBy(function ($k) {
-                                preg_match('/^(\d+)([A-Z])$/', $k->nomor_kursi, $m);
-                                return $m[1] * 10 + (ord($m[2]) - 65);
-                            })->groupBy(function ($k) {
-                                preg_match('/^(\d+)([A-Z])$/', $k->nomor_kursi, $m);
-                                return (int) $m[1];
-                            });
-                        @endphp
+                    @php
+                        $availableIds = $available->pluck('id_kursi')->all();
+                        $unavailableIds = $unavailable->pluck('id_kursi')->all();
+                        $rows = collect($jadwal->bus->kursis)->sortBy(function ($k) {
+                            preg_match('/^(\d+)([A-Z])$/', $k->nomor_kursi, $m);
+                            return isset($m[1]) ? ((int)$m[1] * 10 + (ord($m[2] ?? 'A') - 65)) : $k->id_kursi;
+                        })->groupBy(function ($k) {
+                            preg_match('/^(\d+)([A-Z])$/', $k->nomor_kursi, $m);
+                            return isset($m[1]) ? (int)$m[1] : 1;
+                        });
+                    @endphp
 
-                        <div style="border: 2px solid #e9ecef; border-radius: 12px; padding: 20px 10px; background: #f8fafc;">
-                            @foreach ($rows as $row => $kursis)
-                                <div class="d-flex justify-content-center align-items-center mb-2" style="gap: 0.6rem;">
-                                    <div class="small text-muted" style="width: 22px;">{{ $row }}</div>
-                                    @foreach ($kursis as $kursi)
+                    <!-- Rows of Seats -->
+                    <div class="space-y-3" id="seatMatrix">
+                        @foreach ($rows as $rowNum => $kursis)
+                            @php
+                                $leftSeats = $kursis->filter(fn($k) => preg_match('/[AB]$/', $k->nomor_kursi))->values();
+                                $rightSeats = $kursis->filter(fn($k) => preg_match('/[CD]$/', $k->nomor_kursi))->values();
+                                if ($leftSeats->isEmpty() && $rightSeats->isEmpty()) {
+                                    $chunked = $kursis->chunk(ceil($kursis->count() / 2));
+                                    $leftSeats = $chunked->get(0, collect());
+                                    $rightSeats = $chunked->get(1, collect());
+                                }
+                            @endphp
+
+                            <div class="flex items-center justify-between gap-2 p-1 rounded-xl transition-all row-container">
+                                <!-- Left Seats (e.g. A, B) -->
+                                <div class="flex gap-2">
+                                    @foreach ($leftSeats as $kursi)
                                         @php
-                                            $isUnavailable = in_array($kursi->id_kursi, $unavailableIds);
-                                            $isAvailable = in_array($kursi->id_kursi, $availableIds);
+                                            $isUnavail = in_array($kursi->id_kursi, $unavailableIds);
                                         @endphp
                                         <button type="button"
-    class="seat-btn btn btn-sm font-weight-bold"
-    data-id="{{ $kursi->id_kursi }}"
-    data-nomor="{{ $kursi->nomor_kursi }}"
-    data-harga="{{ $kursi->harga ?? 0 }}"
-    data-available="{{ $isAvailable ? 1 : 0 }}"
-    style="width: 70px; height: 62px; border-radius: 10px; font-size: 0.8rem;
-        {{ $isUnavailable ? 'background: #e53e3e; color: #fff; border-color: #e53e3e; cursor: not-allowed; opacity: 0.75;'
-           : 'background: #2dce89; color: #fff; border-color: #2dce89;' }}">
-
-    <div style="font-size: 0.9rem; font-weight: 700;">
-        {{ $kursi->nomor_kursi }}
-    </div>
-
-    <div style="font-size: 0.65rem; margin-top: 2px;">
-        Rp {{ number_format($kursi->harga ?? 0, 0, ',', '.') }}
-    </div>
-
-</button>
+                                                class="seat-btn w-12 h-12 sm:w-13 sm:h-13 rounded-xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center font-bold text-xs {{ $isUnavail ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-600' }}"
+                                                data-id="{{ $kursi->id_kursi }}"
+                                                data-nomor="{{ $kursi->nomor_kursi }}"
+                                                data-harga="{{ $jadwal->harga }}"
+                                                {{ $isUnavail ? 'disabled' : '' }}>
+                                            <span>{{ $kursi->nomor_kursi }}</span>
+                                            <span class="text-[9px] font-normal {{ $isUnavail ? 'text-slate-400' : 'text-slate-400' }}">
+                                                {{ $isUnavail ? 'Terisi' : 'Rp' . number_format($jadwal->harga / 1000, 0) . 'k' }}
+                                            </span>
+                                        </button>
                                     @endforeach
-                                    <div class="small text-muted" style="width: 22px; text-align: right;">{{ $row }}</div>
                                 </div>
-                            @endforeach
-                        </div>
 
-                        <p class="small text-muted mt-3 mb-0"><i class="fas fa-info-circle"></i> Klik kursi hijau untuk memilih. Maksimal {{ $penumpang }} kursi (jumlah penumpang).</p>
+                                <!-- Center Aisle -->
+                                <div class="text-[10px] font-bold text-slate-300 tracking-widest uppercase px-1">
+                                    LORONG
+                                </div>
+
+                                <!-- Right Seats (e.g. C, D) -->
+                                <div class="flex gap-2">
+                                    @foreach ($rightSeats as $kursi)
+                                        @php
+                                            $isUnavail = in_array($kursi->id_kursi, $unavailableIds);
+                                        @endphp
+                                        <button type="button"
+                                                class="seat-btn w-12 h-12 sm:w-13 sm:h-13 rounded-xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center font-bold text-xs {{ $isUnavail ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-600' }}"
+                                                data-id="{{ $kursi->id_kursi }}"
+                                                data-nomor="{{ $kursi->nomor_kursi }}"
+                                                data-harga="{{ $jadwal->harga }}"
+                                                {{ $isUnavail ? 'disabled' : '' }}>
+                                            <span>{{ $kursi->nomor_kursi }}</span>
+                                            <span class="text-[9px] font-normal {{ $isUnavail ? 'text-slate-400' : 'text-slate-400' }}">
+                                                {{ $isUnavail ? 'Terisi' : 'Rp' . number_format($jadwal->harga / 1000, 0) . 'k' }}
+                                            </span>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                </div>
-            </div>
 
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm sticky-top" style="border-radius: 12px; top: 20px;">
-                    <div class="card-body">
-                        <h6 class="font-weight-bold" style="color: #0B1F3A;">Ringkasan</h6>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Jadwal</span>
-                            <span class="font-weight-bold">{{ $jadwal->jam_berangkat->format('H:i') }} WITA</span>
+                    <!-- Deck Footer Info -->
+                    <div class="flex justify-between items-center pt-4 mt-5 border-t border-slate-200/80 text-xs text-slate-500 font-medium">
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm text-brand-600">airline_seat_recline_normal</span>
+                            Bus AC {{ ucfirst($jadwal->bus->kelas) }}
                         </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Bus</span>
-                            <span class="font-weight-bold">{{ $jadwal->bus->nama_bus }}</span>
+                        <div class="flex items-center gap-1.5 bg-slate-200/60 px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-600">
+                            <span class="material-symbols-outlined text-sm">wc</span>
+                            Toilet Penumpang
                         </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Kelas</span>
-                            <span class="font-weight-bold">{{ ucfirst($jadwal->bus->kelas) }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Harga / kursi</span>
-                            <span class="font-weight-bold" style="color: #1E5AA8;">Rp {{ number_format($jadwal->harga, 0, ',', '.') }}</span>
-                        </div>
-                        <hr>
-                        <div class="mb-3">
-                            <label class="small text-muted font-weight-bold">Kursi Dipilih</label>
-                            <div id="selectedSeats" class="d-flex flex-wrap" style="gap: 0.4rem; min-height: 34px;">
-                                <span class="text-muted small">Belum ada kursi dipilih</span>
+                    </div>
+
+                </div>
+
+                <!-- Right Seat Selection Summary Panel (Form to Passenger Details) -->
+                <div class="md:col-span-5 bg-slate-50/90 rounded-2xl p-5 border border-slate-200/80 space-y-4">
+                    
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-slate-900">Rincian Kursi Dipilih</h4>
+                        <span class="bg-amber-100 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full" id="seatCountBadge">
+                            0 Kursi
+                        </span>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-4 border border-slate-200/80 space-y-3 text-xs">
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-500 font-body">Kursi dipilih:</span>
+                            <div class="flex flex-wrap gap-1.5 justify-end" id="selectedSeatsList">
+                                <span class="text-slate-400 italic">Belum ada kursi dipilih</span>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="font-weight-bold" style="color: #0B1F3A;">Total</span>
-                            <span class="h5 font-weight-bold mb-0" id="totalHarga" style="color: #1E5AA8;">Rp 0</span>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-500 font-body">Harga per kursi:</span>
+                            <span class="font-bold text-slate-800">Rp {{ number_format($jadwal->harga, 0, ',', '.') }}</span>
                         </div>
-                        <button id="lanjutkanBtn" class="btn btn-primary btn-block font-weight-bold" disabled style="background: linear-gradient(135deg, #123E73, #1E5AA8); border: none;">
-                            Lanjutkan <i class="fas fa-arrow-right"></i>
-                        </button>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-500 font-body">Jumlah kursi:</span>
+                            <span class="font-bold text-slate-800" id="seatCountText">0</span>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-500 font-body">Biaya layanan:</span>
+                            <span class="font-semibold text-slate-800">Rp 7.500</span>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-3 flex items-center justify-between">
+                            <span class="font-bold text-slate-900 text-sm">Total:</span>
+                            <span class="text-xl font-black text-brand-600" id="totalPriceText">Rp 0</span>
+                        </div>
+
                     </div>
+
+                    <!-- Reservation Expiry Banner -->
+                    <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs p-3 rounded-xl flex items-center gap-2 font-medium">
+                        <span class="material-symbols-outlined text-emerald-600 text-base" style="font-variation-settings: 'FILL' 1;">lock</span>
+                        <span>Kursi tersimpan untuk pemesanan Anda selama 15 menit.</span>
+                    </div>
+
+                    <!-- Next Action Form -->
+                    <form action="{{ route('booking.form', $jadwal->id_jadwal) }}" method="GET" id="proceedBookingForm">
+                        <div id="hiddenSeatInputs"></div>
+                        <button type="submit" id="submitSeatBtn" disabled
+                                class="w-full py-3.5 px-4 rounded-xl bg-slate-300 text-slate-500 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-not-allowed">
+                            <span>Lanjut ke Data Pemesan (Langkah 3)</span>
+                            <span class="material-symbols-outlined text-base">arrow_forward</span>
+                        </button>
+                    </form>
+
                 </div>
+
             </div>
-        </div>
-    </div>
-@endsection
 
-@push('scripts')
-<script>
-    const penumpang = {{ $penumpang }};
-    const hargaPerKursi = {{ $jadwal->harga }};
-    const maxSeat = {{ $available->count() }};
+        </section>
 
-    let selected = [];
+    </main>
 
-    const seatButtons = document.querySelectorAll('.seat-btn');
+    <style>
+        .w-13 { width: 3.25rem; }
+        .h-13 { height: 3.25rem; }
+    </style>
 
-    function refreshUI() {
-        const container = document.getElementById('selectedSeats');
-        container.innerHTML = '';
+    <!-- Interactive Seat Selection Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const maxPassengers = {{ $penumpang }};
+            const unitPrice = {{ (int) $jadwal->harga }};
+            const serviceFee = 7500;
+            let selectedSeats = [];
 
-        if (selected.length === 0) {
-            container.innerHTML = '<span class="text-muted small">Belum ada kursi dipilih</span>';
-        }
+            const seatCountBadge = document.getElementById('seatCountBadge');
+            const selectedSeatsList = document.getElementById('selectedSeatsList');
+            const seatCountText = document.getElementById('seatCountText');
+            const totalPriceText = document.getElementById('totalPriceText');
+            const hiddenInputs = document.getElementById('hiddenSeatInputs');
+            const submitBtn = document.getElementById('submitSeatBtn');
 
-        selected.forEach(id => {
-            const btn = document.querySelector(`.seat-btn[data-id="${id}"]`);
-            const span = document.createElement('span');
-            span.className = 'badge badge-primary';
-            span.textContent = btn.dataset.nomor;
-            container.appendChild(span);
-        });
+            function updateUI() {
+                const count = selectedSeats.length;
+                seatCountBadge.textContent = `${count} Kursi`;
+                seatCountText.textContent = count;
 
-        document.getElementById('totalHarga').textContent = 'Rp ' + (selected.length * hargaPerKursi).toLocaleString('id-ID');
-        document.getElementById('lanjutkanBtn').disabled = selected.length === 0;
-    }
+                if (count === 0) {
+                    selectedSeatsList.innerHTML = '<span class="text-slate-400 italic">Belum ada kursi dipilih</span>';
+                    totalPriceText.textContent = 'Rp 0';
+                    submitBtn.disabled = true;
+                    submitBtn.className = 'w-full py-3.5 px-4 rounded-xl bg-slate-300 text-slate-500 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-not-allowed';
+                } else {
+                    selectedSeatsList.innerHTML = selectedSeats.map(s => 
+                        `<span class="px-2.5 py-1 bg-amber-500 text-white font-bold text-xs rounded-md shadow-xs">${s.nomor}</span>`
+                    ).join('');
 
-    seatButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-            if (this.dataset.available !== '1') return;
-
-            const id = this.dataset.id;
-
-            if (selected.includes(id)) {
-                selected = selected.filter(s => s !== id);
-                this.style.background = '#2dce89';
-                this.style.borderColor = '#2dce89';
-            } else {
-                if (selected.length >= penumpang) {
-                    alert(`Maksimal memilih ${penumpang} kursi sesuai jumlah penumpang.`);
-                    return;
+                    const total = (count * unitPrice) + serviceFee;
+                    totalPriceText.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+                    submitBtn.disabled = false;
+                    submitBtn.className = 'w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-brand-600/25 transition-all cursor-pointer active:scale-98';
                 }
-                selected.push(id);
-                this.style.background = '#f6c23e';
-                this.style.borderColor = '#f6c23e';
+
+                // Update hidden inputs for GET form (seats[]=...)
+                hiddenInputs.innerHTML = selectedSeats.map(s => 
+                    `<input type="hidden" name="seats[]" value="${s.id}">`
+                ).join('');
             }
 
-            refreshUI();
-        });
-    });
+            document.querySelectorAll('.seat-btn').forEach(btn => {
+                if (btn.disabled) return;
 
-    document.getElementById('lanjutkanBtn').addEventListener('click', function () {
-        if (selected.length === 0) return;
-        const url = '{{ route("booking.form", $jadwal->id_jadwal) }}' + '?seats=' + selected.join(',');
-        window.location.href = url;
-    });
-</script>
-@endpush
+                btn.addEventListener('click', () => {
+                    const id = btn.dataset.id;
+                    const nomor = btn.dataset.nomor;
+                    const index = selectedSeats.findIndex(s => s.id === id);
+
+                    if (index > -1) {
+                        // Unselect
+                        selectedSeats.splice(index, 1);
+                        btn.className = 'seat-btn w-12 h-12 sm:w-13 sm:h-13 rounded-xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center font-bold text-xs bg-white border-slate-200 text-slate-800 hover:border-brand-600';
+                        btn.innerHTML = `<span>${nomor}</span><span class="text-[9px] font-normal text-slate-400">Rp${Math.round(unitPrice/1000)}k</span>`;
+                    } else {
+                        // Check limit
+                        if (selectedSeats.length >= maxPassengers) {
+                            Swal.fire({
+                                title: "Batas Terpenuhi",
+                                text: `Anda hanya memesan untuk ${maxPassengers} penumpang.`,
+                                icon: "info",
+                                confirmButtonColor: "#006194"
+                            });
+                            return;
+                        }
+
+                        // Select
+                        selectedSeats.push({ id, nomor });
+                        btn.className = 'seat-btn w-12 h-12 sm:w-13 sm:h-13 rounded-xl border-2 transition-all shadow-sm flex flex-col items-center justify-center font-bold text-xs bg-amber-500 text-white border-amber-500 scale-105';
+                        btn.innerHTML = `<span>${nomor} ✓</span><span class="text-[9px] font-normal text-amber-100">Rp${Math.round(unitPrice/1000)}k</span>`;
+                    }
+
+                    updateUI();
+                });
+            });
+        });
+    </script>
+@endsection

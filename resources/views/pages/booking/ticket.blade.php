@@ -5,143 +5,178 @@
     @media print {
         body * { visibility: hidden; }
         #ticketPrint, #ticketPrint * { visibility: visible; }
-        #ticketPrint { position: absolute; left: 0; top: 0; width: 100%; }
+        #ticketPrint { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none !important; border: 1px solid #ccc !important; }
         .no-print { display: none !important; }
-    }
-    .ticket-perforation {
-        border-left: 2px dashed #c0c9d6;
-    }
-    @media (max-width: 767.98px) {
-        .ticket-perforation { border-left: none; border-top: 2px dashed #c0c9d6; margin-top: 1rem; padding-top: 1rem; }
     }
 </style>
 @endpush
 
 @section('content')
-    <div class="no-print" style="background: linear-gradient(135deg, #0B1F3A 0%, #123E73 50%, #1E5AA8 100%); padding: 40px 0; margin-bottom: 30px;">
-        <div class="container d-flex align-items-center justify-content-between">
-            <div>
-                <h5 class="text-white font-weight-bold mb-0"><i class="fas fa-ticket-alt"></i> E-Tiket</h5>
-                <small class="text-white-50">Kode Booking: <strong class="text-white">{{ $ticket['kode_booking'] }}</strong></small>
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
+        
+        <!-- Header Strip Actions (No Print) -->
+        <div class="no-print bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+                    <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-slate-900">E-Tiket &amp; Boarding Pass Resmi</h2>
+                    <p class="text-xs text-slate-400 font-body">Status: <span class="font-bold text-emerald-600">Lunas &amp; Terverifikasi</span> &middot; Kode: <span class="font-mono font-bold text-slate-700">{{ $ticket['kode_booking'] }}</span></p>
+                </div>
             </div>
-            <button onclick="window.print()" class="btn btn-light font-weight-bold">
-                <i class="fas fa-print"></i> Cetak Tiket
-            </button>
-        </div>
-    </div>
 
-    <div class="container" style="margin-bottom: 60px;">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div id="ticketPrint" class="card border-0 shadow" style="border-radius: 16px; overflow: hidden;">
-                    {{-- header tiket --}}
-                    <div style="background: linear-gradient(135deg, #0B1F3A, #1E5AA8); padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;">
+            <div class="flex items-center gap-2 self-start sm:self-center">
+                <button onclick="window.print()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all">
+                    <span class="material-symbols-outlined text-sm">print</span>
+                    <span>Cetak Tiket</span>
+                </button>
+                <a href="{{ route('customer.bookings') }}" class="px-4 py-2 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs font-bold transition-all">
+                    Riwayat Pesanan
+                </a>
+            </div>
+        </div>
+
+        <!-- BOARDING PASS VOUCHER CARD (PROTOTYPE DESIGN SYSTEM) -->
+        <div id="ticketPrint" class="bg-white rounded-3xl border border-slate-200/90 shadow-md overflow-hidden transition-all">
+            
+            <!-- Card Blue Top Header Strip -->
+            <div class="bg-brand-600 text-white px-6 sm:px-8 py-4 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    <div>
+                        <span class="text-xs sm:text-sm font-extrabold tracking-wide uppercase">BOARDING PASS RESMI - BUSTICKET</span>
+                        <p class="text-[10px] text-brand-100 font-body">Tiket Elektronik Perjalanan Antar Kota Resmi</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] text-brand-200 uppercase tracking-widest block font-body">KODE BOOKING (PNR)</span>
+                    <span class="font-mono text-base sm:text-lg font-black tracking-widest">{{ $ticket['kode_booking'] }}</span>
+                </div>
+            </div>
+
+            <!-- Ticket Body with Perforation Division -->
+            <div class="grid grid-cols-1 md:grid-cols-12 relative">
+                
+                <!-- Left: Trip & Passenger Details (col-span-8) -->
+                <div class="md:col-span-8 p-6 sm:p-8 space-y-6">
+                    
+                    <!-- Operator & Date -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-100">
                         <div>
-                            <span style="color: #fff; font-size: 1.4rem; font-weight: 800;"><i class="fas fa-bus"></i> BusTicket</span>
-                            <div style="color: rgba(255,255,255,0.8); font-size: 0.8rem; margin-top: 4px;">E-Tiket Digital &middot; {{ $ticket['operator'] }}</div>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-brand-50 text-brand-700 tracking-wider">
+                                BUS {{ strtoupper($ticket['kelas']) }}
+                            </span>
+                            <h3 class="text-xl font-black text-slate-900 mt-1">PO {{ $ticket['operator'] }}</h3>
+                            <p class="text-xs text-slate-400 font-body">{{ $ticket['bus'] }} ({{ $ticket['nomor_polisi'] }})</p>
                         </div>
-                        <div style="color: #fff; font-weight: 700; font-size: 1.1rem; text-align: right;">
-                            <i class="fas fa-check-circle"></i> PAID
-                            <div style="font-size: 0.7rem; font-weight: 400; color: rgba(255,255,255,0.8);">Tiket Sah</div>
+                        <div class="text-right">
+                            <span class="text-[11px] text-slate-400 block font-body">Tanggal Keberangkatan</span>
+                            <span class="text-xs font-bold text-slate-800">{{ $ticket['tanggal']->format('d F Y') }}</span>
                         </div>
                     </div>
 
-                    <div class="card-body p-4">
-                        <div class="row">
-                            <div class="col-md-8">
-                                {{-- rute --}}
-                                <div class="d-flex align-items-center">
-                                    <div class="text-center">
-                                        <h4 class="font-weight-bold mb-0" style="color: #0B1F3A;">{{ \Carbon\Carbon::parse($ticket['jam_berangkat'])->format('H:i') }}</h4>
-                                        <small class="text-muted">{{ $ticket['asal'] }}</small>
-                                    </div>
-                                    <div class="mx-3 text-center flex-grow-1">
-                                        <div class="small text-muted">{{ $ticket['tanggal']->format('d M Y') }}</div>
-                                        <div style="border-top: 2px solid #1E5AA8; position: relative; margin: 8px 0;">
-                                            <i class="fas fa-circle" style="position: absolute; top: -6px; left: 0; color: #1E5AA8; font-size: 0.5rem;"></i>
-                                            <i class="fas fa-bus" style="position: absolute; top: -9px; right: 0; color: #1E5AA8; font-size: 0.9rem;"></i>
-                                        </div>
-                                    </div>
-                                    <div class="text-center">
-                                        <h4 class="font-weight-bold mb-0" style="color: #0B1F3A;">{{ \Carbon\Carbon::parse($ticket['jam_tiba'])->format('H:i') }}</h4>
-                                        <small class="text-muted">{{ $ticket['tujuan'] }}</small>
-                                    </div>
-                                </div>
-
-                                <hr>
-
-                                {{-- detail bus --}}
-                                <div class="row small">
-                                    <div class="col-6 mb-2">
-                                        <div class="text-muted">Bus</div>
-                                        <div class="font-weight-bold" style="color: #0B1F3A;">{{ $ticket['bus'] }} ({{ $ticket['nomor_polisi'] }})</div>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <div class="text-muted">Kelas</div>
-                                        <div class="font-weight-bold" style="color: #0B1F3A;">{{ ucfirst($ticket['kelas']) }}</div>
-                                    </div>
-                                    <div class="col-12 mb-2">
-                                        <div class="text-muted">Fasilitas</div>
-                                        <div class="font-weight-bold" style="color: #0B1F3A;">{{ $ticket['fasilitas'] ?: '-' }}</div>
-                                    </div>
-                                </div>
-
-                                {{-- penumpang --}}
-                                <div class="table-responsive">
-                                <table class="table table-sm table-bordered mt-2 mb-0">
-                                    <thead style="background: #f8fafc;">
-                                        <tr>
-                                            <th class="small">No</th>
-                                            <th class="small">Penumpang</th>
-                                            <th class="small">NIK</th>
-                                            <th class="small">Kursi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($ticket['booking_seats'] as $i => $p)
-                                            <tr>
-                                                <td>{{ $i + 1 }}</td>
-                                                <td class="font-weight-bold">{{ $p['nama_penumpang'] }}</td>
-                                                <td>{{ $p['nik'] }}</td>
-                                                <td class="font-weight-bold">{{ $p['kursi'] }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                </div>
+                    <!-- Route Graph -->
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center bg-slate-50/70 p-4 rounded-2xl border border-slate-100">
+                        <div class="sm:col-span-4 text-left">
+                            <div class="text-xl font-black text-slate-900">
+                                {{ \Carbon\Carbon::parse($ticket['jam_berangkat'])->format('H:i') }} <span class="text-xs font-semibold text-slate-500">WITA</span>
                             </div>
+                            <div class="text-sm font-bold text-slate-800">{{ $ticket['asal'] }}</div>
+                        </div>
 
-                            {{-- qr --}}
-                            <div class="col-md-4 ticket-perforation text-center">
-                                <img src="{{ $qr }}" alt="QR Code" style="width: 160px; height: 160px;">
-                                <div class="font-weight-bold mt-2" style="color: #0B1F3A;">{{ $ticket['kode_booking'] }}</div>
-                                <div class="small text-muted">Scan untuk verifikasi tiket</div>
-                                <hr>
-                                <div class="d-flex justify-content-between">
-                                    <span class="text-muted small">Total Dibayar</span>
-                                    <span class="font-weight-bold" style="color: #1E5AA8;">Rp {{ number_format($ticket['total_harga'], 0, ',', '.') }}</span>
-                                </div>
-                                <div class="d-flex justify-content-between mt-1">
-                                    <span class="text-muted small">Pemesanan</span>
-                                    <span class="small font-weight-bold">{{ $ticket['tanggal_booking']->format('d M Y H:i') }}</span>
-                                </div>
+                        <div class="sm:col-span-4 flex flex-col items-center px-2">
+                            <span class="text-[10px] font-bold text-slate-400 mb-1">Perjalanan Langsung</span>
+                            <div class="w-full flex items-center">
+                                <div class="w-2 h-2 rounded-full bg-brand-600"></div>
+                                <div class="flex-1 h-0.5 bg-brand-200"></div>
+                                <span class="material-symbols-outlined text-brand-600 text-sm -mx-1">directions_bus</span>
+                                <div class="flex-1 h-0.5 bg-brand-200"></div>
+                                <div class="w-2 h-2 rounded-full bg-brand-600"></div>
+                            </div>
+                            <span class="text-[10px] font-bold text-brand-600 mt-1">Tanpa Transit</span>
+                        </div>
+
+                        <div class="sm:col-span-4 text-right">
+                            <div class="text-xl font-black text-slate-900">
+                                {{ \Carbon\Carbon::parse($ticket['jam_tiba'])->format('H:i') }} <span class="text-xs font-semibold text-slate-500">WITA</span>
+                            </div>
+                            <div class="text-sm font-bold text-slate-800">{{ $ticket['tujuan'] }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Passengers & Seats -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Daftar Penumpang</span>
+                            <ol class="space-y-1 text-xs font-semibold text-slate-800 font-body">
+                                @foreach ($ticket['penumpang'] as $idx => $p)
+                                    <li>{{ $idx + 1 }}. {{ $p['nama_penumpang'] }} (NIK: {{ $p['nik'] }})</li>
+                                @endforeach
+                            </ol>
+                        </div>
+
+                        <div class="sm:text-right">
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nomor Kursi</span>
+                            <div class="flex sm:justify-end gap-1.5 flex-wrap">
+                                @foreach ($ticket['penumpang'] as $p)
+                                    <span class="px-3 py-1 bg-brand-600 text-white font-black text-xs rounded-lg shadow-2xs">
+                                        {{ $p['nomor_kursi'] }}
+                                    </span>
+                                @endforeach
                             </div>
                         </div>
                     </div>
 
-                    <div style="background: #f8fafc; padding: 10px 30px; border-top: 1px solid #e9ecef;">
-                        <small class="text-muted">
-                            <i class="fas fa-info-circle"></i> Simpan tiket ini &middot; Tunjukkan e-tiket (cetak/scan QR) kepada petugas saat naik bus. Tiket berlaku sesuai jadwal pada tiket.
-                        </small>
-                    </div>
+                    <p class="text-[11px] text-slate-400 italic pt-2 border-t border-slate-100">
+                        * Harap tiba di terminal minimal 30 menit sebelum jadwal keberangkatan bus.
+                    </p>
+
                 </div>
 
-                <div class="no-print text-center mt-3">
-                    <a href="{{ route('customer.booking.detail', $booking->id) }}" class="btn btn-outline-primary font-weight-bold">
-                        <i class="fas fa-arrow-left"></i> Kembali ke Detail
-                    </a>
+                <!-- Middle Perforated Divider (Dashed Border) -->
+                <div class="md:col-span-4 border-t-2 md:border-t-0 md:border-l-2 border-dashed border-slate-200 p-6 sm:p-8 flex flex-col justify-between items-center text-center bg-slate-50/40">
+                    
+                    <div class="w-full space-y-3">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">PINDAI DI GATE KEBERANGKATAN</span>
+                        
+                        <!-- Official SVG QR Code Container -->
+                        <div class="w-40 h-40 mx-auto bg-white border-2 border-slate-800 p-3 rounded-2xl shadow-xs flex items-center justify-center">
+                            @if ($qr)
+                                <div class="w-full h-full flex items-center justify-center">
+                                    {!! $qr !!}
+                                </div>
+                            @else
+                                <span class="material-symbols-outlined text-6xl text-slate-300">qr_code_2</span>
+                            @endif
+                        </div>
+
+                        <div class="text-[10px] font-mono font-bold text-slate-600">
+                            TIK: {{ $ticket['kode_booking'] }}
+                        </div>
+
+                        <p class="text-[11px] text-slate-400 font-body leading-tight">
+                            Tunjukkan QR code ini kepada staf terminal atau kondektur sebelum menaiki armada bus.
+                        </p>
+                    </div>
+
+                    <!-- Ticket Action Buttons (No Print) -->
+                    <div class="no-print w-full space-y-2 pt-6">
+                        <button type="button" onclick="window.print()" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer">
+                            <span class="material-symbols-outlined text-sm">download</span>
+                            <span>Unduh E-Tiket (PDF)</span>
+                        </button>
+                        <a href="https://wa.me/?text=Tiket%20BusTicket%20Resmi%20Kode%20Booking:%20{{ $ticket['kode_booking'] }}" target="_blank" class="w-full py-2.5 px-4 border border-brand-600 text-brand-600 hover:bg-brand-50 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all">
+                            <span class="material-symbols-outlined text-sm">share</span>
+                            <span>Kirim ke WhatsApp</span>
+                        </a>
+                    </div>
+
                 </div>
+
             </div>
+
         </div>
-    </div>
+
+    </main>
 @endsection
