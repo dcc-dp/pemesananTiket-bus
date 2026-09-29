@@ -3,156 +3,182 @@
 @section('content')
     <div class="main-content">
         <section class="section">
-            <div class="section-header">
-                <h1><i class="fas fa-route"></i> Tambah Rute</h1>
-                <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item">Master Data</div>
-                    <div class="breadcrumb-item"><a href="{{ route('admin.rute.index') }}">Rute</a></div>
-                    <div class="breadcrumb-item">Tambah</div>
+            <!-- PAGE HEADER: Modern Enterprise Header & Breadcrumb -->
+            <div class="adm-page-header" style="margin-bottom: 20px;">
+                <!-- Subtle Breadcrumb -->
+                <div class="adm-breadcrumb" style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #64748b; margin-bottom: 12px;">
+                    <a href="{{ route('admin.dashboard') }}" style="color: #64748b; text-decoration: none; font-weight: 500;">Home</a>
+                    <span style="font-size: 8px; color: #94a3b8;"><i class="fas fa-chevron-right"></i></span>
+                    <span style="color: #64748b;">Master Data</span>
+                    <span style="font-size: 8px; color: #94a3b8;"><i class="fas fa-chevron-right"></i></span>
+                    <a href="{{ route('admin.rute.index') }}" style="color: #64748b; text-decoration: none; font-weight: 500;">Rute</a>
+                    <span style="font-size: 8px; color: #94a3b8;"><i class="fas fa-chevron-right"></i></span>
+                    <span style="color: #0f172a; font-weight: 600;">Tambah</span>
+                </div>
+
+                <!-- Page Title Row -->
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div style="width: 42px; height: 42px; border-radius: 10px; background: #2563eb; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.22);">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div>
+                        <h1 style="font-size: 19px; font-weight: 700; color: #0f172a; margin: 0; line-height: 1.2; letter-spacing: -0.015em;">Tambah Rute</h1>
+                        <p style="font-size: 12.5px; color: #64748b; margin: 3px 0 0 0; line-height: 1.3;">Buat lintasan rute perjalanan baru antarterminal bus</p>
+                    </div>
                 </div>
             </div>
 
+            <!-- FORM CARD CONTAINER: Full-width Enterprise SaaS Form -->
             <div class="row">
-                <div class="col-12 ">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Form Rute</h4>
+                <div class="col-12">
+                    <div class="adm-form-card">
+                        <!-- Card Header -->
+                        <div class="adm-form-header">
+                            <div class="adm-form-header-title">
+                                <div style="width: 26px; height: 26px; border-radius: 6px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 12px;">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                <span>Form Rute</span>
+                            </div>
+                            <div class="adm-form-header-note">
+                                <span>Kolom bertanda</span>
+                                <span class="req-star">*</span>
+                                <span>wajib diisi</span>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <form method="POST" action="{{ route('admin.rute.store') }}">
-                                @csrf
-                                <div class="form-group">
-                                    <label>Terminal Asal <span class="text-danger">*</span></label>
-                                    <select name="terminal_asal_id" class="form-control" required>
-                                        <option value="">-- Pilih Terminal Asal --</option>
 
-                                        @foreach ($terminals as $terminal)
-                                            <option value="{{ $terminal->id_terminal }}"
-                                                data-lat="{{ $terminal->latitude }}" data-lng="{{ $terminal->longitude }}">
-                                                {{ $terminal->kota }} - {{ $terminal->nama_terminal }}
-                                            </option>
-                                        @endforeach
-
-                                    </select>
-                                    @error('terminal_asal_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label>Terminal Tujuan <span class="text-danger">*</span></label>
-                                    <select name="terminal_tujuan_id" class="form-control" required>
-                                        <option value="">-- Pilih Terminal Tujuan --</option>
-
-                                        @foreach ($terminals as $terminal)
-                                            <option value="{{ $terminal->id_terminal }}"
-                                                data-lat="{{ $terminal->latitude }}" data-lng="{{ $terminal->longitude }}">
-                                                {{ $terminal->kota }} - {{ $terminal->nama_terminal }}
-                                            </option>
-                                        @endforeach
-
-                                    </select>
-                                    @error('terminal_tujuan_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Jarak (km)</label>
-                                            {{-- <input type="number" name="jarak" class="form-control"
-                                                value="{{ old('jarak') }}" min="0" step="0.1"> --}}
-                                            <input type="number" name="jarak" id="jarak" class="form-control"
-                                                step="0.1" readonly>
+                        <!-- Form -->
+                        <form method="POST" action="{{ route('admin.rute.store') }}" style="margin: 0;">
+                            @csrf
+                            <div class="adm-form-body">
+                                <!-- Terminal Asal & Tujuan (Two Columns) -->
+                                <div class="row" style="margin-left: -9px; margin-right: -9px;">
+                                    <div class="col-md-6 col-12" style="padding-left: 9px; padding-right: 9px;">
+                                        <div class="adm-form-group">
+                                            <label class="adm-form-label">
+                                                Terminal Asal <span class="req-star">*</span>
+                                            </label>
+                                            <select name="terminal_asal_id" class="adm-select @error('terminal_asal_id') is-invalid @enderror" required>
+                                                <option value="">-- Pilih Terminal Asal --</option>
+                                                @foreach ($terminals as $terminal)
+                                                    <option value="{{ $terminal->id_terminal }}"
+                                                        data-lat="{{ $terminal->latitude }}" data-lng="{{ $terminal->longitude }}"
+                                                        {{ old('terminal_asal_id') == $terminal->id_terminal ? 'selected' : '' }}>
+                                                        {{ $terminal->kota }} - {{ $terminal->nama_terminal }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('terminal_asal_id')
+                                                <div class="invalid-feedback" style="font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Estimasi Durasi (menit)</label>
+                                    <div class="col-md-6 col-12" style="padding-left: 9px; padding-right: 9px;">
+                                        <div class="adm-form-group">
+                                            <label class="adm-form-label">
+                                                Terminal Tujuan <span class="req-star">*</span>
+                                            </label>
+                                            <select name="terminal_tujuan_id" class="adm-select @error('terminal_tujuan_id') is-invalid @enderror" required>
+                                                <option value="">-- Pilih Terminal Tujuan --</option>
+                                                @foreach ($terminals as $terminal)
+                                                    <option value="{{ $terminal->id_terminal }}"
+                                                        data-lat="{{ $terminal->latitude }}" data-lng="{{ $terminal->longitude }}"
+                                                        {{ old('terminal_tujuan_id') == $terminal->id_terminal ? 'selected' : '' }}>
+                                                        {{ $terminal->kota }} - {{ $terminal->nama_terminal }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('terminal_tujuan_id')
+                                                <div class="invalid-feedback" style="font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Jarak, Durasi & Status (Three Columns) -->
+                                <div class="row" style="margin-left: -9px; margin-right: -9px;">
+                                    <div class="col-md-4 col-12" style="padding-left: 9px; padding-right: 9px;">
+                                        <div class="adm-form-group">
+                                            <label class="adm-form-label">
+                                                Jarak (km)
+                                            </label>
+                                            <input type="number" name="jarak" id="jarak" class="adm-input"
+                                                step="0.1" readonly placeholder="Dihitung otomatis...">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12" style="padding-left: 9px; padding-right: 9px;">
+                                        <div class="adm-form-group">
+                                            <label class="adm-form-label">
+                                                Estimasi Durasi (menit)
+                                            </label>
                                             <input type="text" name="estimasi_durasi" id="estimasi_durasi"
-                                                class="form-control" readonly>
-                                            <small class="text-muted">
-                                                Durasi dihitung otomatis berdasarkan rute perjalanan.
+                                                class="adm-input" readonly placeholder="Dihitung otomatis...">
+                                            <small style="font-size: 11px; color: #64748b; margin-top: 4px; display: block;">
+                                                Otomatis dihitung via API rute.
                                             </small>
                                         </div>
                                     </div>
+                                    <div class="col-md-4 col-12" style="padding-left: 9px; padding-right: 9px;">
+                                        <div class="adm-form-group">
+                                            <label class="adm-form-label">
+                                                Status Rute <span class="req-star">*</span>
+                                            </label>
+                                            <select name="status" class="adm-select">
+                                                <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                                                <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Status <span class="text-danger">*</span></label>
-                                    <select name="status" class="form-control">
-                                        <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif
-                                        </option>
-                                        <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>
-                                            Nonaktif</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-0">
-                                    <button type="submit" class="btn btn-primary"
-                                        style="background: linear-gradient(135deg, #123E73, #1E5AA8); border: none;">
-                                        <i class="fas fa-save"></i> Simpan
-                                    </button>
-                                    <a href="{{ route('admin.rute.index') }}" class="btn btn-secondary">Batal</a>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+
+                            <!-- Form Action Area / Footer -->
+                            <div class="adm-form-footer">
+                                <button type="submit" class="adm-btn-submit">
+                                    <i class="fas fa-save" style="font-size: 12px;"></i>
+                                    <span>Simpan Rute</span>
+                                </button>
+                                <a href="{{ route('admin.rute.index') }}" class="adm-btn-cancel">
+                                    <span>Batal</span>
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </section>
     </div>
 
-
-
-    {{-- untuk jarak & durasi --}}
-
+    {{-- JS Kalkulasi Jarak & Durasi --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
             const asal = document.querySelector('select[name="terminal_asal_id"]');
             const tujuan = document.querySelector('select[name="terminal_tujuan_id"]');
-
             const jarak = document.getElementById('jarak');
             const durasi = document.getElementById('estimasi_durasi');
 
-
             async function hitungRute() {
-
-                // Kosongkan hasil sebelumnya
                 jarak.value = '';
                 durasi.value = '';
 
-                // Belum memilih terminal
                 if (!asal.value || !tujuan.value) {
                     return;
                 }
 
-                // Terminal asal dan tujuan tidak boleh sama
                 if (asal.value === tujuan.value) {
-
                     alert('Terminal asal dan tujuan tidak boleh sama.');
-
                     tujuan.value = '';
-
                     return;
                 }
 
-                // Tampilkan proses
                 jarak.placeholder = 'Menghitung...';
                 durasi.placeholder = 'Menghitung...';
 
                 try {
-
-                    // URL ke Laravel
-                    const url = new URL(
-                        "{{ route('admin.rute.calculate-distance') }}"
-                    );
-
+                    const url = new URL("{{ route('admin.rute.calculate-distance') }}");
                     url.searchParams.append('asal', asal.value);
                     url.searchParams.append('tujuan', tujuan.value);
 
-                    console.log('Request:', url.toString());
-
-
-                    // Kirim request ke Laravel
                     const response = await fetch(url, {
                         method: 'GET',
                         headers: {
@@ -160,72 +186,30 @@
                         }
                     });
 
-
-                    // Ambil response JSON
                     const data = await response.json();
 
-                    console.log('Response:', data);
-
-
-                    // Jika terjadi error
                     if (!response.ok || !data.success) {
-
                         jarak.value = '';
                         durasi.value = '';
-
-                        alert(
-                            data.message ||
-                            'Gagal menghitung jarak dan durasi.'
-                        );
-
+                        alert(data.message || 'Gagal menghitung jarak dan durasi.');
                         return;
                     }
 
-
-                    // =========================
-                    // ISI JARAK
-                    // =========================
-
                     jarak.value = Number(data.jarak).toFixed(2);
-
-
-                    // =========================
-                    // ISI DURASI
-                    // =========================
-
                     const totalMenit = Number(data.estimasi_durasi);
-
                     durasi.value = totalMenit;
 
-
-                    console.log('Jarak:', data.jarak + ' km');
-                    console.log('Durasi:', totalMenit + ' menit');
-
-
                 } catch (error) {
-
                     console.error('Error:', error);
-
-                    alert(
-                        'Tidak dapat menghitung rute. ' +
-                        'Pastikan koneksi internet tersedia.'
-                    );
-
+                    alert('Tidak dapat menghitung rute. Pastikan koneksi internet tersedia.');
                 } finally {
-
-                    // Hilangkan placeholder
-                    jarak.placeholder = '';
-                    durasi.placeholder = '';
-
+                    jarak.placeholder = 'Dihitung otomatis...';
+                    durasi.placeholder = 'Dihitung otomatis...';
                 }
-
             }
 
             asal.addEventListener('change', hitungRute);
             tujuan.addEventListener('change', hitungRute);
-
         });
     </script>
-
-    {{--  --}}
 @endsection

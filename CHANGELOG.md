@@ -27,7 +27,42 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 - Penambahan protokol wajib pencatatan changelog di `CHANGELOG.md` dan aturan workspace `AGENTS.md`.
 - Berkas [`docs/FEATURE_AUDIT_AND_RECOMMENDATIONS.md`](docs/FEATURE_AUDIT_AND_RECOMMENDATIONS.md) berisi audit mendalam seluruh skrip controller/view/service eksisting, identifikasi 4 temuan celah teknis/bug, matriks kematangan fitur, serta roadmap rekomendasi fitur berprioritas (Auto-cancel cron, scanner boarding, PDF tiket resmi, WhatsApp gateway, PO multi-tenancy).
 
+### Removed
+- [`resources/views/pages/admin/dashboard/index.blade.php`](resources/views/pages/admin/dashboard/index.blade.php): Menghapus tombol "Refresh Data" di baris header dan teks/badge "Update: Real-time" pada heading Statistik Utama sesuai permintaan pengguna.
+- [`resources/views/pages/admin/operator/{create,edit}.blade.php`](resources/views/pages/admin/operator/create.blade.php): Menghapus tombol "Kembali ke Daftar" di pojok kanan atas page header agar header berfokus penuh pada judul dan deskripsi halaman.
+
 ### Changed
+- **Penyelarasan & Standardisasi UI Seluruh Halaman CRUD Admin Sesuai Acuan "Operator" (`resources/views/pages/admin/*`)**:
+  - **Single Design System Terpadu**: Menerapkan hierarki visual yang sama dengan acuan Operator pada seluruh fitur CRUD:
+    - **Header & Breadcrumb**: Page header seragam dengan breadcrumb navigasi halus, icon container biru 42x42px (`#2563eb`), judul halaman 19px bold `#0f172a`, dan subtitle deskriptif 12.5px `#64748b`.
+    - **Container & Card Lebar**: Menghapus tombol "Kembali ke Daftar" pada header halaman form create/edit agar fokus pada konten, menggunakan card container penuh (`col-12`) tanpa sisa whitespace di sebelah kanan.
+    - **Form Elements & Hierarchy**: Label konsisten dengan tanda bintang merah (`.req-star`), input dan select setinggi 44px dengan border `#cbd5e1`, hover state `#94a3b8`, focus ring subtle, textarea alamat proporsional, serta card footer berlatar lembut (`#fafbfc`) untuk tombol submit (`.adm-btn-submit`) dan batal (`.adm-btn-cancel`).
+    - **Tabel Enterprise & Aksi CRUD**: Header tabel uppercase 9.5-10.5px `#64748b` berlatar `#f8fafc`, padding baris nyaman (10px 14px), badge status berindikator dot/pill modern, badge monospace untuk ID/kode, tombol aksi edit (`far fa-edit`) dan hapus (`far fa-trash-alt`) compact 28x28px, serta empty state ilustratif modern saat data kosong.
+  - **Modul CRUD yang Distandardisasi**:
+    - **Bus (`resources/views/pages/admin/Bus/{index,create,edit}.blade.php`)**: Standardisasi tabel armada dengan status badge dot, form tambah & edit 2 kolom simetris, dan preservasi dropdown `kelas` sesuai validasi controller.
+    - **Terminal (`resources/views/pages/admin/terminal/{index,create,edit}.blade.php`)**: Standardisasi tabel terminal dengan status badge operasional, form tambah & edit koordinat (latitude & longitude) serta textarea alamat.
+    - **Rute (`resources/views/pages/admin/rute/{index,create,edit}.blade.php`)**: Standardisasi tabel rute dengan badge asal & tujuan, form tambah & edit dengan kalkulasi jarak otomatis yang mempertahankan seluruh atribut `data-lat`, `data-lng`, `id="jarak"`, dan fungsi JavaScript kalkulasi jarak.
+    - **Jadwal (`resources/views/pages/admin/jadwal/{index,create,edit}.blade.php`)**: Filter toolbar terpadu, tabel jadwal dengan format jam & tanggal keberangkatan modern, form tambah & edit jadwal keberangkatan dan penetapan bus/rute.
+    - **Kursi (`resources/views/pages/admin/kursi/{index,create,edit}.blade.php`)**: Selector armada bus modern, tabel kursi dengan status badge ketersediaan (aktif/nonaktif), form tambah & edit nomor dan status kursi.
+    - **Akun (`resources/views/pages/admin/akun/{index,create,edit}.blade.php`)**: Filter pencarian & role pengguna, tabel akun dengan avatar inisial dan badge role, form pendaftaran & edit profil akun administrator/customer.
+    - **Customer (`resources/views/pages/admin/customer/index.blade.php`)**: Filter pencarian instan, tabel customer dengan avatar inisial, kontak no HP/email, badge counter pesanan tiket, dan pagination.
+    - **Booking (`resources/views/pages/admin/booking/{index,show}.blade.php`)**: Filter kode booking, status booking & pembayaran, tabel pesanan tiket dengan badge monospace kode booking, manifest penumpang, serta halaman detail booking dengan timeline visual perjalanan rute terminal dan ringkasan pembayaran.
+    - **Pembayaran (`resources/views/pages/admin/payment/{index,show}.blade.php`)**: Filter status bayar & metode transaksi gateway, tabel pembayaran dengan status pill modern, serta halaman detail transaksi pembayaran yang terstruktur rapi.
+    - **Laporan (`resources/views/pages/admin/report/index.blade.php`)**: Filter parameter laporan terpadu dengan 8 parameter filter, 3 metric card statistik modern (Total Transaksi, Tiket Terjual, Total Pendapatan), tombol cetak PDF, dan tabel rekapitulasi transaksi.
+  - **Zero Logic Impact**: 100% mempertahankan seluruh route, controller, query, method form, token CSRF, validasi, dan event handler tanpa modifikasi fungsionalitas.
+- **Full-Width Layout & Polish Form Tambah & Edit Operator (`resources/views/pages/admin/operator/{create,edit}.blade.php` & `public/css/admin-modern.css`)**:
+  - **Full-Width Form Card**: Container form card diperluas menjadi `col-12` penuh mengisi area konten utama dashboard secara optimal tanpa menyisakan ruang kosong besar di sisi kanan, selaras dengan tabel operator dan kartu dashboard.
+  - **SaaS / Enterprise Form Card System**: Mengimplementasikan kelas form terpadu (`.adm-form-card`, `.adm-form-header`, `.adm-form-body`, `.adm-form-footer`, `.adm-input`, `.adm-textarea`, `.adm-select`, `.adm-btn-submit`, `.adm-btn-cancel`) untuk konsistensi desain premium modern.
+  - **Form Header & Indicator**: Header form berpadding rapi dengan ikon clipboard dalam badge lembut dan indikator kolom bertanda `*` wajib diisi yang sejajar presisi secara vertikal.
+  - **Input & Textarea Refinement**: Tinggi input dan select 44px dengan border `#cbd5e1`, hover state `#94a3b8`, focus ring biru subtle (`0 0 0 3px rgba(37, 99, 235, 0.12)`), typography 13.5px, serta textarea alamat yang nyaman (tinggi 90px).
+  - **Symmetrical 2-Column Grid**: Kolom Telepon & Email proporsional simetris dengan gutter konsisten 18px pada desktop dan responsif 1 kolom pada mobile.
+  - **Dedicated Action Footer**: Area tombol aksi dipisahkan menjadi card footer berlatar lembut (`#fafbfc`) dengan separator halus, tombol Simpan (tinggi 42px, primary blue `#1d4ed8`) dan tombol Batal (tinggi 42px, border `#cbd5e1`) dengan navigasi pembatalan yang aman.
+  - **Zero Logic Impact**: Seluruh field, nama parameter, validasi `@error`, token CSRF, route, dan behavior submit/batal tetap 100% terjaga tanpa modifikasi logika.
+- **Refactor UI Halaman Data Operator (`resources/views/pages/admin/operator/index.blade.php`)**:
+  - **Page Header**: Memperbarui page header dengan hierarki breadcrumb yang rapi (`Home > Master Data > Operator`), icon box operator biru 38x38px, judul utama 18px bold, subtitle deskriptif, dan whitespace proporsional.
+  - **Content Card**: Desain container modern dengan background putih bersih, border subtle `#e2e8f0`, shadow halus, badge counter total operator, dan tombol "+ Tambah Operator" bergaya compact enterprise.
+  - **Table & Column Alignment**: Header tabel 9.5px uppercase bernuansa netral, padding row nyaman (10px 14px), pemisah baris halus, dan hover state ringan.
+  - **Badges & Action Buttons**: Badge kode operator monospace modern ber-border tipis, badge jumlah bus rounded pill biru, badge status "Aktif" dengan indikator dot hijau, serta tombol aksi modern (`.btn-action-edit` & `.btn-action-delete`) dengan ikon outlined modern `far fa-edit` (amber) dan `far fa-trash-alt` (crimson red) yang compact (28x28px) dengan fungsionalitas dan form confirmation yang 100% terjaga.
 - **Pembuatan & Penyelarasan Total Dashboard Admin BusTiket Berdasarkan Gambar Referensi**:
   - Mengimplementasikan stylesheet terpadu [`public/css/admin-modern.css`](public/css/admin-modern.css) dengan Google Fonts (*Plus Jakarta Sans* & *Inter*), palet biru royal (`#1d4ed8`), slate netral (`#0f172a`, `#f8fafc`, `#e2e8f0`), dan kartu latar putih ber-shadow lembut.
   - [`resources/views/layouts/app.blade.php`](resources/views/layouts/app.blade.php): Mengintegrasikan `admin-modern.css` ke master layout panel admin.
@@ -41,6 +76,11 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
       - **Right Action Section**: Date pill dan tombol "Refresh Data" tersusun berdampingan secara horizontal dengan tinggi seragam 34px, gap 10px, dan layout nowrap (tidak stacking).
       - **Section Heading "Statistik Utama"**: Diberikan jarak vertikal proporsional (24px) dari header dengan badge status "Update: Real-time" yang selaras dengan grid utama.
       - **Cache Busting**: Penambahan parameter versi dinamis (`?v=filemtime`) pada pemanggilan `admin-modern.css` di `layouts/app.blade.php`.
+    - **Refactor & Compact Text (Status Tiket, Pesanan Terbaru & Live Dispatch)**:
+      - Merampingkan ukuran font judul kartu (`adm-card-title` 12.5px, `adm-card-sub` 10px) dan membungkus header kartu dengan ikon compact 28x28px.
+      - Memperkecil tipografi mini bar status tiket (`adm-status-strip` 10.5px, pill status 9.5px, indikator operator/bus/terminal 10.5px) serta menambahkan utilitas gap dan spacing antar-pill (gap: 8px) dan antar-indikator (gap: 10px) dengan margin bawah 18px.
+      - Mengoptimalkan tabel "Pesanan Terbaru" dengan header huruf kapital mikro 9px berjarak renggang, teks nama dan rute 11px, sub-info 9.5px, link kode booking mono 10.5px, badge status 9.5px, serta tombol aksi 24x24px.
+      - Merapikan kartu "Jadwal Bus Hari Ini (Live Dispatch)": plat nomor tidak membungkus baris (`white-space: nowrap`, 8.5px), nama armada 11px, countdown 9px, rute 10px, dan occupancy 9.5px.
     - **Header**: Ikon kotak biru, judul, subtitle, pill tanggal dinamis bahasa Indonesia, dan tombol "Refresh Data".
     - **4 Statistik Utama (Compact Cards)**: Total Tiket Terjual, Total Pendapatan, Total Perjalanan, dan Total Penumpang dengan icon kecil, angka bold, dan label yang rapi.
     - **Status Tiket & Ringkasan Operasional**: Badge ringkas untuk status tiket (Lunas, Menunggu Pembayaran, Dibatalkan) beserta metrik pendukung.
