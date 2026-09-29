@@ -3,22 +3,12 @@
 @section('content')
     <div class="main-content">
         <section class="section">
-            <!-- Page Header -->
             <div class="section-header">
-                <div class="d-flex align-items-center">
-                    <div class="header-icon-box mr-3">
-                        <span class="material-symbols-outlined">airline_seat_recline_normal</span>
-                    </div>
-                    <div>
-                        <h1 class="mb-0">Tambah Kursi</h1>
-                        <div class="header-subtitle">Tambah nomor kursi dan tarif tempat duduk armada</div>
-                    </div>
-                </div>
+                <h1><i class="fas fa-chair"></i> Tambah Kursi</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Master Data</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.kursi.index') }}">Kursi</a></div>
-                    <div class="breadcrumb-item active">Tambah</div>
+                    <div class="breadcrumb-item">Tambah</div>
                 </div>
             </div>
 

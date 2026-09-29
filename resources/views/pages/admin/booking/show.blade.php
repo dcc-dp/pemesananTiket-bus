@@ -3,22 +3,12 @@
 @section('content')
     <div class="main-content">
         <section class="section">
-            <!-- Page Header -->
             <div class="section-header">
-                <div class="d-flex align-items-center">
-                    <div class="header-icon-box mr-3">
-                        <span class="material-symbols-outlined">receipt_long</span>
-                    </div>
-                    <div>
-                        <h1 class="mb-0">Detail Booking</h1>
-                        <div class="header-subtitle">Rincian reservasi tiket, penumpang, dan pembayaran</div>
-                    </div>
-                </div>
+                <h1><i class="fas fa-file-invoice"></i> Detail Booking</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Transaksi</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.booking.index') }}">Booking</a></div>
-                    <div class="breadcrumb-item active">{{ $data->kode_booking }}</div>
+                    <div class="breadcrumb-item">{{ $data->kode_booking }}</div>
                 </div>
             </div>
 

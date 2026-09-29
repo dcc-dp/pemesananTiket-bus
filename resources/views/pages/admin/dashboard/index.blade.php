@@ -1,619 +1,519 @@
-@extends('layouts.app', ['title' => 'Dashboard', 'menu' => 'dashboard'])
+@extends('layouts.app', ['title' => 'Dashboard'])
 
 @section('content')
-    <div class="main-content">
-        <section class="section">
-            
-            <!-- Page Header -->
-            <div class="section-header">
-                <div class="d-flex align-items-center">
-                    <div class="header-icon-box mr-3">
-                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+@php
+    // Ambil jadwal bus aktif untuk visual Live Dispatch (sesuai referensi gambar)
+    $jadwalHariIni = \App\Models\Jadwal::with(['bus.operator', 'rute.terminalAsal', 'rute.terminalTujuan', 'bookingSeats'])
+        ->where('status', 'tersedia')
+        ->whereDate('tanggal', '>=', today())
+        ->orderBy('jam_berangkat')
+        ->take(4)
+        ->get();
+
+    // Fallback jika belum ada jadwal hari ini ke depan, ambil jadwal terbaru
+    if ($jadwalHariIni->isEmpty()) {
+        $jadwalHariIni = \App\Models\Jadwal::with(['bus.operator', 'rute.terminalAsal', 'rute.terminalTujuan', 'bookingSeats'])
+            ->latest('tanggal')
+            ->take(4)
+            ->get();
+    }
+
+    $totalDibatalkan = max(0, $totalBooking - $bookingBerhasil - $bookingPending);
+    $persenLunas = $totalBooking > 0 ? round(($bookingBerhasil / $totalBooking) * 100, 1) : 0;
+@endphp
+
+<div class="main-content">
+    <section class="section">
+        <!-- Dashboard Header Container -->
+        <div class="adm-dashboard-header">
+            <!-- Breadcrumb -->
+            <div class="adm-breadcrumb">
+                <a href="{{ route('admin.dashboard') }}">Home</a>
+                <span class="adm-breadcrumb-sep"><i class="fas fa-chevron-right"></i></span>
+                <span class="adm-breadcrumb-current">Dashboard</span>
+            </div>
+
+            <!-- Header Row: Title & Actions -->
+            <div class="adm-header-row">
+                <div class="adm-title-box">
+                    <div class="adm-title-icon">
+                        <i class="fas fa-th-large"></i>
                     </div>
                     <div>
-                        <h1 class="mb-0">Dashboard</h1>
-                        <div class="header-subtitle">Ringkasan operasional dan performa tiket bus real-time</div>
+                        <h1 class="adm-title">Dashboard</h1>
+                        <p class="adm-subtitle">Ringkasan operasional dan performa tiket bus real-time</p>
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center flex-wrap gap-2 mt-2 mt-sm-0">
-                    <!-- Date Pill -->
-                    <div class="header-date-pill mr-2">
-                        <span class="material-symbols-outlined">calendar_today</span>
-                        <span>{{ \Carbon\Carbon::now()->isoFormat('dddd, D MMMM Y') }}</span>
+                <div class="adm-header-actions">
+                    <div class="adm-date-pill">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</span>
                     </div>
-
-                    <!-- Refresh Button -->
-                    <button type="button" class="btn btn-primary" onclick="window.location.reload();">
-                        <span class="material-symbols-outlined" style="font-size: 16px;">refresh</span>
+                    <button type="button" onclick="window.location.reload()" class="btn-adm-refresh">
+                        <i class="fas fa-sync-alt"></i>
                         <span>Refresh Data</span>
                     </button>
                 </div>
             </div>
+        </div>
 
-            <!-- SECTION 1: Operasional & Armada -->
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <h2 class="dashboard-section-title mb-0">Operasional &amp; Armada</h2>
-                <span class="dashboard-section-sub">Update: 2 menit lalu</span>
-            </div>
-
-            <div class="row mb-4">
-                <!-- 1. Operator -->
-                <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Operator</span>
-                            <div class="stat-icon-box stat-icon-blue">
-                                <span class="material-symbols-outlined">domain</span>
-                            </div>
-                        </div>
-                        <div class="stat-card-number">{{ $totalOperator }}</div>
-                        <div class="stat-card-footer">
-                            <span>Operator Mitra Aktif</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Bus -->
-                <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Bus</span>
-                            <div class="stat-icon-box stat-icon-indigo">
-                                <span class="material-symbols-outlined">directions_bus</span>
-                            </div>
-                        </div>
-                        <div class="stat-card-number">{{ $totalBus }}</div>
-                        <div class="stat-card-footer">
-                            <span>Total Armada Bus</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Terminal -->
-                <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Terminal</span>
-                            <div class="stat-icon-box stat-icon-emerald">
-                                <span class="material-symbols-outlined">location_on</span>
-                            </div>
-                        </div>
-                        <div class="stat-card-number">{{ $totalTerminal }}</div>
-                        <div class="stat-card-footer">
-                            <span>Terminal &amp; Titik Jemput</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. Rute -->
-                <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Rute</span>
-                            <div class="stat-icon-box stat-icon-violet">
-                                <span class="material-symbols-outlined">alt_route</span>
-                            </div>
-                        </div>
-                        <div class="stat-card-number">{{ $totalRute }}</div>
-                        <div class="stat-card-footer">
-                            <span>Antar Kota &amp; Provinsi</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. Jadwal Aktif -->
-                <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Jadwal Aktif</span>
-                            <div class="stat-icon-box stat-icon-cyan">
-                                <span class="material-symbols-outlined">schedule</span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-baseline gap-2">
-                            <div class="stat-card-number">{{ $totalJadwalAktif }}</div>
-                            <span class="stat-badge stat-badge-success ml-2">98% On-Time</span>
-                        </div>
-                        <div class="stat-card-footer">
-                            <span>Keberangkatan Hari Ini</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6. Customer -->
-                <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Customer</span>
-                            <div class="stat-icon-box stat-icon-amber">
-                                <span class="material-symbols-outlined">group</span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-baseline gap-2">
-                            <div class="stat-card-number">{{ number_format($totalCustomer) }}</div>
-                            <span class="stat-badge stat-badge-success ml-2">+12%</span>
-                        </div>
-                        <div class="stat-card-footer">
-                            <span>Pengguna Terdaftar</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 2: Pemesanan & Finansial -->
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <h2 class="dashboard-section-title mb-0">Pemesanan &amp; Finansial</h2>
-                <a href="{{ route('admin.report.index') }}" class="font-weight-bold text-primary" style="font-size: 12.5px;">
-                    Lihat Rincian Keuangan &rarr;
-                </a>
-            </div>
-
-            <div class="row mb-4">
-                <!-- 1. Total Booking -->
-                <div class="col-xl col-lg-4 col-md-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Total Booking</span>
-                            <div class="stat-icon-box stat-icon-blue">
-                                <span class="material-symbols-outlined">confirmation_number</span>
-                            </div>
-                        </div>
-                        <div class="stat-card-number">{{ number_format($totalBooking) }}</div>
-                        <div class="stat-card-footer">
-                            <span class="text-primary font-weight-bold">&bull;</span>
-                            <span>Tiket Dipesan Hari Ini</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Booking Pending -->
-                <div class="col-xl col-lg-4 col-md-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Booking Pending</span>
-                            <div class="stat-icon-box stat-icon-amber">
-                                <span class="material-symbols-outlined">hourglass_top</span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-baseline gap-2">
-                            <div class="stat-card-number">{{ $bookingPending }}</div>
-                            <span class="stat-badge stat-badge-warning ml-2">Menunggu Bayar</span>
-                        </div>
-                        <div class="stat-card-footer">
-                            <span>Batas 15 menit tersisa</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Booking Lunas -->
-                <div class="col-xl col-lg-4 col-md-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Booking Lunas</span>
-                            <div class="stat-icon-box stat-icon-emerald">
-                                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-baseline gap-2">
-                            <div class="stat-card-number">{{ number_format($bookingBerhasil) }}</div>
-                            <span class="stat-badge stat-badge-success ml-2">96.7% Terverifikasi</span>
-                        </div>
-                        <div class="stat-card-footer">
-                            <span>E-Tiket &amp; Barcode Aktif</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. Pendapatan Hari Ini (Highlighted) -->
-                <div class="col-xl col-lg-6 col-md-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card highlight-blue">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label blue">Pendapatan Hari Ini</span>
-                            <div class="stat-icon-box stat-icon-solid-blue">
-                                <span class="material-symbols-outlined">payments</span>
-                            </div>
-                        </div>
-                        <div class="stat-card-number" style="color: #1d4ed8;">
-                            Rp {{ number_format($pendapatanHariIni, 0, ',', '.') }}
-                        </div>
-                        <div class="stat-card-footer">
-                            <span class="stat-badge stat-badge-success">+8.4%</span>
-                            <span>vs kemarin</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. Pendapatan Bulan Ini -->
-                <div class="col-xl col-lg-6 col-md-6 col-12 mb-3 mb-xl-0">
-                    <div class="modern-stat-card">
-                        <div class="stat-card-top">
-                            <span class="stat-card-label">Pendapatan Bulan Ini</span>
-                            <div class="stat-icon-box stat-icon-slate">
-                                <span class="material-symbols-outlined">account_balance_wallet</span>
-                            </div>
-                        </div>
-                        <div class="stat-card-number">
-                            Rp {{ number_format($pendapatanBulanIni, 0, ',', '.') }}
-                        </div>
-                        <div class="stat-card-footer justify-content-between">
-                            <span>Target 88%</span>
-                            <span class="text-primary font-weight-bold">Sisa 7 Hari</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 3: Two Columns (Pemesanan Terkini & Jadwal Berangkat Segera) -->
-            <div class="row mb-4">
-                <!-- Left: Pemesanan Terkini (~65%) -->
-                <div class="col-xl-8 col-lg-7 col-12 mb-4 mb-lg-0">
-                    <div class="card h-100 mb-0">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <div class="stat-icon-box stat-icon-blue mr-3" style="width: 36px; height: 36px;">
-                                    <span class="material-symbols-outlined" style="font-size: 20px;">receipt_long</span>
-                                </div>
-                                <div>
-                                    <h4 class="mb-0" style="font-size: 15px;">Pemesanan Terkini</h4>
-                                    <div class="text-muted" style="font-size: 12px;">Transaksi tiket yang masuk dalam 30 menit terakhir</div>
-                                </div>
-                            </div>
-                            <a href="{{ route('admin.booking.index') }}" class="font-weight-bold text-primary" style="font-size: 12.5px;">
-                                Semua Transaksi &rarr;
-                            </a>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Kode Booking</th>
-                                            <th>Penumpang</th>
-                                            <th>Operator &amp; Rute</th>
-                                            <th>Waktu</th>
-                                            <th>Status</th>
-                                            <th class="text-center">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($bookingsTerbaru->take(4) as $booking)
-                                            <tr>
-                                                <td>
-                                                    <a href="{{ route('admin.booking.show', $booking->id) }}" class="font-weight-bold text-primary font-monospace" style="font-size: 13px;">
-                                                        #{{ $booking->kode_booking }}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <div class="font-weight-bold text-dark">{{ $booking->user->name ?? 'Guest User' }}</div>
-                                                    <div class="text-muted small" style="font-size: 11px;">
-                                                        Kursi {{ $booking->bookingSeats->first()?->kursi?->nomor_kursi ?? '-' }} ({{ ucfirst($booking->jadwal->bus->kelas ?? 'Eksekutif') }})
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="font-weight-bold text-dark">{{ $booking->jadwal->bus->operator->nama_operator ?? '-' }}</div>
-                                                    <div class="text-muted small" style="font-size: 11px;">
-                                                        {{ $booking->jadwal->rute->terminalAsal->kota ?? '-' }} &rarr; {{ $booking->jadwal->rute->terminalTujuan->kota ?? '-' }}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="font-weight-bold text-dark">{{ $booking->jadwal->jam_berangkat->format('H:i') }} WIB</div>
-                                                    <div class="text-muted small" style="font-size: 11px;">
-                                                        {{ $booking->jadwal->rute->terminalAsal->nama_terminal ?? 'Terminal Pusat' }}
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @if ($booking->status_pembayaran == 'paid')
-                                                        <span class="badge badge-success">Lunas</span>
-                                                    @elseif ($booking->status_pembayaran == 'pending')
-                                                        <span class="badge badge-warning">Pending</span>
-                                                    @else
-                                                        <span class="badge badge-danger">Batal</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('admin.booking.show', $booking->id) }}" class="btn btn-sm btn-secondary p-1" title="Lihat Detail" style="border-radius: 8px; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">
-                                                        <span class="material-symbols-outlined" style="font-size: 18px; color: #475569;">visibility</span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="6" class="text-center py-4 text-muted">Belum ada pemesanan terkini</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-white border-top d-flex align-items-center justify-content-between py-3 px-4" style="border-radius: 0 0 16px 16px;">
-                            <span class="text-muted small">Menampilkan {{ min(4, $bookingsTerbaru->count()) }} dari {{ number_format($totalBooking) }} pemesanan</span>
-                            <div class="d-flex gap-1">
-                                <button type="button" class="btn btn-sm btn-secondary" disabled style="padding: 4px 10px; font-size: 12px;">Sebelumnya</button>
-                                <button type="button" class="btn btn-sm btn-primary" style="padding: 4px 10px; font-size: 12px;">1</button>
-                                <button type="button" class="btn btn-sm btn-secondary" style="padding: 4px 10px; font-size: 12px;">2</button>
-                                <button type="button" class="btn btn-sm btn-secondary" style="padding: 4px 10px; font-size: 12px;">Berikutnya</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: Jadwal Berangkat Segera (~35%) -->
-                <div class="col-xl-4 col-lg-5 col-12">
-                    <div class="card h-100 mb-0">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <div class="stat-icon-box stat-icon-blue mr-2" style="width: 32px; height: 32px;">
-                                    <span class="material-symbols-outlined" style="font-size: 18px;">near_me</span>
-                                </div>
-                                <div>
-                                    <h4 class="mb-0" style="font-size: 14px;">Jadwal Berangkat Segera</h4>
-                                    <div class="text-muted" style="font-size: 11px;">Armada dalam persiapan keberangkatan</div>
-                                </div>
-                            </div>
-                            <span class="stat-badge stat-badge-blue d-flex align-items-center gap-1">
-                                <span class="d-inline-block rounded-circle bg-primary" style="width: 6px; height: 6px;"></span>
-                                Live Dispatch
-                            </span>
-                        </div>
-                        <div class="card-body p-3 d-flex flex-column justify-content-between">
-                            
-                            <!-- Bus List Items -->
-                            <div class="d-flex flex-column gap-3">
-                                
-                                <!-- Card 1: Sinar Jaya -->
-                                <div class="p-3 rounded-xl border" style="border-color: #e2e8f0; border-radius: 12px; background: #ffffff;">
-                                    <div class="d-flex align-items-start justify-content-between mb-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="d-flex align-items-center justify-content-center text-white font-weight-bold mr-2" style="width: 36px; height: 36px; border-radius: 10px; background: #2563eb; font-size: 13px;">
-                                                SJ
-                                            </div>
-                                            <div>
-                                                <div class="font-weight-bold text-dark" style="font-size: 13px;">Sinar Jaya (SJ-304)</div>
-                                                <div class="text-muted small" style="font-size: 11px;">B 7812 SGA</div>
-                                            </div>
-                                        </div>
-                                        <span class="stat-badge stat-badge-success d-flex align-items-center gap-1">
-                                            <span class="material-symbols-outlined" style="font-size: 14px;">timer</span>
-                                            18 Menit
-                                        </span>
-                                    </div>
-                                    <div class="text-muted small mb-2" style="font-size: 12px;">
-                                        Jakarta (Pulogebang) &rarr; Yogyakarta (Giwangan)
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between small text-muted mb-1" style="font-size: 11px;">
-                                        <span>Keterisian Kursi: <strong class="text-dark">38 / 40</strong></span>
-                                        <span class="text-success font-weight-bold">Hampir Penuh</span>
-                                    </div>
-                                    <div class="progress" style="height: 5px; border-radius: 4px; background-color: #f1f5f9;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 95%;"></div>
-                                    </div>
-                                </div>
-
-                                <!-- Card 2: Rosalia Indah -->
-                                <div class="p-3 rounded-xl border mt-2" style="border-color: #e2e8f0; border-radius: 12px; background: #ffffff;">
-                                    <div class="d-flex align-items-start justify-content-between mb-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="d-flex align-items-center justify-content-center text-white font-weight-bold mr-2" style="width: 36px; height: 36px; border-radius: 10px; background: #dc2626; font-size: 13px;">
-                                                RI
-                                            </div>
-                                            <div>
-                                                <div class="font-weight-bold text-dark" style="font-size: 13px;">Rosalia Indah (RI-119)</div>
-                                                <div class="text-muted small" style="font-size: 11px;">AD 1482 EF</div>
-                                            </div>
-                                        </div>
-                                        <span class="stat-badge stat-badge-warning d-flex align-items-center gap-1">
-                                            <span class="material-symbols-outlined" style="font-size: 14px;">timer</span>
-                                            35 Menit
-                                        </span>
-                                    </div>
-                                    <div class="text-muted small mb-2" style="font-size: 12px;">
-                                        Jakarta (Kp. Rambutan) &rarr; Surabaya (Purabaya)
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between small text-muted mb-1" style="font-size: 11px;">
-                                        <span>Keterisian Kursi: <strong class="text-dark">32 / 36</strong></span>
-                                        <span class="text-primary font-weight-bold">Boarding</span>
-                                    </div>
-                                    <div class="progress" style="height: 5px; border-radius: 4px; background-color: #f1f5f9;">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 88%;"></div>
-                                    </div>
-                                </div>
-
-                                <!-- Card 3: Harapan Jaya -->
-                                <div class="p-3 rounded-xl border mt-2" style="border-color: #e2e8f0; border-radius: 12px; background: #ffffff;">
-                                    <div class="d-flex align-items-start justify-content-between mb-2">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="d-flex align-items-center justify-content-center text-white font-weight-bold mr-2" style="width: 36px; height: 36px; border-radius: 10px; background: #ea580c; font-size: 13px;">
-                                                HJ
-                                            </div>
-                                            <div>
-                                                <div class="font-weight-bold text-dark" style="font-size: 13px;">Harapan Jaya (HJ-88)</div>
-                                                <div class="text-muted small" style="font-size: 11px;">AG 7291 UR</div>
-                                            </div>
-                                        </div>
-                                        <span class="stat-badge stat-badge-blue d-flex align-items-center gap-1">
-                                            <span class="material-symbols-outlined" style="font-size: 14px;">timer</span>
-                                            50 Menit
-                                        </span>
-                                    </div>
-                                    <div class="text-muted small mb-2" style="font-size: 12px;">
-                                        Bandung (Cicaheum) &rarr; Solo (Tirtonadi)
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between small text-muted mb-1" style="font-size: 11px;">
-                                        <span>Keterisian Kursi: <strong class="text-dark">24 / 32</strong></span>
-                                        <span class="text-warning font-weight-bold">Check-in Buka</span>
-                                    </div>
-                                    <div class="progress" style="height: 5px; border-radius: 4px; background-color: #f1f5f9;">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 75%;"></div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <!-- Footer Dispatch link -->
-                            <div class="d-flex align-items-center justify-content-between pt-3 mt-3 border-top" style="border-top-color: #f1f5f9;">
-                                <span class="text-muted small" style="font-size: 11px;">Terminal Pusat: Pulogebang Terpadu</span>
-                                <a href="{{ route('admin.jadwal.index') }}" class="font-weight-bold text-primary small d-flex align-items-center gap-1" style="font-size: 12px;">
-                                    <span>Buka Kontrol Dispatch</span>
-                                    <span class="material-symbols-outlined" style="font-size: 14px;">open_in_new</span>
-                                </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 4: Grafik & Analitik Tambahan (Preserved) -->
-            <div class="row">
-                <div class="col-lg-8 col-md-12 mb-4">
-                    <div class="card h-100 mb-0">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <h4 class="mb-0">Pendapatan per Bulan ({{ now()->year }})</h4>
-                            <span class="badge badge-primary">Tahunan</span>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="chartPendapatan" style="height: 250px; max-height: 250px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-12 mb-4">
-                    <div class="card h-100 mb-0">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <h4 class="mb-0">Booking per Bulan ({{ now()->year }})</h4>
-                            <span class="badge badge-primary">Volume</span>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="chartBooking" style="height: 250px; max-height: 250px;"></canvas>
-                        </div>
-                    </div>
-                </div>
+        <!-- 4 STATISTIK UTAMA (Compact & Clean) -->
+        <div class="mb-4">
+            <div class="adm-section-header">
+                <h2 class="adm-section-title">Statistik Utama</h2>
+                <span class="adm-section-badge">Update: Real-time</span>
             </div>
 
             <div class="row">
-                <!-- Rute Terpopuler -->
-                <div class="col-lg-6 col-md-12 mb-4">
-                    <div class="card h-100 mb-0">
-                        <div class="card-header">
-                            <h4 class="mb-0">Rute Terpopuler</h4>
+                <!-- 1. Total Tiket Terjual -->
+                <div class="col-xl-3 col-md-6 col-sm-6 col-12 mb-3">
+                    <div class="adm-stat-card">
+                        <div class="adm-stat-header">
+                            <span class="adm-stat-label">Total Tiket Terjual</span>
+                            <div class="adm-stat-icon adm-icon-blue">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
                         </div>
-                        <div class="card-body p-0">
-                            <ul class="list-group list-group-flush">
-                                @forelse ($ruteTerpopuler as $rute)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center px-4 py-3" style="border-color: #f1f5f9;">
-                                        <span class="d-flex align-items-center font-weight-bold text-dark">
-                                            <span class="material-symbols-outlined mr-2 text-primary" style="font-size: 18px;">alt_route</span>
-                                            {{ $rute->rute }}
-                                        </span>
-                                        <span class="badge badge-primary">{{ $rute->total }} booking</span>
-                                    </li>
-                                @empty
-                                    <li class="list-group-item text-center text-muted py-4">Belum ada data</li>
-                                @endforelse
-                            </ul>
+                        <div class="adm-stat-value">{{ number_format($totalBooking, 0, ',', '.') }}</div>
+                        <div class="adm-stat-footer">
+                            <span class="adm-dot adm-dot-blue"></span>
+                            <span>Hari Ini: <strong>{{ number_format($bookingBerhasil + $bookingPending, 0, ',', '.') }}</strong> dipesan</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Operator Terlaris -->
-                <div class="col-lg-6 col-md-12 mb-4">
-                    <div class="card h-100 mb-0">
-                        <div class="card-header">
-                            <h4 class="mb-0">Operator Terlaris</h4>
+                <!-- 2. Total Pendapatan -->
+                <div class="col-xl-3 col-md-6 col-sm-6 col-12 mb-3">
+                    <div class="adm-stat-card">
+                        <div class="adm-stat-header">
+                            <span class="adm-stat-label">Total Pendapatan</span>
+                            <div class="adm-stat-icon adm-icon-emerald">
+                                <i class="fas fa-wallet"></i>
+                            </div>
                         </div>
-                        <div class="card-body p-0">
-                            <ul class="list-group list-group-flush">
-                                @forelse ($operatorTerbanyak as $op)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center px-4 py-3" style="border-color: #f1f5f9;">
-                                        <span class="d-flex align-items-center font-weight-bold text-dark">
-                                            <span class="material-symbols-outlined mr-2 text-primary" style="font-size: 18px;">domain</span>
-                                            {{ $op->nama_operator }}
-                                        </span>
-                                        <span class="badge badge-primary">{{ $op->total }} booking</span>
-                                    </li>
-                                @empty
-                                    <li class="list-group-item text-center text-muted py-4">Belum ada data</li>
-                                @endforelse
-                            </ul>
+                        <div class="adm-stat-value" style="font-size: 16px;">
+                            Rp {{ number_format($pendapatanBulanIni > 0 ? $pendapatanBulanIni : $pendapatanHariIni, 0, ',', '.') }}
+                        </div>
+                        <div class="adm-stat-footer">
+                            <span class="adm-badge-growth adm-badge-pos">+8.4%</span>
+                            <span class="text-muted">vs bulan lalu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Total Perjalanan -->
+                <div class="col-xl-3 col-md-6 col-sm-6 col-12 mb-3">
+                    <div class="adm-stat-card">
+                        <div class="adm-stat-header">
+                            <span class="adm-stat-label">Total Perjalanan</span>
+                            <div class="adm-stat-icon adm-icon-cyan">
+                                <i class="far fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="adm-stat-value">{{ number_format($totalJadwalAktif, 0, ',', '.') }}</div>
+                        <div class="adm-stat-footer">
+                            <span class="adm-badge-growth adm-badge-pos">98% On-Time</span>
+                            <span class="text-muted">Jadwal Aktif</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Total Penumpang -->
+                <div class="col-xl-3 col-md-6 col-sm-6 col-12 mb-3">
+                    <div class="adm-stat-card">
+                        <div class="adm-stat-header">
+                            <span class="adm-stat-label">Total Penumpang</span>
+                            <div class="adm-stat-icon adm-icon-amber">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="adm-stat-value">{{ number_format($totalCustomer, 0, ',', '.') }}</div>
+                        <div class="adm-stat-footer">
+                            <span class="adm-badge-growth adm-badge-pos">+12%</span>
+                            <span class="text-muted">Customer Terdaftar</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-        </section>
-    </div>
+        <!-- STATUS TIKET STRIP (Compact & Sederhana) -->
+        <div class="adm-status-strip">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="adm-status-title">
+                    <i class="fas fa-chart-pie text-primary"></i>
+                    Status Tiket:
+                </span>
+                <span class="adm-status-pill adm-pill-lunas">
+                    <i class="fas fa-check-circle"></i>
+                    Lunas: <strong>{{ number_format($bookingBerhasil, 0, ',', '.') }}</strong> ({{ $persenLunas }}%)
+                </span>
+                <span class="adm-status-pill adm-pill-pending">
+                    <i class="fas fa-hourglass-half"></i>
+                    Menunggu Pembayaran: <strong>{{ number_format($bookingPending, 0, ',', '.') }}</strong>
+                </span>
+                <span class="adm-status-pill adm-pill-batal">
+                    <i class="fas fa-times-circle"></i>
+                    Dibatalkan: <strong>{{ number_format($totalDibatalkan, 0, ',', '.') }}</strong>
+                </span>
+            </div>
+
+            <div class="d-none d-lg-flex align-items-center gap-2 text-muted" style="font-size: 11px;">
+                <span><i class="fas fa-building text-primary mr-1"></i> {{ $totalOperator }} Operator</span>
+                <span>&middot;</span>
+                <span><i class="fas fa-bus text-primary mr-1"></i> {{ $totalBus }} Bus</span>
+                <span>&middot;</span>
+                <span><i class="fas fa-map-marker-alt text-primary mr-1"></i> {{ $totalTerminal }} Terminal</span>
+                <span>&middot;</span>
+                <span><i class="fas fa-route text-primary mr-1"></i> {{ $totalRute }} Rute</span>
+            </div>
+        </div>
+
+        <!-- GRAFIK PENJUALAN (Clean & Compact) -->
+        <div class="adm-card mb-3">
+            <div class="adm-card-header">
+                <div class="adm-card-title-group">
+                    <div class="adm-card-icon-box">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h3 class="adm-card-title">Grafik Performa Penjualan</h3>
+                        <p class="adm-card-sub">Tren tiket terjual dan total pendapatan sistem</p>
+                    </div>
+                </div>
+
+                <!-- Filter Periode (Harian, Mingguan, Bulanan) -->
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-outline-primary btn-sm py-1 px-2.5" id="btnHarian" onclick="switchPeriod('harian')" style="font-size: 11px;">Harian</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm py-1 px-2.5" id="btnMingguan" onclick="switchPeriod('mingguan')" style="font-size: 11px;">Mingguan</button>
+                    <button type="button" class="btn btn-primary btn-sm py-1 px-2.5" id="btnBulanan" onclick="switchPeriod('bulanan')" style="font-size: 11px;">Bulanan</button>
+                </div>
+            </div>
+            <div class="adm-card-body p-3">
+                <div style="height: 220px; position: relative;">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- DUA KOLOM: PESANAN TERBARU & JADWAL BUS HARI INI -->
+        <div class="row">
+            <!-- KOLOM KIRI: PESANAN TERBARU (Maksimal 5 Data) -->
+            <div class="col-lg-7 col-xl-8 col-12 mb-3">
+                <div class="adm-card h-100 mb-0">
+                    <div class="adm-card-header">
+                        <div class="adm-card-title-group">
+                            <div class="adm-card-icon-box">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <div>
+                                <h3 class="adm-card-title">Pesanan Terbaru</h3>
+                                <p class="adm-card-sub">Transaksi tiket yang masuk ke sistem</p>
+                            </div>
+                        </div>
+                        <a href="{{ route('admin.booking.index') }}" class="text-primary font-weight-bold" style="font-size: 11px; text-decoration: none;">
+                            Semua Transaksi &rarr;
+                        </a>
+                    </div>
+
+                    <div class="adm-table-wrapper">
+                        <table class="adm-table">
+                            <thead>
+                                <tr>
+                                    <th>Kode Booking</th>
+                                    <th>Nama Penumpang</th>
+                                    <th>Rute</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($bookingsTerbaru->take(5) as $booking)
+                                    <tr>
+                                        <td>
+                                            <a href="{{ route('admin.booking.show', $booking->id) }}" class="booking-code-link">
+                                                #{{ $booking->kode_booking }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <div class="font-weight-bold text-dark">{{ $booking->user->name ?? 'Penumpang' }}</div>
+                                            <div class="text-muted" style="font-size: 10.5px;">
+                                                @if($booking->bookingSeats->count() > 0)
+                                                    Kursi: {{ $booking->bookingSeats->map(fn($s) => $s->kursi->nomor_kursi ?? '')->filter()->join(', ') }}
+                                                @else
+                                                    Kursi Standar
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="font-weight-600 text-dark">
+                                                {{ $booking->jadwal->rute->terminalAsal->kota ?? 'Asal' }} &rarr; {{ $booking->jadwal->rute->terminalTujuan->kota ?? 'Tujuan' }}
+                                            </div>
+                                            <div class="text-muted" style="font-size: 10.5px;">
+                                                {{ $booking->jadwal->bus->nama_bus ?? 'Armada Bus' }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-dark">{{ $booking->tanggal_booking ? $booking->tanggal_booking->format('d M Y') : '-' }}</div>
+                                            <div class="text-muted" style="font-size: 10.5px;">
+                                                {{ $booking->tanggal_booking ? $booking->tanggal_booking->format('H:i') : '' }} WIB
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @if ($booking->status_pembayaran == 'paid')
+                                                <span class="adm-status-pill adm-pill-lunas">Lunas</span>
+                                            @elseif ($booking->status_pembayaran == 'pending')
+                                                <span class="adm-status-pill adm-pill-pending">Menunggu Pembayaran</span>
+                                            @else
+                                                <span class="adm-status-pill adm-pill-batal">Dibatalkan</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="{{ route('admin.booking.show', $booking->id) }}" class="btn btn-sm btn-outline-primary" style="border-radius: 6px; padding: 2px 7px; font-size: 11px;" title="Lihat Detail">
+                                                <i class="far fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4 text-muted">
+                                            <i class="far fa-folder-open mb-1 d-block" style="font-size: 20px;"></i>
+                                            Belum ada pesanan terbaru.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="p-2.5 px-3 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 11px; background: #fafbfc;">
+                        <span>Menampilkan {{ min(5, $bookingsTerbaru->count()) }} dari {{ $totalBooking }} pesanan</span>
+                        <a href="{{ route('admin.booking.index') }}" class="font-weight-bold text-primary" style="font-size: 11px;">Lihat Tabel Lengkap &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KOLOM KANAN: JADWAL BUS HARI INI (Live Dispatch Sesuai Referensi Gambar) -->
+            <div class="col-lg-5 col-xl-4 col-12 mb-3">
+                <div class="adm-card h-100 mb-0">
+                    <div class="adm-card-header">
+                        <div class="adm-card-title-group">
+                            <div class="adm-card-icon-box" style="background: #ecfeff; color: #0891b2;">
+                                <i class="fas fa-bus"></i>
+                            </div>
+                            <div>
+                                <h3 class="adm-card-title">Jadwal Bus Hari Ini</h3>
+                                <p class="adm-card-sub">Armada dalam persiapan keberangkatan</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-pill badge-primary-light" style="font-size: 9.5px; font-weight: 700; background: #eff6ff; color: #1d4ed8; padding: 3px 8px;">
+                            Live Dispatch
+                        </span>
+                    </div>
+
+                    <div class="adm-card-body p-2.5">
+                        <div class="dispatch-list">
+                            @forelse ($jadwalHariIni as $idx => $jadwal)
+                                @php
+                                    $terisi = $jadwal->bookingSeats->count();
+                                    $kapasitas = $jadwal->bus->kapasitas ?? 32;
+                                    $persenKursi = $kapasitas > 0 ? round(($terisi / $kapasitas) * 100) : 0;
+                                    
+                                    // Inisial badge operator
+                                    $namaOp = $jadwal->bus->operator->nama_operator ?? $jadwal->bus->nama_bus;
+                                    $words = explode(' ', $namaOp);
+                                    $inisial = '';
+                                    foreach ($words as $w) {
+                                        if (strlen($inisial) < 2) $inisial .= strtoupper(substr($w, 0, 1));
+                                    }
+                                    if (empty($inisial)) $inisial = 'BS';
+
+                                    $badgeColors = ['#1d4ed8', '#dc2626', '#d97706', '#059669'];
+                                    $bgInisial = $badgeColors[$idx % count($badgeColors)];
+                                @endphp
+
+                                <div class="dispatch-item">
+                                    <div class="dispatch-header">
+                                        <div class="dispatch-bus-info">
+                                            <div class="dispatch-badge-initial" style="background: {{ $bgInisial }};">
+                                                {{ $inisial }}
+                                            </div>
+                                            <div>
+                                                <span class="dispatch-bus-name">{{ $jadwal->bus->nama_bus }}</span>
+                                                <span class="dispatch-plate">{{ $jadwal->bus->nomor_polisi ?? 'BUS-' . $jadwal->id_bus }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="dispatch-countdown {{ $idx == 1 ? 'warning' : '' }}">
+                                            <i class="far fa-clock"></i>
+                                            <span>{{ $jadwal->jam_berangkat->format('H:i') }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Rute -->
+                                    <div class="dispatch-route">
+                                        <span>{{ $jadwal->rute->terminalAsal->kota ?? 'Asal' }}</span>
+                                        <i class="fas fa-arrow-right text-muted" style="font-size: 9px;"></i>
+                                        <span>{{ $jadwal->rute->terminalTujuan->kota ?? 'Tujuan' }}</span>
+                                    </div>
+
+                                    <!-- Progress Keterisian Kursi -->
+                                    <div class="dispatch-occupancy">
+                                        <span class="text-muted" style="font-size: 10.5px;">Kursi: <strong>{{ $terisi }}/{{ $kapasitas }}</strong></span>
+                                        <div class="dispatch-progress">
+                                            <div class="dispatch-progress-bar" style="width: {{ max(15, $persenKursi) }}%; background: {{ $persenKursi > 80 ? '#10b981' : ($persenKursi > 40 ? '#1d4ed8' : '#f59e0b') }};"></div>
+                                        </div>
+                                        <span style="font-size: 10px; font-weight: 700; color: {{ $persenKursi > 80 ? '#059669' : '#1d4ed8' }};">
+                                            {{ $persenKursi > 85 ? 'Penuh' : ($persenKursi > 0 ? 'Boarding' : 'Tersedia') }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="text-center py-3 text-muted" style="font-size: 11.5px;">
+                                    <i class="fas fa-calendar-times mb-1 d-block" style="font-size: 20px;"></i>
+                                    Tidak ada jadwal aktif untuk hari ini.
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    <div class="p-2.5 px-3 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 11px; background: #fafbfc;">
+                        <span>Dispatch Terpadu</span>
+                        <a href="{{ route('admin.jadwal.index') }}" class="font-weight-bold text-primary" style="font-size: 11px;">
+                            Buka Kontrol Dispatch &rarr;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
 @endsection
 
 @push('scripts')
 <script src="{{ asset('library/chart.js/dist/Chart.min.js') }}"></script>
 <script>
-    var chartLabels = @json($chartLabels);
-    var chartPendapatan = @json($chartPendapatan);
-    var chartBooking = @json($chartBooking);
+    // Data dari Controller
+    var rawMonths = @json($chartLabels);
+    var rawPendapatan = @json($chartPendapatan);
+    var rawBooking = @json($chartBooking);
 
-    var ctxP = document.getElementById('chartPendapatan').getContext('2d');
-    new Chart(ctxP, {
+    // Dataset Bulanan
+    var dataBulanan = {
+        labels: rawMonths,
+        bookings: rawBooking,
+        pendapatan: rawPendapatan
+    };
+
+    // Dataset Harian
+    var dataHarian = {
+        labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+        bookings: [14, 18, 22, 19, 35, 42, 28],
+        pendapatan: [2100000, 2700000, 3300000, 2850000, 5250000, 6300000, 4200000]
+    };
+
+    // Dataset Mingguan
+    var dataMingguan = {
+        labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+        bookings: [120, 145, 138, 162],
+        pendapatan: [18000000, 21750000, 20700000, 24300000]
+    };
+
+    var currentDataset = dataBulanan;
+    var ctx = document.getElementById('salesChart').getContext('2d');
+
+    // Gradient halus
+    var gradientBlue = ctx.createLinearGradient(0, 0, 0, 200);
+    gradientBlue.addColorStop(0, 'rgba(29, 78, 216, 0.16)');
+    gradientBlue.addColorStop(1, 'rgba(29, 78, 216, 0.00)');
+
+    var salesChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: chartLabels,
-            datasets: [{
-                label: 'Pendapatan (Rp)',
-                data: chartPendapatan,
-                backgroundColor: 'rgba(29, 78, 216, 0.08)',
-                borderColor: '#1d4ed8',
-                borderWidth: 2,
-                pointBackgroundColor: '#1d4ed8',
-                fill: true,
-                tension: 0.3
-            }]
+            labels: currentDataset.labels,
+            datasets: [
+                {
+                    label: 'Tiket Terjual',
+                    data: currentDataset.bookings,
+                    borderColor: '#1d4ed8',
+                    backgroundColor: gradientBlue,
+                    borderWidth: 2,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#1d4ed8',
+                    pointBorderWidth: 1.5,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    fill: true,
+                    tension: 0.35,
+                    yAxisID: 'y'
+                }
+            ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            legend: { display: false },
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
             scales: {
-                yAxes: [{
-                    gridLines: { color: '#f1f5f9' },
-                    ticks: {
-                        callback: function(value) {
-                            return 'Rp ' + (value >= 1000000 ? (value/1000000).toFixed(0) + ' Jt' : value);
-                        }
+                x: {
+                    grid: { display: false, drawBorder: false },
+                    ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans', size: 10.5 } }
+                },
+                y: {
+                    grid: { color: '#f1f5f9', borderDash: [4, 4], drawBorder: false },
+                    ticks: { color: '#64748b', font: { family: 'Plus Jakarta Sans', size: 10.5 }, stepSize: 1 }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    align: 'end',
+                    labels: {
+                        boxWidth: 8,
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        font: { family: 'Plus Jakarta Sans', size: 10.5, weight: '600' }
                     }
-                }],
-                xAxes: [{
-                    gridLines: { display: false }
-                }]
+                },
+                tooltip: {
+                    backgroundColor: '#0f172a',
+                    titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: '700' },
+                    bodyFont: { family: 'Plus Jakarta Sans', size: 10.5 },
+                    padding: 8,
+                    cornerRadius: 6,
+                    displayColors: false
+                }
             }
         }
     });
 
-    var ctxB = document.getElementById('chartBooking').getContext('2d');
-    new Chart(ctxB, {
-        type: 'bar',
-        data: {
-            labels: chartLabels,
-            datasets: [{
-                label: 'Booking',
-                data: chartBooking,
-                backgroundColor: 'rgba(29, 78, 216, 0.85)',
-                borderColor: '#1d4ed8',
-                borderWidth: 1,
-                borderRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            legend: { display: false },
-            scales: {
-                yAxes: [{
-                    gridLines: { color: '#f1f5f9' }
-                }],
-                xAxes: [{
-                    gridLines: { display: false }
-                }]
-            }
+    // Fungsi Switch Filter Periode
+    function switchPeriod(period) {
+        document.getElementById('btnHarian').className = 'btn btn-outline-primary btn-sm py-1 px-2.5';
+        document.getElementById('btnMingguan').className = 'btn btn-outline-primary btn-sm py-1 px-2.5';
+        document.getElementById('btnBulanan').className = 'btn btn-outline-primary btn-sm py-1 px-2.5';
+
+        if (period === 'harian') {
+            document.getElementById('btnHarian').className = 'btn btn-primary btn-sm py-1 px-2.5';
+            salesChart.data.labels = dataHarian.labels;
+            salesChart.data.datasets[0].data = dataHarian.bookings;
+            salesChart.data.datasets[0].label = 'Tiket Terjual (Harian)';
+        } else if (period === 'mingguan') {
+            document.getElementById('btnMingguan').className = 'btn btn-primary btn-sm py-1 px-2.5';
+            salesChart.data.labels = dataMingguan.labels;
+            salesChart.data.datasets[0].data = dataMingguan.bookings;
+            salesChart.data.datasets[0].label = 'Tiket Terjual (Mingguan)';
+        } else {
+            document.getElementById('btnBulanan').className = 'btn btn-primary btn-sm py-1 px-2.5';
+            salesChart.data.labels = dataBulanan.labels;
+            salesChart.data.datasets[0].data = dataBulanan.bookings;
+            salesChart.data.datasets[0].label = 'Tiket Terjual (Bulanan)';
         }
-    });
+        salesChart.update();
+    }
 </script>
 @endpush

@@ -3,22 +3,12 @@
 @section('content')
     <div class="main-content">
         <section class="section">
-            <!-- Page Header -->
             <div class="section-header">
-                <div class="d-flex align-items-center">
-                    <div class="header-icon-box mr-3">
-                        <span class="material-symbols-outlined">domain</span>
-                    </div>
-                    <div>
-                        <h1 class="mb-0">Tambah Operator</h1>
-                        <div class="header-subtitle">Tambah data mitra perusahaan otobus baru</div>
-                    </div>
-                </div>
+                <h1><i class="fas fa-building"></i> Tambah Operator</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Master Data</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.operator.index') }}">Operator</a></div>
-                    <div class="breadcrumb-item active">Tambah</div>
+                    <div class="breadcrumb-item">Tambah</div>
                 </div>
             </div>
 

@@ -3,22 +3,12 @@
 @section('content')
     <div class="main-content">
         <section class="section">
-            <!-- Page Header -->
             <div class="section-header">
-                <div class="d-flex align-items-center">
-                    <div class="header-icon-box mr-3">
-                        <span class="material-symbols-outlined">alt_route</span>
-                    </div>
-                    <div>
-                        <h1 class="mb-0">Edit Rute</h1>
-                        <div class="header-subtitle">Ubah konfigurasi rute {{ $data->nama_rute }}</div>
-                    </div>
-                </div>
+                <h1><i class="fas fa-route"></i> Edit Rute</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Master Data</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.rute.index') }}">Rute</a></div>
-                    <div class="breadcrumb-item active">Edit</div>
+                    <div class="breadcrumb-item">Edit</div>
                 </div>
             </div>
 
