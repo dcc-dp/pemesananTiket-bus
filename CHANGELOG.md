@@ -32,6 +32,13 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 - [`resources/views/pages/admin/operator/{create,edit}.blade.php`](resources/views/pages/admin/operator/create.blade.php): Menghapus tombol "Kembali ke Daftar" di pojok kanan atas page header agar header berfokus penuh pada judul dan deskripsi halaman.
 
 ### Changed
+- **Modernisasi UI Halaman Profil Admin (`resources/views/pages/admin/profile/index.blade.php`)**:
+  - Mengubah tampilan profil admin agar 100% konsisten dengan design system modern enterprise SaaS (seperti Dashboard, Operator, Akun, dan form admin lainnya).
+  - Menggantikan header gradient gelap yang tidak seragam dengan `.adm-page-header` standar (breadcrumb navigasi, icon box biru 42x42px `#2563eb`, badge status role dan sesi aktif).
+  - Menerapkan layout 2 kolom responsif:
+    - **Kolom Kiri**: Card identitas profil berlatar putih dengan banner aksen lembut, avatar pengguna berindikator status aktif online, label/value terstruktur (Email, No. HP, Tanggal Terdaftar, Status Akun), dan card tips keamanan.
+    - **Kolom Kanan**: Card form standar (`.adm-form-card`) dengan header terpadu, pemisahan section jelas antara *Informasi Akun* dan *Ubah Password (Opsional)* menggunakan garis separator putus-putus yang halus, styling input `.adm-input` dengan label konsisten, serta footer form standar dengan tombol Simpan (`.adm-btn-submit`) dan Reset (`.adm-btn-cancel`).
+  - **Zero Logic Impact**: Seluruh fungsionalitas, route (`admin.profile.update`), method POST, CSRF token, validasi error (`@error`), dan input field (`name`, `username`, `email`, `phone`, `password`, `password_confirmation`) dipertahankan 100% tanpa perubahan logic.
 - **Penyelarasan Layout Filter & Kerapatan Tabel Enterprise (`resources/views/pages/admin/*`)**:
   - **Kompaksi Tipografi Toolbar Akun Pengguna (`resources/views/pages/admin/akun/index.blade.php`)**: Memperkecil tipografi dan dimensi pada toolbar pencarian & filter (input pencarian dan filter role setinggi 35px dengan font 11.5px, padding 12px 16px, tombol Cari, Reset, dan Tambah Akun diselaraskan setinggi 35px dengan font 11.5px).
   - **Kompaksi Tipografi & Toolbar Filter Pemesanan (`resources/views/pages/admin/booking/index.blade.php`)**: Memperkecil seluruh tipografi pada filter bar (input pencarian kode booking, dropdown status booking & bayar setinggi 35px dengan font 11.5px, serta tombol filter & reset proporsional). Menyelaraskan teks header (17px), subtitle (11.5px), serta meratakan perataan kolom Aksi menjadi center.
