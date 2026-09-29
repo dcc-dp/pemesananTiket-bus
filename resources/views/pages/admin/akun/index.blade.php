@@ -30,29 +30,30 @@
 
             <!-- SEARCH & FILTER CARD -->
             <div class="card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03); margin-bottom: 18px;">
-                <div class="card-body" style="padding: 14px 18px;">
-                    <form action="{{ route('admin.akun.index') }}" method="GET" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 0;">
-                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1;">
+                <div class="card-body" style="padding: 12px 16px;">
+                    <form action="{{ route('admin.akun.index') }}" method="GET" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin: 0;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1;">
                             <input type="text" name="search" class="adm-input" placeholder="Cari nama, username, atau email..."
-                                value="{{ request('search') }}" style="min-width: 240px; max-width: 320px; height: 36px; font-size: 12.5px;">
-                            <select name="role" class="adm-select" style="width: auto; min-width: 140px; height: 36px; font-size: 12.5px;">
-                                <option value="">-- Semua Role --</option>
+                                value="{{ request('search') }}" style="min-width: 220px; max-width: 300px; height: 35px; font-size: 11.5px; border-radius: 6px; padding: 0 12px; border: 1px solid #cbd5e1;">
+                            <select name="role" class="adm-select" style="width: auto; min-width: 130px; height: 35px; font-size: 11.5px; border-radius: 6px; padding: 0 10px; border: 1px solid #cbd5e1;">
+                                <option value="">Semua Role</option>
                                 <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="customer" {{ request('role') == 'customer' ? 'selected' : '' }}>Customer</option>
                             </select>
-                            <button type="submit" class="btn" style="height: 36px; padding: 0 14px; background: #1d4ed8; color: #ffffff; border: 1px solid #1d4ed8; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
-                                <i class="fas fa-search" style="font-size: 10px;"></i>
+                            <button type="submit" class="btn" style="height: 35px; padding: 0 13px; background: #2563eb; color: #ffffff; border: 1px solid #2563eb; border-radius: 6px; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-search" style="font-size: 9.5px;"></i>
                                 <span>Cari</span>
                             </button>
                             @if(request('search') || request('role'))
-                                <a href="{{ route('admin.akun.index') }}" class="btn" style="height: 36px; padding: 0 12px; background: #ffffff; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; text-decoration: none;">
+                                <a href="{{ route('admin.akun.index') }}" class="btn" style="height: 35px; padding: 0 12px; background: #ffffff; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; text-decoration: none;">
+                                    <i class="fas fa-undo" style="font-size: 9.5px;"></i>
                                     <span>Reset</span>
                                 </a>
                             @endif
                         </div>
                         <div>
-                            <a href="{{ route('admin.akun.create') }}" class="btn" style="background: #1d4ed8; color: #ffffff; border: 1px solid #1d4ed8; font-size: 11.5px; font-weight: 600; padding: 7px 14px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(29, 78, 216, 0.2); transition: all 0.15s ease;">
-                                <i class="fas fa-plus" style="font-size: 10px;"></i>
+                            <a href="{{ route('admin.akun.create') }}" class="btn" style="background: #2563eb; color: #ffffff; border: 1px solid #2563eb; font-size: 11.5px; font-weight: 600; height: 35px; padding: 0 13px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2); transition: all 0.15s ease;">
+                                <i class="fas fa-plus" style="font-size: 9.5px;"></i>
                                 <span>Tambah Akun</span>
                             </a>
                         </div>

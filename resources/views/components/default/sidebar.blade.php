@@ -71,20 +71,14 @@
                 </ul>
             </li>
 
-            <!-- Jadwal Aktif Quick Link -->
-            <li class="nav-item {{ ($menu ?? '') == 'jadwal' ? 'active' : '' }}">
-                <a href="{{ route('admin.jadwal.index') }}" class="nav-link">
-                    <i class="far fa-clock"></i>
-                    <span>Jadwal Aktif</span>
-                </a>
-            </li>
+           
 
             <!-- Transaksi -->
             <li class="nav-item dropdown {{ in_array(($menu ?? ''), ['booking', 'payment', 'customer']) ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fas fa-receipt"></i>
                     <span>Transaksi</span>
-                    <span class="sidebar-badge-new">Baru</span>
+                   
                 </a>
                 <ul class="dropdown-menu">
                     <li class="{{ ($menu ?? '') == 'booking' ? 'active' : '' }}">
@@ -103,14 +97,6 @@
                         </a>
                     </li>
                 </ul>
-            </li>
-
-            <!-- Laporan -->
-            <li class="nav-item {{ ($menu ?? '') == 'report' ? 'active' : '' }}">
-                <a href="{{ route('admin.report.index') }}" class="nav-link">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Laporan</span>
-                </a>
             </li>
 
             <li class="menu-header">Pengaturan</li>

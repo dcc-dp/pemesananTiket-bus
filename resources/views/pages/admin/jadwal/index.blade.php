@@ -30,34 +30,42 @@
 
             <!-- FILTER CARD -->
             <div class="card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03); margin-bottom: 18px;">
-                <div class="card-body" style="padding: 14px 18px;">
-                    <form action="{{ route('admin.jadwal.index') }}" method="GET" class="form-inline" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-                        <select name="rute" class="adm-select" style="width: auto; min-width: 180px; height: 36px; font-size: 12.5px;">
-                            <option value="">-- Semua Rute --</option>
-                            @foreach ($rutes as $rute)
-                                <option value="{{ $rute->id_rute }}" {{ request('rute') == $rute->id_rute ? 'selected' : '' }}>
-                                    {{ $rute->nama_rute }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <select name="bus" class="adm-select" style="width: auto; min-width: 180px; height: 36px; font-size: 12.5px;">
-                            <option value="">-- Semua Bus --</option>
-                            @foreach ($buses as $b)
-                                <option value="{{ $b->id_bus }}" {{ request('bus') == $b->id_bus ? 'selected' : '' }}>
-                                    {{ $b->nama_bus }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <input type="date" name="tanggal" class="adm-input" value="{{ request('tanggal') }}" style="width: auto; height: 36px; font-size: 12.5px;">
-                        
-                        <div style="display: inline-flex; align-items: center; gap: 6px;">
-                            <button type="submit" class="btn" style="height: 36px; padding: 0 14px; background: #1d4ed8; color: #ffffff; border: 1px solid #1d4ed8; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
-                                <i class="fas fa-filter" style="font-size: 10.5px;"></i>
-                                <span>Filter</span>
-                            </button>
-                            <a href="{{ route('admin.jadwal.index') }}" class="btn" style="height: 36px; padding: 0 14px; background: #ffffff; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; text-decoration: none;">
-                                <span>Reset</span>
-                            </a>
+                <div class="card-body" style="padding: 12px 16px;">
+                    <form action="{{ route('admin.jadwal.index') }}" method="GET">
+                        <div class="row align-items-center" style="margin-left: -5px; margin-right: -5px;">
+                            <div class="col-lg-3 col-md-6 col-12" style="padding-left: 5px; padding-right: 5px; margin-bottom: 8px; margin-bottom-lg: 0;">
+                                <select name="rute" class="adm-select" style="height: 35px; font-size: 11.5px; border-radius: 6px; padding: 0 10px; border: 1px solid #cbd5e1; width: 100%;">
+                                    <option value="">-- Semua Rute --</option>
+                                    @foreach ($rutes as $rute)
+                                        <option value="{{ $rute->id_rute }}" {{ request('rute') == $rute->id_rute ? 'selected' : '' }}>
+                                            {{ $rute->nama_rute }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-12" style="padding-left: 5px; padding-right: 5px; margin-bottom: 8px; margin-bottom-lg: 0;">
+                                <select name="bus" class="adm-select" style="height: 35px; font-size: 11.5px; border-radius: 6px; padding: 0 10px; border: 1px solid #cbd5e1; width: 100%;">
+                                    <option value="">-- Semua Bus --</option>
+                                    @foreach ($buses as $b)
+                                        <option value="{{ $b->id_bus }}" {{ request('bus') == $b->id_bus ? 'selected' : '' }}>
+                                            {{ $b->nama_bus }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-12" style="padding-left: 6px; padding-right: 5px; margin-bottom: 8px; margin-bottom-lg: 0;">
+                                <input type="date" name="tanggal" class="adm-input" value="{{ request('tanggal') }}" style="height: 35px; font-size: 11.5px; border-radius: 6px; padding: 0 10px; border: 1px solid #cbd5e1; width: 100%;">
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-12" style="padding-left: 5px; padding-right: 5px; display: flex; gap: 8px; align-items: center;">
+                                <button type="submit" class="btn" style="height: 35px; padding: 0 12px; background: #2563eb; color: #ffffff; border: 1px solid #2563eb; border-radius: 6px; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 5px; flex: 1; transition: all 0.15s ease;">
+                                    <i class="fas fa-filter" style="font-size: 10px;"></i>
+                                    <span>Filter</span>
+                                </button>
+                                <a href="{{ route('admin.jadwal.index') }}" class="btn" style="height: 35px; padding: 0 12px; background: #ffffff; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 5px; flex: 1; text-decoration: none; transition: all 0.15s ease;">
+                                    <i class="fas fa-undo" style="font-size: 10px;"></i>
+                                    <span>Reset</span>
+                                </a>
+                            </div>
                         </div>
                     </form>
                 </div>

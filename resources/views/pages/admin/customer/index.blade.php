@@ -82,9 +82,7 @@
                                                 <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; line-height: 1.2;">
                                                     {{ $data->name }}
                                                 </div>
-                                                <div style="font-size: 10px; color: #64748b; margin-top: 1px;">
-                                                    ID #{{ $data->id }}
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </td>
