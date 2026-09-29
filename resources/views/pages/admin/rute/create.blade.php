@@ -3,12 +3,22 @@
 @section('content')
     <div class="main-content">
         <section class="section">
+            <!-- Page Header -->
             <div class="section-header">
-                <h1><i class="fas fa-route"></i> Tambah Rute</h1>
+                <div class="d-flex align-items-center">
+                    <div class="header-icon-box mr-3">
+                        <span class="material-symbols-outlined">alt_route</span>
+                    </div>
+                    <div>
+                        <h1 class="mb-0">Tambah Rute</h1>
+                        <div class="header-subtitle">Tambah trayek perjalanan dan estimasi jarak tempuh baru</div>
+                    </div>
+                </div>
                 <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Master Data</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.rute.index') }}">Rute</a></div>
-                    <div class="breadcrumb-item">Tambah</div>
+                    <div class="breadcrumb-item active">Tambah</div>
                 </div>
             </div>
 

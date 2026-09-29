@@ -3,12 +3,22 @@
 @section('content')
     <div class="main-content">
         <section class="section">
+            <!-- Page Header -->
             <div class="section-header">
-                <h1><i class="fas fa-calendar-alt"></i> Tambah Jadwal</h1>
+                <div class="d-flex align-items-center">
+                    <div class="header-icon-box mr-3">
+                        <span class="material-symbols-outlined">calendar_today</span>
+                    </div>
+                    <div>
+                        <h1 class="mb-0">Tambah Jadwal</h1>
+                        <div class="header-subtitle">Tambah jadwal keberangkatan armada bus baru</div>
+                    </div>
+                </div>
                 <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Master Data</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.jadwal.index') }}">Jadwal</a></div>
-                    <div class="breadcrumb-item">Tambah</div>
+                    <div class="breadcrumb-item active">Tambah</div>
                 </div>
             </div>
 

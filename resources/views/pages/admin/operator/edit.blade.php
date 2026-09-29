@@ -3,12 +3,22 @@
 @section('content')
     <div class="main-content">
         <section class="section">
+            <!-- Page Header -->
             <div class="section-header">
-                <h1><i class="fas fa-building"></i> Edit Operator</h1>
+                <div class="d-flex align-items-center">
+                    <div class="header-icon-box mr-3">
+                        <span class="material-symbols-outlined">domain</span>
+                    </div>
+                    <div>
+                        <h1 class="mb-0">Edit Operator</h1>
+                        <div class="header-subtitle">Ubah informasi data operator {{ $data->nama_operator }}</div>
+                    </div>
+                </div>
                 <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Master Data</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.operator.index') }}">Operator</a></div>
-                    <div class="breadcrumb-item">Edit</div>
+                    <div class="breadcrumb-item active">Edit</div>
                 </div>
             </div>
 

@@ -1,51 +1,70 @@
-@extends('layouts.app', ['title' => 'Data Kursi'])
+@extends('layouts.app', ['title' => 'Data Kursi', 'menu' => 'kursi'])
 
 @section('content')
     <div class="main-content">
         <section class="section">
+            <!-- Page Header -->
             <div class="section-header">
-                <h1><i class="fas fa-chair"></i> Data Kursi</h1>
+                <div class="d-flex align-items-center">
+                    <div class="header-icon-box mr-3">
+                        <span class="material-symbols-outlined">airline_seat_recline_normal</span>
+                    </div>
+                    <div>
+                        <h1 class="mb-0">Data Kursi</h1>
+                        <div class="header-subtitle">Kelola denah nomor kursi, kelas kursi, dan ketersediaan armada</div>
+                    </div>
+                </div>
                 <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Master Data</div>
-                    <div class="breadcrumb-item">Kursi</div>
+                    <div class="breadcrumb-item active">Kursi</div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h4>Pilih Bus</h4>
+            <!-- Select Bus Card -->
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <span class="material-symbols-outlined mr-2 text-primary" style="font-size: 18px;">directions_bus</span>
+                        <h4 class="mb-0">Pilih Armada Bus</h4>
+                    </div>
+                    <div class="card-header-action">
+                        <a href="{{ route('admin.kursi.create') }}" class="btn btn-primary">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">add</span>
+                            <span>Tambah Kursi</span>
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.kursi.index') }}" method="GET" class="form-inline">
-                        <select name="bus" class="form-control" onchange="this.form.submit()">
-                            @foreach ($buses as $b)
-                                <option value="{{ $b->id_bus }}"
-                                    {{ $bus && $bus->id_bus == $b->id_bus ? 'selected' : '' }}>
-                                    {{ $b->nama_bus }} ({{ $b->nomor_polisi }})
-                                </option>
-                            @endforeach
-                        </select>
-                        <a href="{{ route('admin.kursi.create') }}" class="btn btn-primary ml-auto"
-                            style="background: #1E5AA8; border: none;">
-                            <i class="fas fa-plus"></i> Tambah Kursi
-                        </a>
+                    <form action="{{ route('admin.kursi.index') }}" method="GET" class="d-flex align-items-center gap-3">
+                        <div style="max-width: 400px; width: 100%;">
+                            <select name="bus" class="form-control" onchange="this.form.submit()">
+                                @foreach ($buses as $b)
+                                    <option value="{{ $b->id_bus }}"
+                                        {{ $bus && $bus->id_bus == $b->id_bus ? 'selected' : '' }}>
+                                        {{ $b->nama_bus }} ({{ $b->nomor_polisi }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </form>
                 </div>
             </div>
 
+            <!-- Table Card -->
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex align-items-center justify-content-between">
                     <h4>
                         Daftar Kursi
                         @if ($bus)
-                            - {{ $bus->nama_bus }} ({{ $bus->nomor_polisi }})
+                            &mdash; <span class="text-primary font-weight-bold">{{ $bus->nama_bus }} ({{ $bus->nomor_polisi }})</span>
                         @endif
                     </h4>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover mb-0">
-                            <thead style="background: #f8fafc;">
+                        <table class="table table-hover mb-0">
+                            <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Nomor Kursi</th>
@@ -60,36 +79,38 @@
                                 @forelse ($datas as $i => $data)
                                     <tr>
                                         <td>{{ $i + 1 }}</td>
-                                        <td><span class="badge badge-primary"
-                                                style="font-size: 1rem;">{{ $data->nomor_kursi }}</span></td>
+                                        <td>
+                                            <span class="badge badge-primary font-weight-bold" style="font-size: 12px; padding: 4px 10px;">
+                                                {{ $data->nomor_kursi }}
+                                            </span>
+                                        </td>
                                         <td>{{ $data->kelas ?? '-' }}</td>
-                                        <td>Rp {{ number_format($data->harga ?? 0, 0, ',', '.') }}</td>
+                                        <td class="font-weight-bold text-dark">Rp {{ number_format($data->harga ?? 0, 0, ',', '.') }}</td>
                                         <td>{{ $data->posisi ?? '-' }}</td>
                                         <td>
-                                            <span
-                                                class="badge badge-{{ $data->status == 'tersedia' ? 'success' : 'danger' }}">
+                                            <span class="badge badge-{{ $data->status == 'tersedia' ? 'success' : 'danger' }}">
                                                 {{ $data->status_label }}
                                             </span>
                                         </td>
                                         <td class="text-right">
-                                            <a href="{{ route('admin.kursi.edit', $data->id_kursi) }}"
-                                                class="btn btn-sm btn-warning">
-                                                <i class="fas fa-edit"></i>
+                                            <a href="{{ route('admin.kursi.edit', $data->id_kursi) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                <span class="material-symbols-outlined" style="font-size: 16px;">edit</span>
                                             </a>
-                                            <form action="{{ route('admin.kursi.destroy', $data->id_kursi) }}"
-                                                method="POST" class="d-inline"
+                                            <form action="{{ route('admin.kursi.destroy', $data->id_kursi) }}" method="POST" class="d-inline"
                                                 onsubmit="return confirm('Yakin hapus kursi {{ $data->nomor_kursi }}?');">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                    <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
                                                 </button>
                                             </form>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center py-4 text-muted">Belum ada data kursi untuk
-                                            bus ini</td>
+                                        <td colspan="7" class="text-center py-5 text-muted">
+                                            <span class="material-symbols-outlined text-muted" style="font-size: 36px; display: block; margin-bottom: 6px;">inbox</span>
+                                            <span>Belum ada data kursi untuk bus ini</span>
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>

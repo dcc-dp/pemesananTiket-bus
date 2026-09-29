@@ -3,12 +3,22 @@
 @section('content')
     <div class="main-content">
         <section class="section">
+            <!-- Page Header -->
             <div class="section-header">
-                <h1><i class="fas fa-user-plus"></i> Tambah Akun</h1>
+                <div class="d-flex align-items-center">
+                    <div class="header-icon-box mr-3">
+                        <span class="material-symbols-outlined">person_add</span>
+                    </div>
+                    <div>
+                        <h1 class="mb-0">Tambah Akun</h1>
+                        <div class="header-subtitle">Tambah akun pengguna baru untuk staf atau administrator</div>
+                    </div>
+                </div>
                 <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Pengaturan</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.akun.index') }}">Akun</a></div>
-                    <div class="breadcrumb-item">Tambah</div>
+                    <div class="breadcrumb-item active">Tambah</div>
                 </div>
             </div>
 

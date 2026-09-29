@@ -3,12 +3,22 @@
 @section('content')
     <div class="main-content">
         <section class="section">
+            <!-- Page Header -->
             <div class="section-header">
-                <h1><i class="fas fa-credit-card"></i> Detail Pembayaran</h1>
+                <div class="d-flex align-items-center">
+                    <div class="header-icon-box mr-3">
+                        <span class="material-symbols-outlined">payments</span>
+                    </div>
+                    <div>
+                        <h1 class="mb-0">Detail Pembayaran</h1>
+                        <div class="header-subtitle">Rincian status pembayaran dan informasi gateway Midtrans</div>
+                    </div>
+                </div>
                 <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Transaksi</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.payment.index') }}">Pembayaran</a></div>
-                    <div class="breadcrumb-item">{{ $data->order_id }}</div>
+                    <div class="breadcrumb-item active">{{ $data->order_id }}</div>
                 </div>
             </div>
 

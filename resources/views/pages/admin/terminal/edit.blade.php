@@ -3,12 +3,22 @@
 @section('content')
     <div class="main-content">
         <section class="section">
+            <!-- Page Header -->
             <div class="section-header">
-                <h1><i class="fas fa-map-marker-alt"></i> Edit Terminal</h1>
+                <div class="d-flex align-items-center">
+                    <div class="header-icon-box mr-3">
+                        <span class="material-symbols-outlined">location_on</span>
+                    </div>
+                    <div>
+                        <h1 class="mb-0">Edit Terminal</h1>
+                        <div class="header-subtitle">Ubah data terminal {{ $data->nama_terminal }} ({{ $data->kota }})</div>
+                    </div>
+                </div>
                 <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></div>
                     <div class="breadcrumb-item">Master Data</div>
                     <div class="breadcrumb-item"><a href="{{ route('admin.terminal.index') }}">Terminal</a></div>
-                    <div class="breadcrumb-item">Edit</div>
+                    <div class="breadcrumb-item active">Edit</div>
                 </div>
             </div>
 
