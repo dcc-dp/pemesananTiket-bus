@@ -70,14 +70,6 @@
         <!-- Copyright Bottom Bar -->
         <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-body">
             <p>&copy; {{ date('Y') }} BusTicket Platform. Hak Cipta Dilindungi Undang-Undang.</p>
-            <div class="flex items-center gap-6">
-                <a href="#" class="hover:text-slate-400 transition-colors">Ketentuan Tiket</a>
-                <a href="#" class="hover:text-slate-400 transition-colors">Privasi</a>
-                <span class="flex items-center gap-1.5 text-emerald-400">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                    Status Server: Normal
-                </span>
-            </div>
         </div>
 
     </div>

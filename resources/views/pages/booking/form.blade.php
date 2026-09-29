@@ -227,28 +227,24 @@
                                 </span>
                             </div>
                             <div class="flex justify-between text-slate-600">
-                                <span>Biaya Layanan</span>
-                                <span class="font-semibold text-slate-900">Rp 7.500</span>
-                            </div>
-                            <div class="flex justify-between text-slate-600">
-                                <span>Asuransi Jasa Raharja</span>
-                                <span class="font-semibold text-emerald-600">TERMASUK</span>
+                                <span>Asuransi Penumpang</span>
+                                <span class="font-semibold text-emerald-600">Termasuk</span>
                             </div>
 
                             <div class="border-t border-slate-100 pt-3 flex items-center justify-between">
                                 <div>
                                     <span class="font-bold text-slate-900 text-sm block">Total Tagihan</span>
-                                    <span class="text-[10px] text-slate-400">Termasuk Pajak</span>
+                                    <span class="text-[10px] text-slate-400">Harga resmi terverifikasi</span>
                                 </div>
-                                <span class="text-2xl font-black text-brand-600">
-                                    Rp {{ number_format(($kursis->count() * $jadwal->harga) + 7500, 0, ',', '.') }}
+                                <span class="text-xl font-extrabold text-brand-600">
+                                    Rp {{ number_format($kursis->count() * $jadwal->harga, 0, ',', '.') }}
                                 </span>
                             </div>
                         </div>
 
                         <!-- CTA Button to Step 4 -->
-                        <button type="submit" class="w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-brand-600/25 transition-all active:scale-98">
-                            <span>Lanjut ke Pembayaran (Langkah 4)</span>
+                        <button type="submit" class="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98 cursor-pointer">
+                            <span>Lanjut ke Pembayaran</span>
                             <span class="material-symbols-outlined text-base">arrow_forward</span>
                         </button>
 

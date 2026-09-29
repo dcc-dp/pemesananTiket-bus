@@ -214,17 +214,16 @@
                 </div>
 
                 <!-- Right Seat Selection Summary Panel (Form to Passenger Details) -->
-                <div class="md:col-span-5 bg-slate-50/90 rounded-2xl p-5 border border-slate-200/80 space-y-4">
+                <div class="md:col-span-5 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
                     
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                         <h4 class="text-sm font-bold text-slate-900">Rincian Kursi Dipilih</h4>
                         <span class="bg-amber-100 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full" id="seatCountBadge">
                             0 Kursi
                         </span>
                     </div>
 
-                    <div class="bg-white rounded-xl p-4 border border-slate-200/80 space-y-3 text-xs">
-                        
+                    <div class="space-y-3 text-xs">
                         <div class="flex items-center justify-between">
                             <span class="text-slate-500 font-body">Kursi dipilih:</span>
                             <div class="flex flex-wrap gap-1.5 justify-end" id="selectedSeatsList">
@@ -238,34 +237,22 @@
                         </div>
 
                         <div class="flex items-center justify-between">
-                            <span class="text-slate-500 font-body">Jumlah kursi:</span>
+                            <span class="text-slate-500 font-body">Jumlah penumpang:</span>
                             <span class="font-bold text-slate-800" id="seatCountText">0</span>
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <span class="text-slate-500 font-body">Biaya layanan:</span>
-                            <span class="font-semibold text-slate-800">Rp 7.500</span>
                         </div>
 
                         <div class="border-t border-slate-100 pt-3 flex items-center justify-between">
                             <span class="font-bold text-slate-900 text-sm">Total:</span>
                             <span class="text-xl font-black text-brand-600" id="totalPriceText">Rp 0</span>
                         </div>
-
-                    </div>
-
-                    <!-- Reservation Expiry Banner -->
-                    <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs p-3 rounded-xl flex items-center gap-2 font-medium">
-                        <span class="material-symbols-outlined text-emerald-600 text-base" style="font-variation-settings: 'FILL' 1;">lock</span>
-                        <span>Kursi tersimpan untuk pemesanan Anda selama 15 menit.</span>
                     </div>
 
                     <!-- Next Action Form -->
-                    <form action="{{ route('booking.form', $jadwal->id_jadwal) }}" method="GET" id="proceedBookingForm">
+                    <form action="{{ route('booking.form', $jadwal->id_jadwal) }}" method="GET" id="proceedBookingForm" class="pt-2">
                         <div id="hiddenSeatInputs"></div>
                         <button type="submit" id="submitSeatBtn" disabled
-                                class="w-full py-3.5 px-4 rounded-xl bg-slate-300 text-slate-500 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-not-allowed">
-                            <span>Lanjut ke Data Pemesan (Langkah 3)</span>
+                                class="w-full py-3 px-4 rounded-xl bg-slate-200 text-slate-400 text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-not-allowed">
+                            <span>Lanjut ke Data Pemesan</span>
                             <span class="material-symbols-outlined text-base">arrow_forward</span>
                         </button>
                     </form>
@@ -288,7 +275,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             const maxPassengers = {{ $penumpang }};
             const unitPrice = {{ (int) $jadwal->harga }};
-            const serviceFee = 7500;
             let selectedSeats = [];
 
             const seatCountBadge = document.getElementById('seatCountBadge');
@@ -307,16 +293,16 @@
                     selectedSeatsList.innerHTML = '<span class="text-slate-400 italic">Belum ada kursi dipilih</span>';
                     totalPriceText.textContent = 'Rp 0';
                     submitBtn.disabled = true;
-                    submitBtn.className = 'w-full py-3.5 px-4 rounded-xl bg-slate-300 text-slate-500 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-not-allowed';
+                    submitBtn.className = 'w-full py-3 px-4 rounded-xl bg-slate-200 text-slate-400 text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-not-allowed';
                 } else {
                     selectedSeatsList.innerHTML = selectedSeats.map(s => 
-                        `<span class="px-2.5 py-1 bg-amber-500 text-white font-bold text-xs rounded-md shadow-xs">${s.nomor}</span>`
+                        `<span class="px-2.5 py-1 bg-amber-500 text-white font-bold text-xs rounded-lg shadow-2xs">${s.nomor}</span>`
                     ).join('');
 
-                    const total = (count * unitPrice) + serviceFee;
+                    const total = count * unitPrice;
                     totalPriceText.textContent = `Rp ${total.toLocaleString('id-ID')}`;
                     submitBtn.disabled = false;
-                    submitBtn.className = 'w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-brand-600/25 transition-all cursor-pointer active:scale-98';
+                    submitBtn.className = 'w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer active:scale-98';
                 }
 
                 // Update hidden inputs for GET form (seats[]=...)

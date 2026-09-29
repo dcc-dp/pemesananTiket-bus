@@ -131,6 +131,28 @@
             </script>
         @endif
 
+        @if (session('message') == 'booking dibuat')
+            <script>
+                Swal.fire({
+                    title: "Berhasil",
+                    text: "Pemesanan berhasil dibuat. Silakan lanjutkan pembayaran.",
+                    icon: "success",
+                    confirmButtonColor: "#006194"
+                });
+            </script>
+        @endif
+
+        @if (session('message') == 'update profile')
+            <script>
+                Swal.fire({
+                    title: "Berhasil",
+                    text: "Profil berhasil diperbarui",
+                    icon: "success",
+                    confirmButtonColor: "#006194"
+                });
+            </script>
+        @endif
+
         @if (session('error'))
             <script>
                 Swal.fire({

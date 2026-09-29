@@ -120,7 +120,7 @@
                             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nomor Kursi</span>
                             <div class="flex sm:justify-end gap-1.5 flex-wrap">
                                 @foreach ($ticket['penumpang'] as $p)
-                                    <span class="px-3 py-1 bg-brand-600 text-white font-black text-xs rounded-lg shadow-2xs">
+                                    <span class="px-3 py-1 bg-amber-500 text-white font-bold text-xs rounded-lg shadow-2xs">
                                         {{ $p['nomor_kursi'] }}
                                     </span>
                                 @endforeach
@@ -162,12 +162,12 @@
 
                     <!-- Ticket Action Buttons (No Print) -->
                     <div class="no-print w-full space-y-2 pt-6">
-                        <button type="button" onclick="window.print()" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer">
-                            <span class="material-symbols-outlined text-sm">download</span>
-                            <span>Unduh E-Tiket (PDF)</span>
+                        <button type="button" onclick="window.print()" class="w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer">
+                            <span class="material-symbols-outlined text-sm">print</span>
+                            <span>Cetak Tiket / Unduh PDF</span>
                         </button>
-                        <a href="https://wa.me/?text=Tiket%20BusTicket%20Resmi%20Kode%20Booking:%20{{ $ticket['kode_booking'] }}" target="_blank" class="w-full py-2.5 px-4 border border-brand-600 text-brand-600 hover:bg-brand-50 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all">
-                            <span class="material-symbols-outlined text-sm">share</span>
+                        <a href="https://wa.me/?text=Tiket%20BusTicket%20Resmi%20Kode%20Booking:%20{{ $ticket['kode_booking'] }}" target="_blank" class="w-full py-2.5 px-4 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                            <span class="material-symbols-outlined text-sm text-emerald-600">share</span>
                             <span>Kirim ke WhatsApp</span>
                         </a>
                     </div>

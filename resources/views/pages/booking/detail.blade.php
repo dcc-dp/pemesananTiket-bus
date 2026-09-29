@@ -95,7 +95,7 @@
                             <div class="py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
                                 <div>
                                     <div class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                        <span class="px-2 py-0.5 bg-brand-600 text-white font-bold rounded text-xs">
+                                        <span class="px-2 py-0.5 bg-amber-500 text-white font-bold rounded text-xs">
                                             Kursi {{ $seat->kursi->nomor_kursi }}
                                         </span>
                                         <span>{{ $seat->nama_penumpang }}</span>
@@ -144,12 +144,12 @@
 
                     <div class="pt-2">
                         @if ($booking->status_pembayaran == 'paid')
-                            <a href="{{ route('customer.booking.ticket', $booking->id) }}" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all">
+                            <a href="{{ route('customer.booking.ticket', $booking->id) }}" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-all">
                                 <span class="material-symbols-outlined text-base">confirmation_number</span>
                                 <span>Lihat E-Tiket &amp; Boarding Pass</span>
                             </a>
                         @elseif ($booking->status_pembayaran == 'pending')
-                            <a href="{{ route('customer.booking.pay', $booking->id) }}" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-brand-600/25 transition-all active:scale-98">
+                            <a href="{{ route('customer.booking.pay', $booking->id) }}" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98">
                                 <span class="material-symbols-outlined text-base">credit_card</span>
                                 <span>Bayar Sekarang</span>
                             </a>

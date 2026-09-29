@@ -1,84 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.landing.app', ['menu' => $menu ?? 'dashboard'])
 
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title }} &mdash; BusTicket</title>
-
-    <!-- General CSS Files -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-
-    <!-- CSS Libraries -->
-    @stack('styles')
-
-    <!-- Template CSS -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/components.css') }}">
-</head>
-
-<body class="layout-3">
-
-    <div id="app">
-        <div class="main-wrapper container">
-
-            {{-- Header --}}
-            @include('components.top-navigation.navbar')
-
-            <!-- Main Content -->
-            @yield('content')
-
-            {{-- Footer --}}
-            @include('components.footer')
-
-        </div>
+@section('content')
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
+    <!-- Sub-navigation Tabs for Customer Portal -->
+    <div class="bg-white rounded-2xl border border-slate-200/90 p-1.5 shadow-xs flex flex-wrap items-center gap-1">
+        <a href="{{ route('customer.dashboard') }}" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all {{ ($menu ?? '') == 'dashboard' ? 'bg-brand-50 text-brand-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+            <span class="material-symbols-outlined text-lg">dashboard</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="{{ route('customer.bookings') }}" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all {{ ($menu ?? '') == 'bookings' ? 'bg-brand-50 text-brand-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+            <span class="material-symbols-outlined text-lg">receipt_long</span>
+            <span>Booking Saya</span>
+        </a>
+        <a href="{{ route('customer.tickets') }}" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all {{ ($menu ?? '') == 'tickets' ? 'bg-brand-50 text-brand-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+            <span class="material-symbols-outlined text-lg">confirmation_number</span>
+            <span>Tiket Saya</span>
+        </a>
+        <a href="{{ route('customer.profile') }}" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all {{ ($menu ?? '') == 'profile' ? 'bg-brand-50 text-brand-700 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
+            <span class="material-symbols-outlined text-lg">person</span>
+            <span>Profil Saya</span>
+        </a>
     </div>
 
-    <!-- General JS Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
-    <script src="{{ asset('js/stisla.js') }}"></script>
-
-    <!-- JS Libraies -->
-    <script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
-
-    <!-- JS Libraies -->
-    @stack('scripts')
-
-    <!-- Template JS File -->
-    <script src="{{ asset('js/scripts.js') }}"></script>
-    <script src="{{ asset('js/custom.js') }}"></script>
-
-    @if (session('message') == 'sukses login')
-        <script>swal("Berhasil", "Berhasil Login", "success");</script>
-    @endif
-    @if (session('message') == 'sukses logout')
-        <script>swal("Berhasil", "Anda Telah Logout", "success");</script>
-    @endif
-    @if (session('message') == 'gagal login')
-        <script>swal("Warning", "Periksa kembali username/email dan password anda", "error");</script>
-    @endif
-    @if (session('message') == 'need login')
-        <script>swal("Warning", "Anda harus login terlebih dahulu", "error");</script>
-    @endif
-    @if (session('message') == 'booking dibuat')
-        <script>swal("Berhasil", "Pemesanan berhasil dibuat. Silakan lanjutkan pembayaran.", "success");</script>
-    @endif
-    @if (session('message') == 'update profile')
-        <script>swal("Berhasil", "Profil berhasil diperbarui", "success");</script>
-    @endif
-    @if (session('error'))
-        <script>swal("Error", "{{ session('error') }}", "error");</script>
-    @endif
-</body>
-
-</html>
+    @yield('user-content')
+</main>
+@endsection

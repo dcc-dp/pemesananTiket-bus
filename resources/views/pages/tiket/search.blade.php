@@ -168,96 +168,81 @@
 
                 </div>
 
-                <!-- Garansi Kursi Pasti Ada Box -->
-                <div class="bg-brand-50/60 rounded-2xl p-4 border border-brand-100 flex items-start gap-3">
-                    <span class="material-symbols-outlined text-brand-600 text-2xl" style="font-variation-settings: 'FILL' 1;">verified_user</span>
-                    <div>
-                        <h5 class="text-xs font-bold text-slate-900">Garansi Kursi Pasti Ada</h5>
-                        <p class="text-[11px] text-slate-500 font-body mt-0.5 leading-relaxed">
-                            Tiket diterbitkan langsung oleh operator mitra resmi dengan QR terverifikasi.
-                        </p>
-                    </div>
-                </div>
-
             </aside>
 
             <!-- RIGHT FEED: STEP 1 (PILIH ARMADA BUS YANG TERSEDIA) -->
-            <div class="lg:col-span-9 space-y-6">
+            <div class="lg:col-span-9 space-y-5">
                 
                 <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                        <span class="w-1.5 h-5 bg-brand-600 rounded-full inline-block"></span>
-                        Langkah 1: Pilih Armada Bus yang Tersedia
-                    </h2>
-                    <span class="text-xs text-slate-400 font-medium font-body">
-                        Menampilkan {{ $jadwals->count() }} bus tersedia
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">
+                            Pilih Armada Bus &amp; Jadwal
+                        </h2>
+                        <p class="text-xs text-slate-500 font-body mt-0.5">Pilih bus yang sesuai dengan waktu dan fasilitas yang Anda inginkan</p>
+                    </div>
+                    <span class="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                        {{ $jadwals->count() }} bus tersedia
                     </span>
                 </div>
 
                 @if (is_null($params))
                     <!-- Empty State: Not searched yet -->
-                    <div class="bg-white border border-slate-200/90 rounded-2xl p-12 text-center shadow-xs">
-                        <div class="w-16 h-16 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-4">
-                            <span class="material-symbols-outlined text-3xl">search</span>
+                    <div class="bg-white border border-slate-200/90 rounded-2xl p-10 text-center shadow-xs">
+                        <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-3">
+                            <span class="material-symbols-outlined text-2xl">search</span>
                         </div>
                         <h3 class="text-base font-bold text-slate-900">Mulai Pencarian Tiket Bus</h3>
-                        <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 font-body">
-                            Pilih terminal asal, tujuan, dan tanggal perjalanan di panel sebelah kiri untuk melihat jadwal armada yang tersedia.
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1 font-body">
+                            Pilih terminal asal, tujuan, dan tanggal perjalanan di panel filter untuk melihat jadwal armada yang tersedia.
                         </p>
                     </div>
                 @elseif ($jadwals->count() === 0)
                     <!-- Empty State: No results -->
-                    <div class="bg-white border border-slate-200/90 rounded-2xl p-12 text-center shadow-xs">
-                        <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4">
-                            <span class="material-symbols-outlined text-3xl">directions_bus</span>
+                    <div class="bg-white border border-slate-200/90 rounded-2xl p-10 text-center shadow-xs">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                            <span class="material-symbols-outlined text-2xl">directions_bus</span>
                         </div>
                         <h3 class="text-base font-bold text-slate-900">Tidak Ada Jadwal Bus Tersedia</h3>
-                        <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1 font-body">
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1 font-body">
                             Maaf, belum ada jadwal bus aktif untuk rute dan tanggal yang Anda pilih. Coba sesuaikan tanggal atau pilihan filter.
                         </p>
                     </div>
                 @else
-                    <!-- Bus Cards List (Matching Image 2 Prototype) -->
-                    <div class="space-y-4">
+                    <!-- Bus Cards List (Consistent Design) -->
+                    <div class="space-y-3.5">
                         @foreach ($jadwals as $jadwal)
-                            <div class="bg-white border {{ $loop->first ? 'border-2 border-brand-600 shadow-sm' : 'border-slate-200/90 shadow-xs' }} rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all hover:border-brand-600">
-                                
-                                @if ($loop->first)
-                                    <!-- Highlight Ribbon Badge -->
-                                    <div class="absolute top-0 right-0 bg-brand-600 text-white text-[11px] font-bold px-3 py-1 rounded-bl-xl flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-xs">thumb_up</span>
-                                        Armada Terpilih
-                                    </div>
-                                @endif
-
+                            <div class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs hover:border-brand-600/70 transition-all">
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
                                     
                                     <!-- PO Name & Class -->
                                     <div class="md:col-span-4">
                                         <div class="flex items-center gap-2">
-                                            <h3 class="text-lg font-bold text-slate-900">{{ $jadwal->bus->nama_bus }}</h3>
+                                            <h3 class="text-base font-bold text-slate-900">{{ $jadwal->bus->nama_bus }}</h3>
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-50 text-brand-700">
+                                                {{ ucfirst($jadwal->bus->kelas) }}
+                                            </span>
                                         </div>
-                                        <p class="text-xs font-semibold text-brand-600 mt-0.5">
-                                            {{ $jadwal->bus->operator->nama_operator }} &middot; {{ ucfirst($jadwal->bus->kelas) }}
+                                        <p class="text-xs text-slate-500 mt-0.5">
+                                            {{ $jadwal->bus->operator->nama_operator }}
                                         </p>
                                         @if ($jadwal->bus->fasilitas)
                                             <div class="flex flex-wrap gap-1 mt-2 text-[10px] text-slate-500 font-body">
                                                 @foreach (explode(',', $jadwal->bus->fasilitas) as $fasilitas)
-                                                    <span class="bg-slate-100 px-2 py-0.5 rounded">{{ trim($fasilitas) }}</span>
+                                                    <span class="bg-slate-100 px-2 py-0.5 rounded text-slate-600">{{ trim($fasilitas) }}</span>
                                                 @endforeach
                                             </div>
                                         @endif
                                     </div>
 
                                     <!-- Departure Schedule Timeline -->
-                                    <div class="md:col-span-5 flex items-center justify-between px-2">
+                                    <div class="md:col-span-5 flex items-center justify-between px-1">
                                         <div class="text-left">
-                                            <div class="text-lg font-black text-slate-900">{{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }}</div>
-                                            <div class="text-xs text-slate-400 font-body">{{ $jadwal->rute->terminalAsal->kota }}</div>
+                                            <div class="text-base sm:text-lg font-bold text-slate-900">{{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }}</div>
+                                            <div class="text-xs text-slate-500 font-body">{{ $jadwal->rute->terminalAsal->kota }}</div>
                                         </div>
 
-                                        <div class="flex-1 flex flex-col items-center px-4">
-                                            <span class="text-[10px] font-semibold text-slate-400 mb-1">
+                                        <div class="flex-1 flex flex-col items-center px-3">
+                                            <span class="text-[10px] font-medium text-slate-400 mb-1">
                                                 {{ $jadwal->rute->estimasi_durasi ? gmdate('H:i', $jadwal->rute->estimasi_durasi * 60) . ' Jam' : '8j 30m' }}
                                             </span>
                                             <div class="w-full flex items-center">
@@ -270,33 +255,32 @@
                                         </div>
 
                                         <div class="text-right">
-                                            <div class="text-lg font-black text-slate-900">
+                                            <div class="text-base sm:text-lg font-bold text-slate-900">
                                                 {{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->addMinutes(($jadwal->rute->estimasi_durasi ?? 8) * 60)->format('H:i') }}
                                             </div>
-                                            <div class="text-xs text-slate-400 font-body">{{ $jadwal->rute->terminalTujuan->kota }}</div>
+                                            <div class="text-xs text-slate-500 font-body">{{ $jadwal->rute->terminalTujuan->kota }}</div>
                                         </div>
                                     </div>
 
                                     <!-- Price & CTA -->
-                                    <div class="md:col-span-3 md:border-l md:border-slate-100 md:pl-5 flex md:flex-col justify-between items-end">
+                                    <div class="md:col-span-3 md:border-l md:border-slate-100 md:pl-5 flex md:flex-col justify-between items-end gap-2">
                                         <div class="text-right">
-                                            <span class="text-[11px] text-slate-400 block">Mulai dari</span>
-                                            <div class="text-xl font-black text-brand-600">
+                                            <span class="text-[10px] text-slate-400 block uppercase tracking-wider font-semibold">Harga</span>
+                                            <div class="text-lg sm:text-xl font-extrabold text-brand-600">
                                                 Rp {{ number_format($jadwal->harga, 0, ',', '.') }}
                                             </div>
-                                            <span class="text-[11px] font-bold {{ $jadwal->available_seats <= 5 ? 'text-rose-500' : 'text-emerald-600' }} block">
-                                                Tersisa {{ $jadwal->available_seats }} Kursi
+                                            <span class="text-[11px] font-medium {{ $jadwal->available_seats <= 5 ? 'text-rose-600' : 'text-emerald-600' }} block">
+                                                Sisa {{ $jadwal->available_seats }} kursi
                                             </span>
                                         </div>
                                         <a href="{{ route('tiket.seats', $jadwal->id_jadwal) }}?penumpang={{ $params['penumpang'] ?? 1 }}"
-                                           class="mt-2.5 w-full py-2.5 px-4 rounded-xl {{ $loop->first ? 'bg-brand-600 hover:bg-brand-700 text-white' : 'border border-brand-600 text-brand-600 hover:bg-brand-50' }} text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all">
+                                           class="w-full py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98">
                                             <span>Pilih Kursi</span>
                                             <span class="material-symbols-outlined text-sm">arrow_forward</span>
                                         </a>
                                     </div>
 
                                 </div>
-
                             </div>
                         @endforeach
                     </div>
