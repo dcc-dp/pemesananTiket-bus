@@ -6,8 +6,8 @@
         
         <!-- Brand Icon & Header -->
         <div class="text-center mb-6">
-            <div class="inline-flex w-12 h-12 rounded-2xl bg-brand-600 items-center justify-center text-white shadow-xs mb-3">
-                <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">directions_bus</span>
+            <div class="inline-flex items-center justify-center mb-3">
+                <img src="{{ asset('img/logo-bustiket.png') }}" alt="Logo BUSTIKET" class="w-14 h-14 object-contain">
             </div>
             <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Daftar Akun BusTicket</h1>
             <p class="text-xs text-slate-500 mt-1 font-body">Lengkapi data diri untuk kemudahan pemesanan tiket bus</p>

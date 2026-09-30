@@ -3,9 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
         <!-- Logo -->
         <a href="{{ route('home') }}" class="flex items-center gap-2.5 group">
-            <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-xs group-hover:bg-brand-700 transition-colors">
-                <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">directions_bus</span>
-            </div>
+            <img src="{{ asset('img/logo-bustiket.png') }}" alt="Logo BUSTIKET" class="w-10 h-10 object-contain group-hover:scale-105 transition-transform">
             <span class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">BusTicket</span>
         </a>
 

@@ -32,6 +32,10 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 - [`resources/views/pages/admin/operator/{create,edit}.blade.php`](resources/views/pages/admin/operator/create.blade.php): Menghapus tombol "Kembali ke Daftar" di pojok kanan atas page header agar header berfokus penuh pada judul dan deskripsi halaman.
 
 ### Changed
+- **Pembaruan Logo Brand Aplikasi (`resources/views/components/default/sidebar.blade.php`, `resources/views/layouts/landing/{topbar,footer}.blade.php`, `resources/views/pages/auth/{login,register}.blade.php`, `public/img/logo-bustiket.png`)**:
+  - Mengganti ikon kotak biru generik FontAwesome/Material Symbols pada sidebar admin serta landing page (topbar navbar dan footer) dengan gambar logo mobil bus resmi BUSTIKET (`logo-bustiket.png`).
+  - Memperbarui halaman autentikasi (login dan register) agar menampilkan logo gambar mobil bus yang seragam dan konsisten di seluruh aplikasi.
+  - Memotong secara presisi dan membersihkan teks sisa pada berkas logo (`logo-bustiket.png`) sehingga hanya menyisakan grafis emblem mobil bus yang proporsional, terpusat (*centered*), dan berlatar belakang transparan.
 - **Modernisasi UI Halaman Profil Admin (`resources/views/pages/admin/profile/index.blade.php`)**:
   - Mengubah tampilan profil admin agar 100% konsisten dengan design system modern enterprise SaaS (seperti Dashboard, Operator, Akun, dan form admin lainnya).
   - Menggantikan header gradient gelap yang tidak seragam dengan `.adm-page-header` standar (breadcrumb navigasi, icon box biru 42x42px `#2563eb`, badge status role dan sesi aktif).

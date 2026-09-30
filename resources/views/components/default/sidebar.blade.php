@@ -2,21 +2,17 @@
     <aside id="sidebar-wrapper">
         <!-- Logo & Brand Header (Protected with clean flexbox & no clipping) -->
         <div class="sidebar-brand" style="height: 52px; line-height: 52px; padding: 0 14px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center;">
-            <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 8px; text-decoration: none; height: 32px; line-height: 1.1;">
-                <div style="width: 28px; height: 28px; background: #1d4ed8; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; flex-shrink: 0;">
-                    <i class="fas fa-bus"></i>
-                </div>
+            <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 9px; text-decoration: none; height: 34px; line-height: 1.1;">
+                <img src="{{ asset('img/logo-bustiket.png') }}" alt="Logo BUSTIKET" style="width: 32px; height: 32px; object-fit: contain; flex-shrink: 0;">
                 <div style="display: flex; flex-direction: column; text-align: left;">
-                    <span style="font-size: 13px; font-weight: 800; color: #0f172a; letter-spacing: -0.2px; text-transform: uppercase;">BUSTICKET</span>
+                    <span style="font-size: 13px; font-weight: 800; color: #0f172a; letter-spacing: -0.2px; text-transform: uppercase;">BUSTIKET</span>
                     <span style="font-size: 8px; font-weight: 600; color: #64748b; letter-spacing: 0.5px; text-transform: uppercase;">Transit Management</span>
                 </div>
             </a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm" style="display: none !important;">
-            <a href="{{ route('admin.dashboard') }}">
-                <div style="width: 26px; height: 26px; background: #1d4ed8; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; margin: 13px auto;">
-                    <i class="fas fa-bus"></i>
-                </div>
+            <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                <img src="{{ asset('img/logo-bustiket.png') }}" alt="Logo BUSTIKET" style="width: 28px; height: 28px; object-fit: contain; display: block;">
             </a>
         </div>
 

@@ -7,9 +7,7 @@
             <!-- Col 1: Brand & Desc -->
             <div class="md:col-span-4 space-y-4">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white">
-                        <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">directions_bus</span>
-                    </div>
+                    <img src="{{ asset('img/logo-bustiket.png') }}" alt="Logo BUSTIKET" class="w-8 h-8 object-contain">
                     <span class="text-xl font-extrabold text-white tracking-tight">BusTicket</span>
                 </div>
                 <p class="text-xs sm:text-sm text-slate-400 font-body leading-relaxed max-w-sm">
