@@ -32,6 +32,14 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 - [`resources/views/pages/admin/operator/{create,edit}.blade.php`](resources/views/pages/admin/operator/create.blade.php): Menghapus tombol "Kembali ke Daftar" di pojok kanan atas page header agar header berfokus penuh pada judul dan deskripsi halaman.
 
 ### Changed
+- **Kompaksi Tipografi & Penyesuaian Tampilan Kartu Kursi Bus (`resources/views/pages/tiket/kursi.blade.php`)**:
+  - Memperkecil ukuran seluruh tulisan pada kartu kursi bus agar tampak proporsional, lebih *compact*, dan tidak terlalu besar/mendominasi kartu.
+  - Nomor kursi (`1A`, `1B`, `1C`, `1D`, dst.) disesuaikan dari `sm:text-sm` (14px) menjadi `sm:text-xs text-[10px]` dengan ketebalan tegas (`font-bold leading-none`).
+  - Label tipe/kelas kursi (`Sleeper`, `Ekonomi`, `Bisnis`, `Executive`) diperkecil menjadi `sm:text-[8.5px] text-[7px]` (`font-medium leading-none mt-1`).
+  - Tarif harga tiket (`Rp100.000`, `Rp125.000`, `Rp250.000` atau status `Terisi`) diperkecil menjadi `sm:text-[9px] text-[7.5px]` (`font-semibold leading-none mt-1`).
+  - Mengurangi padding vertikal internal kartu dari `py-1.5 sm:py-2.5` menjadi `py-1.5 sm:py-2` sehingga kartu lebih ramping dan kompak.
+  - Menyelaraskan skrip interaktif JavaScript (event klik pemilihan & pembatalan kursi) agar perubahan ukuran font dan padding diterapkan secara konsisten pada seluruh status kursi (normal, hover, maupun terpilih/selected).
+  - Mempertahankan 100% susunan layout 2+2, posisi kursi, lorong kabin tengah, jarak antar baris, dan alur pemesanan tanpa mengubah logic apapun.
 - **Penyelarasan Posisi Kursi Admin Sesuai Layout Bus User (A/D = Jendela, B/C = Lorong)**:
   - **Sinkronisasi Posisi Kursi (`app/Models/kursi.php`, `app/Http/Controllers/KursiController.php`, `app/Http/Controllers/BusController.php`, `database/seeders/BusSeeder.php`)**:
     - Mengimplementasikan pemetaan posisi kursi bus format 2+2 secara konsisten: Kursi kolom A dan D berposisi `Jendela`, sedangkan kolom B dan C berposisi `Lorong`.

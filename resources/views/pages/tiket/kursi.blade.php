@@ -162,20 +162,20 @@
                                             $formattedHarga = 'Rp' . number_format($kursiHarga, 0, ',', '.');
                                         @endphp
                                         <button type="button"
-                                                class="seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2.5 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
+                                                class="seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
                                                 data-id="{{ $kursi->id_kursi }}"
                                                 data-nomor="{{ $kursi->nomor_kursi }}"
                                                 data-kelas="{{ $kursiKelas }}"
                                                 data-harga="{{ $kursiHarga }}"
                                                 data-formatted-harga="{{ $formattedHarga }}"
                                                 {{ $isUnavail ? 'disabled' : '' }}>
-                                            <span class="seat-nomor font-bold text-[11px] sm:text-sm leading-tight {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
+                                            <span class="seat-nomor font-bold text-[10px] sm:text-xs leading-none {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
                                                 {{ $kursi->nomor_kursi }}
                                             </span>
-                                            <span class="seat-kelas text-[8px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
+                                            <span class="seat-kelas text-[7px] sm:text-[8.5px] font-medium leading-none mt-1 truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
                                                 {{ $kursiKelas }}
                                             </span>
-                                            <span class="seat-harga text-[8.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
+                                            <span class="seat-harga text-[7.5px] sm:text-[9px] font-semibold leading-none mt-1 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
                                                 {{ $isUnavail ? 'Terisi' : $formattedHarga }}
                                             </span>
                                         </button>
@@ -198,20 +198,20 @@
                                             $formattedHarga = 'Rp' . number_format($kursiHarga, 0, ',', '.');
                                         @endphp
                                         <button type="button"
-                                                class="seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2.5 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
+                                                class="seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
                                                 data-id="{{ $kursi->id_kursi }}"
                                                 data-nomor="{{ $kursi->nomor_kursi }}"
                                                 data-kelas="{{ $kursiKelas }}"
                                                 data-harga="{{ $kursiHarga }}"
                                                 data-formatted-harga="{{ $formattedHarga }}"
                                                 {{ $isUnavail ? 'disabled' : '' }}>
-                                            <span class="seat-nomor font-bold text-[11px] sm:text-sm leading-tight {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
+                                            <span class="seat-nomor font-bold text-[10px] sm:text-xs leading-none {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
                                                 {{ $kursi->nomor_kursi }}
                                             </span>
-                                            <span class="seat-kelas text-[8px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
+                                            <span class="seat-kelas text-[7px] sm:text-[8.5px] font-medium leading-none mt-1 truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
                                                 {{ $kursiKelas }}
                                             </span>
-                                            <span class="seat-harga text-[8.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
+                                            <span class="seat-harga text-[7.5px] sm:text-[9px] font-semibold leading-none mt-1 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
                                                 {{ $isUnavail ? 'Terisi' : $formattedHarga }}
                                             </span>
                                         </button>
@@ -347,11 +347,11 @@
                     if (index > -1) {
                         // Unselect
                         selectedSeats.splice(index, 1);
-                        btn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2.5 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer';
+                        btn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer';
                         btn.innerHTML = `
-                            <span class="seat-nomor font-bold text-[11px] sm:text-sm leading-tight text-slate-800">${nomor}</span>
-                            <span class="seat-kelas text-[8px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 text-slate-500">${kelas}</span>
-                            <span class="seat-harga text-[8.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 text-slate-700">${formattedHarga}</span>
+                            <span class="seat-nomor font-bold text-[10px] sm:text-xs leading-none text-slate-800">${nomor}</span>
+                            <span class="seat-kelas text-[7px] sm:text-[8.5px] font-medium leading-none mt-1 truncate max-w-full px-0.5 text-slate-500">${kelas}</span>
+                            <span class="seat-harga text-[7.5px] sm:text-[9px] font-semibold leading-none mt-1 text-slate-700">${formattedHarga}</span>
                         `;
                     } else {
                         // Check limit
@@ -367,11 +367,11 @@
 
                         // Select
                         selectedSeats.push({ id, nomor, kelas, harga, formattedHarga });
-                        btn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2.5 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-sm flex flex-col items-center justify-center text-center bg-amber-500 border-amber-500 text-white scale-102 cursor-pointer';
+                        btn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-sm flex flex-col items-center justify-center text-center bg-amber-500 border-amber-500 text-white scale-102 cursor-pointer';
                         btn.innerHTML = `
-                            <span class="seat-nomor font-bold text-[11px] sm:text-sm text-white flex items-center justify-center gap-1">${nomor} <span class="text-[10px] text-amber-100 font-bold">✓</span></span>
-                            <span class="seat-kelas text-[8px] sm:text-[10px] font-medium leading-tight text-amber-100 truncate max-w-full px-0.5">${kelas}</span>
-                            <span class="seat-harga text-[8.5px] sm:text-[10.5px] font-bold leading-tight mt-0.5 text-white">${formattedHarga}</span>
+                            <span class="seat-nomor font-bold text-[10px] sm:text-xs text-white leading-none flex items-center justify-center gap-0.5 sm:gap-1">${nomor} <span class="text-[8.5px] sm:text-[9.5px] text-amber-100 font-bold">✓</span></span>
+                            <span class="seat-kelas text-[7px] sm:text-[8.5px] font-medium leading-none text-amber-100 mt-1 truncate max-w-full px-0.5">${kelas}</span>
+                            <span class="seat-harga text-[7.5px] sm:text-[9px] font-bold leading-none mt-1 text-white">${formattedHarga}</span>
                         `;
                     }
 
