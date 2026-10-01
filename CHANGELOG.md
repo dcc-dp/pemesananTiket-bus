@@ -32,6 +32,12 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 - [`resources/views/pages/admin/operator/{create,edit}.blade.php`](resources/views/pages/admin/operator/create.blade.php): Menghapus tombol "Kembali ke Daftar" di pojok kanan atas page header agar header berfokus penuh pada judul dan deskripsi halaman.
 
 ### Changed
+- **Penyelarasan Tampilan Pemilihan Kursi User (`resources/views/pages/tiket/kursi.blade.php`)**:
+  - **Integrasi Harga & Tipe/Kelas dari Database/Admin**: Menghapus teks harga statis/hardcoded seperti `Rp200k`. Setiap kursi kini mengambil nilai kelas (`$kursi->kelas`) dan harga (`$kursi->harga` dengan fallback `$jadwal->harga`) yang telah dikonfigurasi pada menu Master Data Kursi di Admin.
+  - **Format Harga Konsisten**: Menerapkan format mata uang standar Indonesia (`Rp200.000`, `Rp250.000`, dll.) secara seragam pada kartu kursi dan panel ringkasan pesanan.
+  - **Hierarki Kartu Kursi 3 Baris**: Mengubah tata letak kartu kursi menjadi 3 baris proporsional: Nomor Kursi (misal `1A`, bold), Tipe/Kelas Kursi (misal `Executive`, `Sleeper`, font kecil mudah dibaca), dan Harga Kursi (misal `Rp200.000` / `Terisi`).
+  - **Preservasi Layout Bus 2+2 & Aisle**: Mempertahankan susunan layout 2+2 (kiri 2 kursi, LORONG di tengah, kanan 2 kursi) sesuai acuan desain, dengan kurva sudut modern (`rounded-xl`/`rounded-2xl`), efek hover halus, serta status terpilih (*amber-500*) yang kontras dan bersih.
+  - **Panel Ringkasan & Kalkulasi Dinamis**: Menyelaraskan rincian ringkasan kursi yang dipilih, harga per kursi dinamis berdasarkan kelas yang dipilih, total tagihan terakumulasi otomatis, serta sinkronisasi input form `seats[]` tanpa mengubah logic, controller, route, maupun alur pemesanan.
 - **Pembaruan Logo Brand Aplikasi (`resources/views/components/default/sidebar.blade.php`, `resources/views/layouts/landing/{topbar,footer}.blade.php`, `resources/views/pages/auth/{login,register}.blade.php`, `public/img/logo-bustiket.png`)**:
   - Mengganti ikon kotak biru generik FontAwesome/Material Symbols pada sidebar admin serta landing page (topbar navbar dan footer) dengan gambar logo mobil bus resmi BUSTIKET (`logo-bustiket.png`).
   - Memperbarui halaman autentikasi (login dan register) agar menampilkan logo gambar mobil bus yang seragam dan konsisten di seluruh aplikasi.

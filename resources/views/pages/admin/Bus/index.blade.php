@@ -55,6 +55,7 @@
                                     <th style="width: 120px; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; padding: 7px 12px; border: none;">Plat Nomor</th>
                                     <th style="width: 150px; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; padding: 7px 12px; border: none;">Operator</th>
                                     <th style="width: 110px; text-align: center; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; padding: 7px 12px; border: none;">Kapasitas</th>
+                                    <th style="width: 110px; text-align: center; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; padding: 7px 12px; border: none;">Kelas</th>
                                     <th style="width: 110px; text-align: center; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; padding: 7px 12px; border: none;">Status</th>
                                     <th style="width: 90px; text-align: right; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; padding: 7px 14px; border: none;">Aksi</th>
                                 </tr>
@@ -87,6 +88,12 @@
                                             <span style="font-size: 9.5px; font-weight: 600; background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; padding: 2px 7px; border-radius: 12px; display: inline-flex; align-items: center; gap: 3px;">
                                                 <i class="fas fa-chair" style="font-size: 8px;"></i>
                                                 <span>{{ $data->kapasitas }} kursi</span>
+                                            </span>
+                                        </td>
+                                        <td style="width: 110px; text-align: center; padding: 6px 12px; vertical-align: middle; border-bottom: 1px solid #f1f5f9;">
+                                            <span style="font-size: 9.5px; font-weight: 600; background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; padding: 2px 7px; border-radius: 12px; display: inline-flex; align-items: center; gap: 3px;">
+                                                <i class="fas fa-chair" style="font-size: 8px;"></i>
+                                                <span>{{ $data->kelas }}</span>
                                             </span>
                                         </td>
                                         <td style="width: 110px; text-align: center; padding: 6px 12px; vertical-align: middle; border-bottom: 1px solid #f1f5f9;">

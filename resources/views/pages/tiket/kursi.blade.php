@@ -120,8 +120,8 @@
                             DEPAN
                         </div>
                         <div class="flex items-center gap-1.5 bg-slate-200/70 px-3 py-1 rounded-lg text-xs font-bold text-slate-700">
-                            <span class="material-symbols-outlined text-sm text-brand-600">sports_motorsports</span>
-                            Sopir 🚌
+                            <span class="material-symbols-outlined text-sm text-brand-600">airline_seat_recline_normal</span>
+                            Sopir 
                         </div>
                     </div>
 
@@ -150,65 +150,75 @@
                                 }
                             @endphp
 
-                            <div class="flex items-center justify-between gap-2 p-1 rounded-xl transition-all row-container">
+                            <div class="flex items-center justify-between gap-1 sm:gap-2 p-1 rounded-xl transition-all row-container">
                                 <!-- Left Seats (e.g. A, B) -->
-                                <div class="flex gap-2">
+                                <div class="flex gap-2 sm:gap-2.5">
                                     @foreach ($leftSeats as $kursi)
                                         @php
                                             $isUnavail = in_array($kursi->id_kursi, $unavailableIds);
+                                            $kursiKelasRaw = !empty($kursi->kelas) ? $kursi->kelas : ($jadwal->bus->kelas ?? 'Ekonomi');
+                                            $kursiKelas = ucwords(str_replace('_', ' ', $kursiKelasRaw));
+                                            $kursiHarga = ($kursi->harga && (int) $kursi->harga > 0) ? (int) $kursi->harga : (int) $jadwal->harga;
+                                            $formattedHarga = 'Rp' . number_format($kursiHarga, 0, ',', '.');
                                         @endphp
                                         <button type="button"
-                                                class="seat-btn w-12 h-12 sm:w-13 sm:h-13 rounded-xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center font-bold text-xs {{ $isUnavail ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-600' }}"
+                                                class="seat-btn w-[4.5rem] sm:w-[5.25rem] md:w-[5.5rem] py-2 sm:py-2.5 px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
                                                 data-id="{{ $kursi->id_kursi }}"
                                                 data-nomor="{{ $kursi->nomor_kursi }}"
-                                                data-harga="{{ $jadwal->harga }}"
+                                                data-kelas="{{ $kursiKelas }}"
+                                                data-harga="{{ $kursiHarga }}"
+                                                data-formatted-harga="{{ $formattedHarga }}"
                                                 {{ $isUnavail ? 'disabled' : '' }}>
-                                            <span>{{ $kursi->nomor_kursi }}</span>
-                                            <span class="text-[9px] font-normal {{ $isUnavail ? 'text-slate-400' : 'text-slate-400' }}">
-                                                {{ $isUnavail ? 'Terisi' : 'Rp' . number_format($jadwal->harga / 1000, 0) . 'k' }}
+                                            <span class="seat-nomor font-bold text-xs sm:text-sm leading-tight {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
+                                                {{ $kursi->nomor_kursi }}
+                                            </span>
+                                            <span class="seat-kelas text-[9px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
+                                                {{ $kursiKelas }}
+                                            </span>
+                                            <span class="seat-harga text-[9.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
+                                                {{ $isUnavail ? 'Terisi' : $formattedHarga }}
                                             </span>
                                         </button>
                                     @endforeach
                                 </div>
 
                                 <!-- Center Aisle -->
-                                <div class="text-[10px] font-bold text-slate-300 tracking-widest uppercase px-1">
+                                <div class="text-[10px] sm:text-[11px] font-bold text-slate-300 tracking-widest uppercase px-1 sm:px-2 text-center select-none flex-shrink-0">
                                     LORONG
                                 </div>
 
                                 <!-- Right Seats (e.g. C, D) -->
-                                <div class="flex gap-2">
+                                <div class="flex gap-2 sm:gap-2.5">
                                     @foreach ($rightSeats as $kursi)
                                         @php
                                             $isUnavail = in_array($kursi->id_kursi, $unavailableIds);
+                                            $kursiKelasRaw = !empty($kursi->kelas) ? $kursi->kelas : ($jadwal->bus->kelas ?? 'Ekonomi');
+                                            $kursiKelas = ucwords(str_replace('_', ' ', $kursiKelasRaw));
+                                            $kursiHarga = ($kursi->harga && (int) $kursi->harga > 0) ? (int) $kursi->harga : (int) $jadwal->harga;
+                                            $formattedHarga = 'Rp' . number_format($kursiHarga, 0, ',', '.');
                                         @endphp
                                         <button type="button"
-                                                class="seat-btn w-12 h-12 sm:w-13 sm:h-13 rounded-xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center font-bold text-xs {{ $isUnavail ? 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-600' }}"
+                                                class="seat-btn w-[4.5rem] sm:w-[5.25rem] md:w-[5.5rem] py-2 sm:py-2.5 px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
                                                 data-id="{{ $kursi->id_kursi }}"
                                                 data-nomor="{{ $kursi->nomor_kursi }}"
-                                                data-harga="{{ $jadwal->harga }}"
+                                                data-kelas="{{ $kursiKelas }}"
+                                                data-harga="{{ $kursiHarga }}"
+                                                data-formatted-harga="{{ $formattedHarga }}"
                                                 {{ $isUnavail ? 'disabled' : '' }}>
-                                            <span>{{ $kursi->nomor_kursi }}</span>
-                                            <span class="text-[9px] font-normal {{ $isUnavail ? 'text-slate-400' : 'text-slate-400' }}">
-                                                {{ $isUnavail ? 'Terisi' : 'Rp' . number_format($jadwal->harga / 1000, 0) . 'k' }}
+                                            <span class="seat-nomor font-bold text-xs sm:text-sm leading-tight {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
+                                                {{ $kursi->nomor_kursi }}
+                                            </span>
+                                            <span class="seat-kelas text-[9px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
+                                                {{ $kursiKelas }}
+                                            </span>
+                                            <span class="seat-harga text-[9.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
+                                                {{ $isUnavail ? 'Terisi' : $formattedHarga }}
                                             </span>
                                         </button>
                                     @endforeach
                                 </div>
                             </div>
                         @endforeach
-                    </div>
-
-                    <!-- Deck Footer Info -->
-                    <div class="flex justify-between items-center pt-4 mt-5 border-t border-slate-200/80 text-xs text-slate-500 font-medium">
-                        <div class="flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-sm text-brand-600">airline_seat_recline_normal</span>
-                            Bus AC {{ ucfirst($jadwal->bus->kelas) }}
-                        </div>
-                        <div class="flex items-center gap-1.5 bg-slate-200/60 px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-600">
-                            <span class="material-symbols-outlined text-sm">wc</span>
-                            Toilet Penumpang
-                        </div>
                     </div>
 
                 </div>
@@ -224,8 +234,8 @@
                     </div>
 
                     <div class="space-y-3 text-xs">
-                        <div class="flex items-center justify-between">
-                            <span class="text-slate-500 font-body">Kursi dipilih:</span>
+                        <div class="flex items-start justify-between gap-2">
+                            <span class="text-slate-500 font-body flex-shrink-0 pt-0.5">Kursi dipilih:</span>
                             <div class="flex flex-wrap gap-1.5 justify-end" id="selectedSeatsList">
                                 <span class="text-slate-400 italic">Belum ada kursi dipilih</span>
                             </div>
@@ -233,7 +243,7 @@
 
                         <div class="flex items-center justify-between">
                             <span class="text-slate-500 font-body">Harga per kursi:</span>
-                            <span class="font-bold text-slate-800">Rp {{ number_format($jadwal->harga, 0, ',', '.') }}</span>
+                            <span class="font-bold text-slate-800" id="seatUnitPriceText">Rp {{ number_format($jadwal->harga, 0, ',', '.') }}</span>
                         </div>
 
                         <div class="flex items-center justify-between">
@@ -265,20 +275,16 @@
 
     </main>
 
-    <style>
-        .w-13 { width: 3.25rem; }
-        .h-13 { height: 3.25rem; }
-    </style>
-
     <!-- Interactive Seat Selection Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const maxPassengers = {{ $penumpang }};
-            const unitPrice = {{ (int) $jadwal->harga }};
+            const defaultUnitPrice = {{ (int) $jadwal->harga }};
             let selectedSeats = [];
 
             const seatCountBadge = document.getElementById('seatCountBadge');
             const selectedSeatsList = document.getElementById('selectedSeatsList');
+            const seatUnitPriceText = document.getElementById('seatUnitPriceText');
             const seatCountText = document.getElementById('seatCountText');
             const totalPriceText = document.getElementById('totalPriceText');
             const hiddenInputs = document.getElementById('hiddenSeatInputs');
@@ -291,15 +297,31 @@
 
                 if (count === 0) {
                     selectedSeatsList.innerHTML = '<span class="text-slate-400 italic">Belum ada kursi dipilih</span>';
+                    if (seatUnitPriceText) {
+                        seatUnitPriceText.textContent = 'Rp {{ number_format($jadwal->harga, 0, ',', '.') }}';
+                    }
                     totalPriceText.textContent = 'Rp 0';
                     submitBtn.disabled = true;
                     submitBtn.className = 'w-full py-3 px-4 rounded-xl bg-slate-200 text-slate-400 text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-not-allowed';
                 } else {
                     selectedSeatsList.innerHTML = selectedSeats.map(s => 
-                        `<span class="px-2.5 py-1 bg-amber-500 text-white font-bold text-xs rounded-lg shadow-2xs">${s.nomor}</span>`
+                        `<span class="px-2 py-0.5 bg-amber-500 text-white font-bold text-[11px] rounded-lg shadow-2xs flex items-center gap-1">
+                            <span>${s.nomor}</span>
+                            <span class="text-[9px] font-normal text-amber-100">(${s.kelas})</span>
+                        </span>`
                     ).join('');
 
-                    const total = count * unitPrice;
+                    const total = selectedSeats.reduce((sum, s) => sum + s.harga, 0);
+
+                    if (seatUnitPriceText) {
+                        const allSame = selectedSeats.every(s => s.harga === selectedSeats[0].harga);
+                        if (allSame) {
+                            seatUnitPriceText.textContent = `Rp ${selectedSeats[0].harga.toLocaleString('id-ID')}`;
+                        } else {
+                            seatUnitPriceText.textContent = 'Bervariasi (Sesuai Kelas)';
+                        }
+                    }
+
                     totalPriceText.textContent = `Rp ${total.toLocaleString('id-ID')}`;
                     submitBtn.disabled = false;
                     submitBtn.className = 'w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer active:scale-98';
@@ -317,13 +339,20 @@
                 btn.addEventListener('click', () => {
                     const id = btn.dataset.id;
                     const nomor = btn.dataset.nomor;
+                    const kelas = btn.dataset.kelas;
+                    const harga = parseInt(btn.dataset.harga, 10) || defaultUnitPrice;
+                    const formattedHarga = btn.dataset.formattedHarga || `Rp${harga.toLocaleString('id-ID')}`;
                     const index = selectedSeats.findIndex(s => s.id === id);
 
                     if (index > -1) {
                         // Unselect
                         selectedSeats.splice(index, 1);
-                        btn.className = 'seat-btn w-12 h-12 sm:w-13 sm:h-13 rounded-xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center font-bold text-xs bg-white border-slate-200 text-slate-800 hover:border-brand-600';
-                        btn.innerHTML = `<span>${nomor}</span><span class="text-[9px] font-normal text-slate-400">Rp${Math.round(unitPrice/1000)}k</span>`;
+                        btn.className = 'seat-btn w-[4.5rem] sm:w-[5.25rem] md:w-[5.5rem] py-2 sm:py-2.5 px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer';
+                        btn.innerHTML = `
+                            <span class="seat-nomor font-bold text-xs sm:text-sm leading-tight text-slate-800">${nomor}</span>
+                            <span class="seat-kelas text-[9px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 text-slate-500">${kelas}</span>
+                            <span class="seat-harga text-[9.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 text-slate-700">${formattedHarga}</span>
+                        `;
                     } else {
                         // Check limit
                         if (selectedSeats.length >= maxPassengers) {
@@ -337,9 +366,13 @@
                         }
 
                         // Select
-                        selectedSeats.push({ id, nomor });
-                        btn.className = 'seat-btn w-12 h-12 sm:w-13 sm:h-13 rounded-xl border-2 transition-all shadow-sm flex flex-col items-center justify-center font-bold text-xs bg-amber-500 text-white border-amber-500 scale-105';
-                        btn.innerHTML = `<span>${nomor} ✓</span><span class="text-[9px] font-normal text-amber-100">Rp${Math.round(unitPrice/1000)}k</span>`;
+                        selectedSeats.push({ id, nomor, kelas, harga, formattedHarga });
+                        btn.className = 'seat-btn w-[4.5rem] sm:w-[5.25rem] md:w-[5.5rem] py-2 sm:py-2.5 px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-sm flex flex-col items-center justify-center text-center bg-amber-500 border-amber-500 text-white scale-102 cursor-pointer';
+                        btn.innerHTML = `
+                            <span class="seat-nomor font-bold text-xs sm:text-sm text-white flex items-center justify-center gap-1">${nomor} <span class="text-[10px] text-amber-100 font-bold">✓</span></span>
+                            <span class="seat-kelas text-[9px] sm:text-[10px] font-medium leading-tight text-amber-100 truncate max-w-full px-0.5">${kelas}</span>
+                            <span class="seat-harga text-[9.5px] sm:text-[10.5px] font-bold leading-tight mt-0.5 text-white">${formattedHarga}</span>
+                        `;
                     }
 
                     updateUI();
