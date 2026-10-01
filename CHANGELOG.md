@@ -32,6 +32,10 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 - [`resources/views/pages/admin/operator/{create,edit}.blade.php`](resources/views/pages/admin/operator/create.blade.php): Menghapus tombol "Kembali ke Daftar" di pojok kanan atas page header agar header berfokus penuh pada judul dan deskripsi halaman.
 
 ### Changed
+- **Fitur Penggantian Kursi Otomatis Seperti Bioskop / XXI / TIX ID (`resources/views/pages/tiket/kursi.blade.php`)**:
+  - Mengubah perilaku interaktif pemilihan kursi: saat batas maksimal kuota penumpang tercapai, mengklik kursi lain yang tersedia kini secara otomatis mengganti (*swap/replace*) kursi yang sudah dipilih sebelumnya tanpa memunculkan modal peringatan yang memblokir.
+  - Mempertahankan mekanisme pembatalan: mengklik kembali kursi yang sedang aktif/terpilih akan membatalkan pilihan kursi tersebut (*unselect*).
+  - Melakukan refaktorisasi fungsi render status kursi (`setSeatUnselected` dan `setSeatSelected`) agar transisi tampilan penggantian kursi berlangsung instan, bersih, dan konsisten dengan ukuran tipografi *compact*.
 - **Kompaksi Tipografi & Penyesuaian Tampilan Kartu Kursi Bus (`resources/views/pages/tiket/kursi.blade.php`)**:
   - Memperkecil ukuran seluruh tulisan pada kartu kursi bus agar tampak proporsional, lebih *compact*, dan tidak terlalu besar/mendominasi kartu.
   - Nomor kursi (`1A`, `1B`, `1C`, `1D`, dst.) disesuaikan dari `sm:text-sm` (14px) menjadi `sm:text-xs text-[10px]` dengan ketebalan tegas (`font-bold leading-none`).

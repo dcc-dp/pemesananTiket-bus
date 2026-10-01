@@ -333,6 +333,30 @@
                 ).join('');
             }
 
+            function setSeatUnselected(targetBtn) {
+                const n = targetBtn.dataset.nomor;
+                const k = targetBtn.dataset.kelas;
+                const p = targetBtn.dataset.formattedHarga || `Rp${(parseInt(targetBtn.dataset.harga, 10) || defaultUnitPrice).toLocaleString('id-ID')}`;
+                targetBtn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer';
+                targetBtn.innerHTML = `
+                    <span class="seat-nomor font-bold text-[10px] sm:text-xs leading-none text-slate-800">${n}</span>
+                    <span class="seat-kelas text-[7px] sm:text-[8.5px] font-medium leading-none mt-1 truncate max-w-full px-0.5 text-slate-500">${k}</span>
+                    <span class="seat-harga text-[7.5px] sm:text-[9px] font-semibold leading-none mt-1 text-slate-700">${p}</span>
+                `;
+            }
+
+            function setSeatSelected(targetBtn) {
+                const n = targetBtn.dataset.nomor;
+                const k = targetBtn.dataset.kelas;
+                const p = targetBtn.dataset.formattedHarga || `Rp${(parseInt(targetBtn.dataset.harga, 10) || defaultUnitPrice).toLocaleString('id-ID')}`;
+                targetBtn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-sm flex flex-col items-center justify-center text-center bg-amber-500 border-amber-500 text-white scale-102 cursor-pointer';
+                targetBtn.innerHTML = `
+                    <span class="seat-nomor font-bold text-[10px] sm:text-xs text-white leading-none flex items-center justify-center gap-0.5 sm:gap-1">${n} <span class="text-[8.5px] sm:text-[9.5px] text-amber-100 font-bold">✓</span></span>
+                    <span class="seat-kelas text-[7px] sm:text-[8.5px] font-medium leading-none text-amber-100 mt-1 truncate max-w-full px-0.5">${k}</span>
+                    <span class="seat-harga text-[7.5px] sm:text-[9px] font-bold leading-none mt-1 text-white">${p}</span>
+                `;
+            }
+
             document.querySelectorAll('.seat-btn').forEach(btn => {
                 if (btn.disabled) return;
 
@@ -345,34 +369,23 @@
                     const index = selectedSeats.findIndex(s => s.id === id);
 
                     if (index > -1) {
-                        // Unselect
+                        // Kursi yang sama diklik lagi -> Batalkan pilihan (Unselect)
                         selectedSeats.splice(index, 1);
-                        btn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer';
-                        btn.innerHTML = `
-                            <span class="seat-nomor font-bold text-[10px] sm:text-xs leading-none text-slate-800">${nomor}</span>
-                            <span class="seat-kelas text-[7px] sm:text-[8.5px] font-medium leading-none mt-1 truncate max-w-full px-0.5 text-slate-500">${kelas}</span>
-                            <span class="seat-harga text-[7.5px] sm:text-[9px] font-semibold leading-none mt-1 text-slate-700">${formattedHarga}</span>
-                        `;
+                        setSeatUnselected(btn);
                     } else {
-                        // Check limit
+                        // Jika kuota kursi sudah penuh (seperti sistem bioskop XXI/TIX ID):
+                        // Gantikan kursi yang dipilih sebelumnya secara otomatis
                         if (selectedSeats.length >= maxPassengers) {
-                            Swal.fire({
-                                title: "Batas Terpenuhi",
-                                text: `Anda hanya memesan untuk ${maxPassengers} penumpang.`,
-                                icon: "info",
-                                confirmButtonColor: "#006194"
-                            });
-                            return;
+                            const removedSeat = selectedSeats.shift();
+                            const prevBtn = document.querySelector(`.seat-btn[data-id="${removedSeat.id}"]`);
+                            if (prevBtn) {
+                                setSeatUnselected(prevBtn);
+                            }
                         }
 
-                        // Select
+                        // Pilih kursi baru
                         selectedSeats.push({ id, nomor, kelas, harga, formattedHarga });
-                        btn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-sm flex flex-col items-center justify-center text-center bg-amber-500 border-amber-500 text-white scale-102 cursor-pointer';
-                        btn.innerHTML = `
-                            <span class="seat-nomor font-bold text-[10px] sm:text-xs text-white leading-none flex items-center justify-center gap-0.5 sm:gap-1">${nomor} <span class="text-[8.5px] sm:text-[9.5px] text-amber-100 font-bold">✓</span></span>
-                            <span class="seat-kelas text-[7px] sm:text-[8.5px] font-medium leading-none text-amber-100 mt-1 truncate max-w-full px-0.5">${kelas}</span>
-                            <span class="seat-harga text-[7.5px] sm:text-[9px] font-bold leading-none mt-1 text-white">${formattedHarga}</span>
-                        `;
+                        setSeatSelected(btn);
                     }
 
                     updateUI();
