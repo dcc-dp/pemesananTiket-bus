@@ -4,50 +4,50 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
         
         <!-- STEPPER (Horizontal 4-Step Header) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-5 shadow-xs">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 items-center">
                 
                 <!-- Step 1: Checked -->
-                <div class="flex items-center gap-3">
-                    <a href="{{ route('tiket.search') }}" class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs hover:bg-slate-700 transition-colors">
-                        <span class="material-symbols-outlined text-base">check</span>
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <a href="{{ route('tiket.search') }}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs sm:text-sm shadow-xs hover:bg-slate-700 transition-colors shrink-0">
+                        <span class="material-symbols-outlined text-sm sm:text-base">check</span>
                     </a>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 1</p>
-                        <p class="text-sm font-bold text-slate-900">Pilih Bus</p>
+                    <div class="min-w-0">
+                        <p class="text-[9.5px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 1</p>
+                        <p class="text-xs sm:text-sm font-bold text-slate-900 truncate">Pilih Bus</p>
                     </div>
                 </div>
 
                 <!-- Step 2: Active -->
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs sm:text-sm shadow-xs ring-4 ring-brand-100 shrink-0">
                         2
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-brand-600 uppercase tracking-wider">LANGKAH 2</p>
-                        <p class="text-sm font-bold text-brand-600">Pilih Kursi</p>
+                    <div class="min-w-0">
+                        <p class="text-[9.5px] sm:text-[11px] font-bold text-brand-600 uppercase tracking-wider truncate">LANGKAH 2</p>
+                        <p class="text-xs sm:text-sm font-bold text-brand-600 truncate">Pilih Kursi</p>
                     </div>
                 </div>
 
                 <!-- Step 3: Pending -->
-                <div class="flex items-center gap-3 opacity-60">
-                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                <div class="flex items-center gap-2 sm:gap-3 opacity-60">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs sm:text-sm border border-slate-200 shrink-0">
                         3
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 3</p>
-                        <p class="text-sm font-semibold text-slate-600">Data Pemesan</p>
+                    <div class="min-w-0">
+                        <p class="text-[9.5px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 3</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-600 truncate">Data Pemesan</p>
                     </div>
                 </div>
 
                 <!-- Step 4: Pending -->
-                <div class="flex items-center gap-3 opacity-60">
-                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                <div class="flex items-center gap-2 sm:gap-3 opacity-60">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs sm:text-sm border border-slate-200 shrink-0">
                         4
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 4</p>
-                        <p class="text-sm font-semibold text-slate-600">Pembayaran</p>
+                    <div class="min-w-0">
+                        <p class="text-[9.5px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 4</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-600 truncate">Pembayaran</p>
                     </div>
                 </div>
 
@@ -55,34 +55,34 @@
         </div>
 
         <!-- TRIP INFO BANNER -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="flex items-center gap-3.5">
-                <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center border border-brand-100">
-                    <span class="material-symbols-outlined text-xl">directions_bus</span>
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-3.5 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center border border-brand-100 shrink-0">
+                    <span class="material-symbols-outlined text-lg sm:text-xl">directions_bus</span>
                 </div>
-                <div>
-                    <h3 class="text-base font-bold text-slate-900">
+                <div class="min-w-0">
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900 truncate">
                         {{ $jadwal->bus->nama_bus }} &middot; <span class="text-brand-600">{{ $jadwal->bus->operator->nama_operator }}</span>
                     </h3>
-                    <p class="text-xs text-slate-400 font-body">
+                    <p class="text-xs text-slate-400 font-body truncate">
                         {{ $jadwal->rute->terminalAsal->kota }} &rarr; {{ $jadwal->rute->terminalTujuan->kota }} &middot; {{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d M Y') }} ({{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i') }} WITA)
                     </p>
                 </div>
             </div>
-            <a href="{{ route('tiket.search') }}" class="text-xs font-bold text-brand-600 hover:underline flex items-center gap-1">
-                <span class="material-symbols-outlined text-base">arrow_back</span>
+            <a href="{{ route('tiket.search') }}" class="text-xs font-bold text-brand-600 hover:underline flex items-center gap-1 shrink-0 self-start sm:self-center">
+                <span class="material-symbols-outlined text-sm sm:text-base">arrow_back</span>
                 Ganti Jadwal
             </a>
         </div>
 
         <!-- STEP 2 SECTION: PILIH NOMOR KURSI BUS ANDA (PROTOTYPE DESIGN SYSTEM) -->
-        <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-6">
+        <section class="bg-white border border-slate-200/90 rounded-2xl p-3.5 sm:p-6 shadow-xs space-y-5 sm:space-y-6">
             
             <!-- Header & Legend Bar -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                 <div>
-                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-brand-600 text-xl">airline_seat_recline_extra</span>
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-brand-600 text-lg sm:text-xl">airline_seat_recline_extra</span>
                         Langkah 2: Pilih Nomor Kursi Bus Anda
                     </h3>
                     <p class="text-xs text-slate-500 font-body mt-0.5">
@@ -91,37 +91,37 @@
                 </div>
 
                 <!-- Legend -->
-                <div class="flex flex-wrap items-center gap-4 text-xs font-medium">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-medium">
                     <div class="flex items-center gap-1.5">
-                        <div class="w-4 h-4 rounded-md bg-white border border-slate-300"></div>
+                        <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-md bg-white border border-slate-300"></div>
                         <span class="text-slate-600">Tersedia</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <div class="w-4 h-4 rounded-md bg-amber-500 text-white flex items-center justify-center font-bold text-[10px]">✓</div>
+                        <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-md bg-amber-500 text-white flex items-center justify-center font-bold text-[10px]">✓</div>
                         <span class="text-amber-600 font-bold">Dipilih</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <div class="w-4 h-4 rounded-md bg-slate-200 border border-slate-300 text-slate-400 flex items-center justify-center text-[10px]">✕</div>
+                        <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-md bg-slate-200 border border-slate-300 text-slate-400 flex items-center justify-center text-[10px]">✕</div>
                         <span class="text-slate-400">Terisi</span>
                     </div>
                 </div>
             </div>
 
             <!-- Seat Grid & Summary Dual-Column -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
                 
                 <!-- Left Deck Graphic (2+2 Bus Layout) -->
-                <div class="md:col-span-7 bg-slate-50/80 border border-slate-200/80 rounded-2xl p-5">
+                <div class="md:col-span-7 bg-slate-50/80 border border-slate-200/80 rounded-2xl p-3 sm:p-5 overflow-x-auto">
                     
                     <!-- Front Deck Header -->
-                    <div class="flex justify-between items-center pb-3 mb-5 border-b border-slate-200/80">
-                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-widest">
-                            <span class="material-symbols-outlined text-base text-brand-600">arrow_upward</span>
+                    <div class="flex justify-between items-center pb-3 mb-4 sm:mb-5 border-b border-slate-200/80">
+                        <div class="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-widest">
+                            <span class="material-symbols-outlined text-sm sm:text-base text-brand-600">arrow_upward</span>
                             DEPAN
                         </div>
-                        <div class="flex items-center gap-1.5 bg-slate-200/70 px-3 py-1 rounded-lg text-xs font-bold text-slate-700">
+                        <div class="flex items-center gap-1.5 bg-slate-200/70 px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold text-slate-700">
                             <span class="material-symbols-outlined text-sm text-brand-600">airline_seat_recline_normal</span>
-                            Sopir 
+                            Sopir
                         </div>
                     </div>
 
@@ -138,7 +138,7 @@
                     @endphp
 
                     <!-- Rows of Seats -->
-                    <div class="space-y-3" id="seatMatrix">
+                    <div class="space-y-2.5 sm:space-y-3" id="seatMatrix">
                         @foreach ($rows as $rowNum => $kursis)
                             @php
                                 $leftSeats = $kursis->filter(fn($k) => preg_match('/[AB]$/', $k->nomor_kursi))->values();
@@ -150,9 +150,9 @@
                                 }
                             @endphp
 
-                            <div class="flex items-center justify-between gap-1 sm:gap-2 p-1 rounded-xl transition-all row-container">
+                            <div class="flex items-center justify-between sm:justify-center sm:gap-6 md:gap-8 p-0.5 sm:p-1 rounded-xl transition-all row-container min-w-max mx-auto">
                                 <!-- Left Seats (e.g. A, B) -->
-                                <div class="flex gap-2 sm:gap-2.5">
+                                <div class="flex gap-1.5 sm:gap-2.5">
                                     @foreach ($leftSeats as $kursi)
                                         @php
                                             $isUnavail = in_array($kursi->id_kursi, $unavailableIds);
@@ -162,20 +162,20 @@
                                             $formattedHarga = 'Rp' . number_format($kursiHarga, 0, ',', '.');
                                         @endphp
                                         <button type="button"
-                                                class="seat-btn w-[4.5rem] sm:w-[5.25rem] md:w-[5.5rem] py-2 sm:py-2.5 px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
+                                                class="seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2.5 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
                                                 data-id="{{ $kursi->id_kursi }}"
                                                 data-nomor="{{ $kursi->nomor_kursi }}"
                                                 data-kelas="{{ $kursiKelas }}"
                                                 data-harga="{{ $kursiHarga }}"
                                                 data-formatted-harga="{{ $formattedHarga }}"
                                                 {{ $isUnavail ? 'disabled' : '' }}>
-                                            <span class="seat-nomor font-bold text-xs sm:text-sm leading-tight {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
+                                            <span class="seat-nomor font-bold text-[11px] sm:text-sm leading-tight {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
                                                 {{ $kursi->nomor_kursi }}
                                             </span>
-                                            <span class="seat-kelas text-[9px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
+                                            <span class="seat-kelas text-[8px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
                                                 {{ $kursiKelas }}
                                             </span>
-                                            <span class="seat-harga text-[9.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
+                                            <span class="seat-harga text-[8.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
                                                 {{ $isUnavail ? 'Terisi' : $formattedHarga }}
                                             </span>
                                         </button>
@@ -183,12 +183,12 @@
                                 </div>
 
                                 <!-- Center Aisle -->
-                                <div class="text-[10px] sm:text-[11px] font-bold text-slate-300 tracking-widest uppercase px-1 sm:px-2 text-center select-none flex-shrink-0">
+                                <div class="text-[9px] sm:text-[11px] font-bold text-slate-300 tracking-wider uppercase px-1 sm:px-2 text-center select-none flex-shrink-0">
                                     LORONG
                                 </div>
 
                                 <!-- Right Seats (e.g. C, D) -->
-                                <div class="flex gap-2 sm:gap-2.5">
+                                <div class="flex gap-1.5 sm:gap-2.5">
                                     @foreach ($rightSeats as $kursi)
                                         @php
                                             $isUnavail = in_array($kursi->id_kursi, $unavailableIds);
@@ -198,20 +198,20 @@
                                             $formattedHarga = 'Rp' . number_format($kursiHarga, 0, ',', '.');
                                         @endphp
                                         <button type="button"
-                                                class="seat-btn w-[4.5rem] sm:w-[5.25rem] md:w-[5.5rem] py-2 sm:py-2.5 px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
+                                                class="seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2.5 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center {{ $isUnavail ? 'bg-slate-200/80 border-slate-300 text-slate-400 cursor-not-allowed' : 'bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer' }}"
                                                 data-id="{{ $kursi->id_kursi }}"
                                                 data-nomor="{{ $kursi->nomor_kursi }}"
                                                 data-kelas="{{ $kursiKelas }}"
                                                 data-harga="{{ $kursiHarga }}"
                                                 data-formatted-harga="{{ $formattedHarga }}"
                                                 {{ $isUnavail ? 'disabled' : '' }}>
-                                            <span class="seat-nomor font-bold text-xs sm:text-sm leading-tight {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
+                                            <span class="seat-nomor font-bold text-[11px] sm:text-sm leading-tight {{ $isUnavail ? 'text-slate-400' : 'text-slate-800' }}">
                                                 {{ $kursi->nomor_kursi }}
                                             </span>
-                                            <span class="seat-kelas text-[9px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
+                                            <span class="seat-kelas text-[8px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-500' }}">
                                                 {{ $kursiKelas }}
                                             </span>
-                                            <span class="seat-harga text-[9.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
+                                            <span class="seat-harga text-[8.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 {{ $isUnavail ? 'text-slate-400' : 'text-slate-700' }}">
                                                 {{ $isUnavail ? 'Terisi' : $formattedHarga }}
                                             </span>
                                         </button>
@@ -224,7 +224,7 @@
                 </div>
 
                 <!-- Right Seat Selection Summary Panel (Form to Passenger Details) -->
-                <div class="md:col-span-5 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
+                <div class="md:col-span-5 bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
                     
                     <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                         <h4 class="text-sm font-bold text-slate-900">Rincian Kursi Dipilih</h4>
@@ -347,11 +347,11 @@
                     if (index > -1) {
                         // Unselect
                         selectedSeats.splice(index, 1);
-                        btn.className = 'seat-btn w-[4.5rem] sm:w-[5.25rem] md:w-[5.5rem] py-2 sm:py-2.5 px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer';
+                        btn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2.5 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-2xs flex flex-col items-center justify-center text-center bg-white border-slate-200 text-slate-800 hover:border-brand-500 hover:shadow-xs cursor-pointer';
                         btn.innerHTML = `
-                            <span class="seat-nomor font-bold text-xs sm:text-sm leading-tight text-slate-800">${nomor}</span>
-                            <span class="seat-kelas text-[9px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 text-slate-500">${kelas}</span>
-                            <span class="seat-harga text-[9.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 text-slate-700">${formattedHarga}</span>
+                            <span class="seat-nomor font-bold text-[11px] sm:text-sm leading-tight text-slate-800">${nomor}</span>
+                            <span class="seat-kelas text-[8px] sm:text-[10px] font-medium leading-tight truncate max-w-full px-0.5 text-slate-500">${kelas}</span>
+                            <span class="seat-harga text-[8.5px] sm:text-[10.5px] font-semibold leading-tight mt-0.5 text-slate-700">${formattedHarga}</span>
                         `;
                     } else {
                         // Check limit
@@ -367,11 +367,11 @@
 
                         // Select
                         selectedSeats.push({ id, nomor, kelas, harga, formattedHarga });
-                        btn.className = 'seat-btn w-[4.5rem] sm:w-[5.25rem] md:w-[5.5rem] py-2 sm:py-2.5 px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-sm flex flex-col items-center justify-center text-center bg-amber-500 border-amber-500 text-white scale-102 cursor-pointer';
+                        btn.className = 'seat-btn w-[3.65rem] sm:w-[5.15rem] md:w-[5.35rem] min-w-[3.65rem] sm:min-w-[5.15rem] py-1.5 sm:py-2.5 px-0.5 sm:px-1 rounded-xl sm:rounded-2xl border-2 transition-all shadow-sm flex flex-col items-center justify-center text-center bg-amber-500 border-amber-500 text-white scale-102 cursor-pointer';
                         btn.innerHTML = `
-                            <span class="seat-nomor font-bold text-xs sm:text-sm text-white flex items-center justify-center gap-1">${nomor} <span class="text-[10px] text-amber-100 font-bold">✓</span></span>
-                            <span class="seat-kelas text-[9px] sm:text-[10px] font-medium leading-tight text-amber-100 truncate max-w-full px-0.5">${kelas}</span>
-                            <span class="seat-harga text-[9.5px] sm:text-[10.5px] font-bold leading-tight mt-0.5 text-white">${formattedHarga}</span>
+                            <span class="seat-nomor font-bold text-[11px] sm:text-sm text-white flex items-center justify-center gap-1">${nomor} <span class="text-[10px] text-amber-100 font-bold">✓</span></span>
+                            <span class="seat-kelas text-[8px] sm:text-[10px] font-medium leading-tight text-amber-100 truncate max-w-full px-0.5">${kelas}</span>
+                            <span class="seat-harga text-[8.5px] sm:text-[10.5px] font-bold leading-tight mt-0.5 text-white">${formattedHarga}</span>
                         `;
                     }
 

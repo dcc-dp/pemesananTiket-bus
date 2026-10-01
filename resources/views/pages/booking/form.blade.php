@@ -4,50 +4,50 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
         
         <!-- STEPPER (Horizontal 4-Step Header) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-5 shadow-xs">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 items-center">
                 
                 <!-- Step 1: Checked -->
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
                         <span class="material-symbols-outlined text-base">check</span>
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 1</p>
-                        <p class="text-sm font-bold text-slate-900">Pilih Bus</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 1</p>
+                        <p class="text-xs sm:text-sm font-bold text-slate-900 truncate">Pilih Bus</p>
                     </div>
                 </div>
 
                 <!-- Step 2: Checked -->
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
                         <span class="material-symbols-outlined text-base">check</span>
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 2</p>
-                        <p class="text-sm font-bold text-slate-900">Pilih Kursi</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 2</p>
+                        <p class="text-xs sm:text-sm font-bold text-slate-900 truncate">Pilih Kursi</p>
                     </div>
                 </div>
 
                 <!-- Step 3: Active -->
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100 shrink-0">
                         3
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-brand-600 uppercase tracking-wider">LANGKAH 3</p>
-                        <p class="text-sm font-bold text-brand-600">Data Pemesan</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-brand-600 uppercase tracking-wider truncate">LANGKAH 3</p>
+                        <p class="text-xs sm:text-sm font-bold text-brand-600 truncate">Data Pemesan</p>
                     </div>
                 </div>
 
                 <!-- Step 4: Pending -->
-                <div class="flex items-center gap-3 opacity-60">
-                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                <div class="flex items-center gap-2 sm:gap-3 opacity-60 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200 shrink-0">
                         4
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 4</p>
-                        <p class="text-sm font-semibold text-slate-600">Pembayaran</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 4</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-600 truncate">Pembayaran</p>
                     </div>
                 </div>
 
@@ -64,7 +64,7 @@
                 <!-- Left Column: Passenger Cards -->
                 <div class="lg:col-span-7 space-y-6">
                     
-                    <div class="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs">
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-6 shadow-xs">
                         <h3 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-1">
                             <span class="material-symbols-outlined text-brand-600 text-xl">badge</span>
                             Langkah 3: Informasi Kontak &amp; Data Penumpang
@@ -75,7 +75,7 @@
 
                         <div class="space-y-6">
                             @foreach ($kursis as $i => $kursi)
-                                <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-5 space-y-4">
+                                <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-3.5 sm:p-5 space-y-4">
                                     <div class="flex items-center justify-between pb-3 border-b border-slate-200/80">
                                         <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                                             <span class="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs">

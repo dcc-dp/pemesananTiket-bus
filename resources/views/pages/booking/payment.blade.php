@@ -4,50 +4,50 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
         
         <!-- STEPPER (Horizontal 4-Step Header) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-5 shadow-xs">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 items-center">
                 
                 <!-- Step 1: Checked -->
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
                         <span class="material-symbols-outlined text-base">check</span>
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 1</p>
-                        <p class="text-sm font-bold text-slate-900">Pilih Bus</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 1</p>
+                        <p class="text-xs sm:text-sm font-bold text-slate-900 truncate">Pilih Bus</p>
                     </div>
                 </div>
 
                 <!-- Step 2: Checked -->
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
                         <span class="material-symbols-outlined text-base">check</span>
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 2</p>
-                        <p class="text-sm font-bold text-slate-900">Pilih Kursi</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 2</p>
+                        <p class="text-xs sm:text-sm font-bold text-slate-900 truncate">Pilih Kursi</p>
                     </div>
                 </div>
 
                 <!-- Step 3: Checked -->
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
                         <span class="material-symbols-outlined text-base">check</span>
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 3</p>
-                        <p class="text-sm font-bold text-slate-900">Data Pemesan</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 3</p>
+                        <p class="text-xs sm:text-sm font-bold text-slate-900 truncate">Data Pemesan</p>
                     </div>
                 </div>
 
                 <!-- Step 4: Active -->
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100 shrink-0">
                         4
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-brand-600 uppercase tracking-wider">LANGKAH 4</p>
-                        <p class="text-sm font-bold text-brand-600">Pembayaran</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-brand-600 uppercase tracking-wider truncate">LANGKAH 4</p>
+                        <p class="text-xs sm:text-sm font-bold text-brand-600 truncate">Pembayaran</p>
                     </div>
                 </div>
 

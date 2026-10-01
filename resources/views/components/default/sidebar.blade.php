@@ -10,7 +10,7 @@
                 </div>
             </a>
         </div>
-        <div class="sidebar-brand sidebar-brand-sm" style="display: none !important;">
+        <div class="sidebar-brand sidebar-brand-sm">
             <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; justify-content: center; height: 100%;">
                 <img src="{{ asset('img/logo-bustiket.png') }}" alt="Logo BUSTIKET" style="width: 28px; height: 28px; object-fit: contain; display: block;">
             </a>

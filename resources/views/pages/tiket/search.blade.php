@@ -4,50 +4,50 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         
         <!-- STEPPER (Horizontal 4-Step Header) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs mb-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-3 sm:p-5 shadow-xs mb-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 items-center">
                 
                 <!-- Step 1: Active -->
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-xs ring-4 ring-brand-100 shrink-0">
                         1
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-brand-600 uppercase tracking-wider">LANGKAH 1</p>
-                        <p class="text-sm font-bold text-brand-600">Pilih Bus</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-brand-600 uppercase tracking-wider truncate">LANGKAH 1</p>
+                        <p class="text-xs sm:text-sm font-bold text-brand-600 truncate">Pilih Bus</p>
                     </div>
                 </div>
 
                 <!-- Step 2: Next -->
-                <div class="flex items-center gap-3 opacity-60">
-                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                <div class="flex items-center gap-2 sm:gap-3 opacity-60 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200 shrink-0">
                         2
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 2</p>
-                        <p class="text-sm font-semibold text-slate-600">Pilih Kursi</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 2</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-600 truncate">Pilih Kursi</p>
                     </div>
                 </div>
 
                 <!-- Step 3: Pending -->
-                <div class="flex items-center gap-3 opacity-60">
-                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                <div class="flex items-center gap-2 sm:gap-3 opacity-60 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200 shrink-0">
                         3
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 3</p>
-                        <p class="text-sm font-semibold text-slate-600">Data Pemesan</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 3</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-600 truncate">Data Pemesan</p>
                     </div>
                 </div>
 
                 <!-- Step 4: Pending -->
-                <div class="flex items-center gap-3 opacity-60">
-                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200">
+                <div class="flex items-center gap-2 sm:gap-3 opacity-60 min-w-0">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-sm border border-slate-200 shrink-0">
                         4
                     </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">LANGKAH 4</p>
-                        <p class="text-sm font-semibold text-slate-600">Pembayaran</p>
+                    <div class="min-w-0">
+                        <p class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider truncate">LANGKAH 4</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-600 truncate">Pembayaran</p>
                     </div>
                 </div>
 
@@ -263,11 +263,11 @@
                                     </div>
 
                                     <!-- Price & CTA -->
-                                    <div class="md:col-span-3 md:border-l md:border-slate-100 md:pl-5 flex md:flex-col justify-between items-end gap-2">
-                                        <div class="text-right">
+                                    <div class="md:col-span-3 md:border-l md:border-slate-100 md:pl-5 flex flex-col sm:flex-row md:flex-col justify-between items-stretch sm:items-end gap-3 sm:gap-2">
+                                        <div class="text-left sm:text-right md:text-right">
                                             <span class="text-[10px] text-slate-400 block uppercase tracking-wider font-semibold">Harga</span>
                                             <div class="text-lg sm:text-xl font-extrabold text-brand-600">
-                                                Rp {{ number_format($jadwal->harga, 0, ',', '.') }}
+                                                 Rp {{ number_format($jadwal->harga, 0, ',', '.') }}
                                             </div>
                                             <span class="text-[11px] font-medium {{ $jadwal->available_seats <= 5 ? 'text-rose-600' : 'text-emerald-600' }} block">
                                                 Sisa {{ $jadwal->available_seats }} kursi

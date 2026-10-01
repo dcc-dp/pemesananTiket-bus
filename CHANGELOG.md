@@ -32,6 +32,22 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 - [`resources/views/pages/admin/operator/{create,edit}.blade.php`](resources/views/pages/admin/operator/create.blade.php): Menghapus tombol "Kembali ke Daftar" di pojok kanan atas page header agar header berfokus penuh pada judul dan deskripsi halaman.
 
 ### Changed
+- **Optimalisasi Responsivitas Penuh Sistem di Seluruh Ukuran Device (Desktop, Laptop, Tablet, Mobile 320px - 1280px+)**:
+  - **Penyempurnaan CSS Global Admin (`public/css/admin-modern.css`)**:
+    - Menambahkan aturan media query responsif terpadu (`@media (max-width: 1024px)`, `@media (max-width: 768px)`, `@media (max-width: 576px)`).
+    - Memperbaiki drawer sidebar admin pada tablet & mobile: tersembunyi default di `-250px`, bertransisi mulus ke `0` saat `body.sidebar-show`, serta penambahan backdrop gelap semi-transparan.
+    - Mengisolasi scroll horizontal tabel hanya di dalam kontainer `.table-responsive` (`min-width: 600px` untuk tabel) sehingga seluruh halaman tidak mengalami horizontal overflow di mobile.
+    - Menyesuaikan target sentuh (touch target), form controls, modal popup, filter bar, dan header stack pada resolusi kecil.
+  - **Navbar & Sidebar Admin (`resources/views/components/default/{header,sidebar}.blade.php`)**:
+    - Memperbaiki ikon bus mini 28x28px pada logo sidebar mode collapsed (`sidebar-mini`) dengan menghapus inline override `display: none !important;`.
+    - Menyembunyikan teks label "Lihat Situs" pada resolusi mobile (`d-none d-md-inline`) untuk mencegah navbar admin terpotong atau wrap.
+  - **Layout Pemilihan Kursi 2+2 Responsif (`resources/views/pages/tiket/kursi.blade.php`)**:
+    - Menerapkan lebar kursi adaptif (`w-[3.65rem] xs:w-[4.25rem] sm:w-[5.15rem] md:w-[5.35rem]`), font dinamis 3 baris (Nomor Kursi, Kelas/Tipe, Harga/Terisi), dan spasi lorong tengah yang proporsional sehingga muat sempurna pada viewport ponsel paling sempit (320px - 375px) tanpa merusak pola `1A 1B LORONG 1C 1D`.
+    - Membungkus kabin bus dengan kontainer internal `overflow-x-auto` yang aman dan terpusat (`mx-auto min-w-max`).
+  - **Standarisasi Stepper & Kartu Funnel Pemesanan (`resources/views/pages/tiket/search.blade.php`, `resources/views/pages/booking/{form,payment}.blade.php`)**:
+    - Menyeragamkan 4-Langkah Stepper (`Pilih Bus`, `Pilih Kursi`, `Data Pemesan`, `Pembayaran`) dengan grid responsif `grid-cols-2 md:grid-cols-4`, padding `p-3 sm:p-5`, gap `gap-2 sm:gap-4`, serta teks ringkas ber-`truncate` agar tidak bertumpuk di mobile.
+    - Menyesuaikan section Harga & tombol CTA "Pilih Kursi" pada kartu jadwal bus agar tersusun fleksibel (`flex-col sm:flex-row md:flex-col`) tanpa saling menghimpit.
+    - Menyesuaikan padding kartu penumpang dan ringkasan order (`p-4 sm:p-6`) untuk kenyamanan penggunaan jari pada layar sentuh.
 - **Penyelarasan Tampilan Pemilihan Kursi User (`resources/views/pages/tiket/kursi.blade.php`)**:
   - **Integrasi Harga & Tipe/Kelas dari Database/Admin**: Menghapus teks harga statis/hardcoded seperti `Rp200k`. Setiap kursi kini mengambil nilai kelas (`$kursi->kelas`) dan harga (`$kursi->harga` dengan fallback `$jadwal->harga`) yang telah dikonfigurasi pada menu Master Data Kursi di Admin.
   - **Format Harga Konsisten**: Menerapkan format mata uang standar Indonesia (`Rp200.000`, `Rp250.000`, dll.) secara seragam pada kartu kursi dan panel ringkasan pesanan.

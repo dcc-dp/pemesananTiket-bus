@@ -16,8 +16,8 @@
     <!-- Right Section: Actions & Profile (Single Row, No Wrap!) -->
     <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
         <!-- Lihat Situs Button -->
-        <a href="{{ route('home') }}" target="_blank" class="btn-site-link" style="height: 28px; padding: 0 10px; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #334155; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; text-decoration: none;">
-            <span>Lihat Situs</span>
+        <a href="{{ route('home') }}" target="_blank" class="btn-site-link" title="Lihat Situs Publik" style="height: 28px; padding: 0 8px; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #334155; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; text-decoration: none;">
+            <span class="d-none d-md-inline">Lihat Situs</span>
             <i class="fas fa-external-link-alt" style="font-size: 9.5px;"></i>
         </a>
 
