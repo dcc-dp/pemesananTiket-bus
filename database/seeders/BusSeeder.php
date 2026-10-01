@@ -65,9 +65,11 @@ class BusSeeder extends Seeder
         }
 
         foreach ($seats as $nomor) {
+            $col = strtoupper(substr($nomor, -1));
+            $posisi = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
             Kursi::updateOrCreate(
                 ['id_bus' => $bus->id_bus, 'nomor_kursi' => $nomor],
-                ['posisi' => 'jendela', 'status' => 'tersedia']
+                ['posisi' => $posisi, 'status' => 'tersedia']
             );
         }
 
@@ -88,6 +90,9 @@ class BusSeeder extends Seeder
                 $harga = 200000;
             }
 
+            $col = strtoupper(substr($nomor, -1));
+            $posisi = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
+
             Kursi::updateOrCreate(
                 [
                     'id_bus' => $bus->id_bus,
@@ -96,7 +101,7 @@ class BusSeeder extends Seeder
                 [
                     'kelas' => $kelas,
                     'harga' => $harga,
-                    'posisi' => 'jendela',
+                    'posisi' => $posisi,
                     'status' => 'tersedia'
                 ]
             );

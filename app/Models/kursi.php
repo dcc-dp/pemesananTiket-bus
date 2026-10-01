@@ -36,4 +36,26 @@ class Kursi extends Model
     {
         return ucfirst($this->status);
     }
+
+    public function getPosisiAttribute($value)
+    {
+        $col = strtoupper(substr((string) $this->nomor_kursi, -1));
+        if (in_array($col, ['A', 'D'])) {
+            return 'Jendela';
+        }
+        if (in_array($col, ['B', 'C'])) {
+            return 'Lorong';
+        }
+
+        return !empty($value) ? ucfirst(strtolower($value)) : 'Jendela';
+    }
+
+    public function setPosisiAttribute($value)
+    {
+        if (empty($value)) {
+            $col = strtoupper(substr((string) $this->nomor_kursi, -1));
+            $value = in_array($col, ['A', 'D']) ? 'jendela' : (in_array($col, ['B', 'C']) ? 'lorong' : 'jendela');
+        }
+        $this->attributes['posisi'] = strtolower((string) $value);
+    }
 }

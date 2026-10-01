@@ -17,8 +17,9 @@ class KursiController extends Controller
 
         $bus = $busId ? Bus::findOrFail($busId) : null;
         $buses = Bus::orderBy('nama_bus')->get();
-    
-        $datas = $bus ? Kursi::where('id_bus', $bus->id_bus)->orderBy('nomor_kursi')->get() : collect();
+
+        // $datas = $bus ? Kursi::where('id_bus', $bus->id_bus)->orderBy('nomor_kursi')->get() : collect();
+        $datas = $bus ? Kursi::where('id_bus', $bus->id_bus)->orderByRaw('LENGTH(nomor_kursi), nomor_kursi')->get() : collect();
 
         return view('pages.admin.kursi.index', compact('menu', 'buses', 'bus', 'datas'));
     }
@@ -50,7 +51,13 @@ class KursiController extends Controller
             return back()->with('message', 'kursi sudah ada');
         }
 
-        Kursi::create($request->only(['id_bus', 'nomor_kursi', 'kelas', 'harga', 'posisi', 'status']));
+        $data = $request->only(['id_bus', 'nomor_kursi', 'kelas', 'harga', 'posisi', 'status']);
+        if (empty($data['posisi'])) {
+            $col = strtoupper(substr($request->nomor_kursi, -1));
+            $data['posisi'] = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
+        }
+
+        Kursi::create($data);
 
         return redirect()->route('admin.kursi.index', ['bus' => $request->id_bus])->with('message', 'store');
     }
@@ -82,7 +89,13 @@ class KursiController extends Controller
             return back()->with('message', 'kursi sudah ada');
         }
 
-        $kursi->update($request->only(['nomor_kursi', 'kelas', 'harga', 'posisi', 'status']));
+        $data = $request->only(['nomor_kursi', 'kelas', 'harga', 'posisi', 'status']);
+        if (empty($data['posisi'])) {
+            $col = strtoupper(substr($request->nomor_kursi, -1));
+            $data['posisi'] = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
+        }
+
+        $kursi->update($data);
 
         return redirect()->route('admin.kursi.index', ['bus' => $kursi->id_bus])->with('message', 'update');
     }

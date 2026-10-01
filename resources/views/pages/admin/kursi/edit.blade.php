@@ -116,8 +116,10 @@
                                             <label class="adm-form-label">
                                                 Posisi Tempat Duduk
                                             </label>
-                                            <input type="text" name="posisi" class="adm-input"
-                                                value="{{ old('posisi', $data->posisi) }}" maxlength="20">
+                                            <select name="posisi" class="adm-select">
+                                                <option value="jendela" {{ strtolower(old('posisi', $data->posisi)) == 'jendela' ? 'selected' : '' }}>Jendela</option>
+                                                <option value="lorong" {{ strtolower(old('posisi', $data->posisi)) == 'lorong' ? 'selected' : '' }}>Lorong</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12" style="padding-left: 9px; padding-right: 9px;">

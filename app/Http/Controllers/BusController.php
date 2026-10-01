@@ -90,9 +90,11 @@ class BusController extends Controller
 
         foreach (range(1, $rows) as $row) {
             foreach (['A', 'B', 'C', 'D'] as $col) {
+                $posisi = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
                 $bus->kursis()->firstOrCreate(
                     ['nomor_kursi' => $row . $col],
-                    ['posisi' => 'jendela', 'status' => 'tersedia']
+                    // ['posisi' => 'jendela', 'status' => 'tersedia']
+                    ['posisi' => $posisi, 'status' => 'tersedia']
                 );
             }
         }

@@ -121,8 +121,11 @@
                                             <label class="adm-form-label">
                                                 Posisi Tempat Duduk
                                             </label>
-                                            <input type="text" name="posisi" class="adm-input" value="{{ old('posisi') }}" maxlength="20"
-                                                placeholder="Contoh: Jendela, Lorong, Depan">
+                                            <select name="posisi" class="adm-select">
+                                                <option value="">Otomatis (A/D: Jendela, B/C: Lorong)</option>
+                                                <option value="jendela" {{ old('posisi') == 'jendela' ? 'selected' : '' }}>Jendela</option>
+                                                <option value="lorong" {{ old('posisi') == 'lorong' ? 'selected' : '' }}>Lorong</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12" style="padding-left: 9px; padding-right: 9px;">

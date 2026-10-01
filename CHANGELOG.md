@@ -32,6 +32,14 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 - [`resources/views/pages/admin/operator/{create,edit}.blade.php`](resources/views/pages/admin/operator/create.blade.php): Menghapus tombol "Kembali ke Daftar" di pojok kanan atas page header agar header berfokus penuh pada judul dan deskripsi halaman.
 
 ### Changed
+- **Penyelarasan Posisi Kursi Admin Sesuai Layout Bus User (A/D = Jendela, B/C = Lorong)**:
+  - **Sinkronisasi Posisi Kursi (`app/Models/kursi.php`, `app/Http/Controllers/KursiController.php`, `app/Http/Controllers/BusController.php`, `database/seeders/BusSeeder.php`)**:
+    - Mengimplementasikan pemetaan posisi kursi bus format 2+2 secara konsisten: Kursi kolom A dan D berposisi `Jendela`, sedangkan kolom B dan C berposisi `Lorong`.
+    - Menambahkan accessor `getPosisiAttribute` dan mutator `setPosisiAttribute` pada model `Kursi` agar representasi data posisi selalu selaras dengan layout denah bus User.
+    - Memperbarui fungsi `generateSeats()` pada `BusController` dan `BusSeeder` agar posisi otomatis terisi `jendela` atau `lorong` secara presisi saat armada bus baru dibuat.
+    - Menyelaraskan form tambah dan edit kursi ([`resources/views/pages/admin/kursi/{create,edit}.blade.php`](resources/views/pages/admin/kursi/create.blade.php)) dengan dropdown opsi `Jendela` dan `Lorong` yang rapi.
+    - Memperbaiki pengurutan data kursi pada tabel admin ([`resources/views/pages/admin/kursi/index.blade.php`](resources/views/pages/admin/kursi/index.blade.php)) menggunakan `orderByRaw('LENGTH(nomor_kursi), nomor_kursi')` agar deretan kursi tersusun natural (1A–1D, 2A–2D, dst.).
+    - Seluruh nomor kursi, kelas kursi, tarif/harga, status ketersediaan, layout user, dan database schema dipertahankan 100% utuh tanpa gangguan logic.
 - **Optimalisasi Responsivitas Penuh Sistem di Seluruh Ukuran Device (Desktop, Laptop, Tablet, Mobile 320px - 1280px+)**:
   - **Penyempurnaan CSS Global Admin (`public/css/admin-modern.css`)**:
     - Menambahkan aturan media query responsif terpadu (`@media (max-width: 1024px)`, `@media (max-width: 768px)`, `@media (max-width: 576px)`).
