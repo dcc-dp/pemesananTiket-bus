@@ -308,6 +308,7 @@
                         `<span class="px-2 py-0.5 bg-amber-500 text-white font-bold text-[11px] rounded-lg shadow-2xs flex items-center gap-1">
                             <span>${s.nomor}</span>
                             <span class="text-[9px] font-normal text-amber-100">(${s.kelas})</span>
+                            <span class="text-[9px] font-bold text-white bg-amber-600/60 px-1 py-0.5 rounded leading-none">${s.formattedHarga}</span>
                         </span>`
                     ).join('');
 
@@ -316,9 +317,9 @@
                     if (seatUnitPriceText) {
                         const allSame = selectedSeats.every(s => s.harga === selectedSeats[0].harga);
                         if (allSame) {
-                            seatUnitPriceText.textContent = `Rp ${selectedSeats[0].harga.toLocaleString('id-ID')}`;
+                            seatUnitPriceText.textContent = selectedSeats[0].formattedHarga;
                         } else {
-                            seatUnitPriceText.textContent = 'Bervariasi (Sesuai Kelas)';
+                            seatUnitPriceText.textContent = selectedSeats.map(s => `${s.nomor}: ${s.formattedHarga}`).join(' • ');
                         }
                     }
 

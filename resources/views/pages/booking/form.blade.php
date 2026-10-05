@@ -83,9 +83,18 @@
                                             </span>
                                             Penumpang {{ $i + 1 }}
                                         </h4>
-                                        <span class="px-2.5 py-1 bg-amber-500 text-white text-xs font-bold rounded-lg shadow-2xs">
-                                            Nomor Kursi: {{ $kursi->nomor_kursi }}
-                                        </span>
+                                        <div class="flex items-center gap-1.5">
+                                            @php
+                                                $kPrice = ($kursi->harga !== null && (int) $kursi->harga > 0) ? (int) $kursi->harga : (int) $jadwal->harga;
+                                                $kKelas = ucfirst($kursi->kelas ?? $jadwal->bus->kelas ?? 'Ekonomi');
+                                            @endphp
+                                            <span class="px-2.5 py-1 bg-amber-500 text-white text-xs font-bold rounded-lg shadow-2xs">
+                                                Kursi {{ $kursi->nomor_kursi }} ({{ $kKelas }})
+                                            </span>
+                                            <span class="text-xs font-bold text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded-lg shadow-2xs">
+                                                Rp {{ number_format($kPrice, 0, ',', '.') }}
+                                            </span>
+                                        </div>
                                     </div>
 
                                     <input type="hidden" name="penumpang[{{ $i }}][id_kursi]" value="{{ $kursi->id_kursi }}">
@@ -218,14 +227,45 @@
                             </div>
                         </div>
 
+                        @php
+                            $totalTiket = $kursis->sum(function ($k) use ($jadwal) {
+                                return ($k->harga !== null && (int) $k->harga > 0) ? (int) $k->harga : (int) $jadwal->harga;
+                            });
+                            $firstPrice = ($kursis[0]->harga !== null && (int) $kursis[0]->harga > 0) ? (int) $kursis[0]->harga : (int) $jadwal->harga;
+                            $allSamePrice = $kursis->every(function ($k) use ($jadwal, $firstPrice) {
+                                $currPrice = ($k->harga !== null && (int) $k->harga > 0) ? (int) $k->harga : (int) $jadwal->harga;
+                                return $currPrice === $firstPrice;
+                            });
+                        @endphp
+
                         <!-- Price Breakdown -->
                         <div class="space-y-2 pt-3 border-t border-slate-100 text-xs font-body">
                             <div class="flex justify-between text-slate-600">
-                                <span>Tiket Bus ({{ $kursis->count() }}x Rp {{ number_format($jadwal->harga, 0, ',', '.') }})</span>
+                                @if ($allSamePrice)
+                                    <span>Tiket Bus ({{ $kursis->count() }}x Rp {{ number_format($firstPrice, 0, ',', '.') }})</span>
+                                @else
+                                    <span>Tiket Bus ({{ $kursis->count() }} Kursi)</span>
+                                @endif
                                 <span class="font-semibold text-slate-900">
-                                    Rp {{ number_format($kursis->count() * $jadwal->harga, 0, ',', '.') }}
+                                    Rp {{ number_format($totalTiket, 0, ',', '.') }}
                                 </span>
                             </div>
+
+                            @if (! $allSamePrice)
+                                <div class="bg-slate-50 p-2.5 rounded-lg space-y-1 text-[11px] text-slate-600 border border-slate-100">
+                                    @foreach ($kursis as $k)
+                                        @php
+                                            $seatP = ($k->harga !== null && (int) $k->harga > 0) ? (int) $k->harga : (int) $jadwal->harga;
+                                            $seatK = ucfirst($k->kelas ?? $jadwal->bus->kelas ?? 'Ekonomi');
+                                        @endphp
+                                        <div class="flex justify-between">
+                                            <span>Kursi {{ $k->nomor_kursi }} ({{ $seatK }})</span>
+                                            <span class="font-semibold text-slate-800">Rp {{ number_format($seatP, 0, ',', '.') }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+
                             <div class="flex justify-between text-slate-600">
                                 <span>Asuransi Penumpang</span>
                                 <span class="font-semibold text-emerald-600">Termasuk</span>
@@ -237,7 +277,7 @@
                                     <span class="text-[10px] text-slate-400">Harga resmi terverifikasi</span>
                                 </div>
                                 <span class="text-xl font-extrabold text-brand-600">
-                                    Rp {{ number_format($kursis->count() * $jadwal->harga, 0, ',', '.') }}
+                                    Rp {{ number_format($totalTiket, 0, ',', '.') }}
                                 </span>
                             </div>
                         </div>

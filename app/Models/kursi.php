@@ -58,4 +58,49 @@ class Kursi extends Model
         }
         $this->attributes['posisi'] = strtolower((string) $value);
     }
+
+    /**
+     * Hitung tarif efektif kursi berdasarkan aturan prioritas:
+     * 1. Tarif khusus per kursi (jika diisi dan > 0)
+     * 2. Tarif default dari jadwal keberangkatan
+     */
+    public function getTarif(?Jadwal $jadwal = null): int
+    {
+        if ($this->harga !== null && (int) $this->harga > 0) {
+            return (int) $this->harga;
+        }
+
+        if ($jadwal && (int) $jadwal->harga > 0) {
+            return (int) $jadwal->harga;
+        }
+
+        $latestJadwal = Jadwal::where('id_bus', $this->id_bus)
+            ->orderByDesc('tanggal')
+            ->orderByDesc('jam_berangkat')
+            ->first();
+
+        if ($latestJadwal && (int) $latestJadwal->harga > 0) {
+            return (int) $latestJadwal->harga;
+        }
+
+        $anyJadwal = Jadwal::orderByDesc('tanggal')->orderByDesc('jam_berangkat')->first();
+
+        return $anyJadwal ? (int) $anyJadwal->harga : 0;
+    }
+
+    /**
+     * Dapatkan label kelas kursi (fallback ke kelas bus jika belum diatur)
+     */
+    public function getKelasEffectiveAttribute(): string
+    {
+        return !empty($this->kelas) ? $this->kelas : ($this->bus?->kelas ?? 'ekonomi');
+    }
+
+    /**
+     * Cek apakah kursi memiliki tarif khusus
+     */
+    public function getHasTarifKhususAttribute(): bool
+    {
+        return $this->harga !== null && (int) $this->harga > 0;
+    }
 }

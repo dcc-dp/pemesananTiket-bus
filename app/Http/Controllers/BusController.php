@@ -93,8 +93,12 @@ class BusController extends Controller
                 $posisi = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
                 $bus->kursis()->firstOrCreate(
                     ['nomor_kursi' => $row . $col],
-                    // ['posisi' => 'jendela', 'status' => 'tersedia']
-                    ['posisi' => $posisi, 'status' => 'tersedia']
+                    [
+                        'posisi' => $posisi,
+                        'kelas' => $bus->kelas ?? 'ekonomi',
+                        'harga' => 0,
+                        'status' => 'tersedia',
+                    ]
                 );
             }
         }

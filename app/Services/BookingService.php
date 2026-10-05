@@ -84,7 +84,7 @@ class BookingService
 
             $totalHarga = 0;
             foreach ($kursis as $kursi) {
-                $totalHarga += $locked->harga;
+                $totalHarga += $kursi->getTarif($locked);
             }
 
             $kode = $this->generateKodeBooking();
@@ -107,7 +107,7 @@ class BookingService
                     'booking_id' => $booking->id,
                     'id_jadwal' => $locked->id_jadwal,
                     'id_kursi' => $kursi->id_kursi,
-                    'harga' => $locked->harga,
+                    'harga' => $kursi->getTarif($locked),
                     'nama_penumpang' => $dataPenumpang['nama_penumpang'] ?? null,
                     'nik' => $dataPenumpang['nik'] ?? null,
                     'no_hp' => $dataPenumpang['no_hp'] ?? null,

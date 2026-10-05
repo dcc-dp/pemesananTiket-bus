@@ -103,10 +103,10 @@
                                     <div class="col-md-6 col-12" style="padding-left: 9px; padding-right: 9px;">
                                         <div class="adm-form-group">
                                             <label class="adm-form-label">
-                                                Tarif / Harga Kursi (Rp) <span class="req-star">*</span>
+                                                Tarif / Harga Khusus Kursi (Rp)
                                             </label>
                                             <input type="number" name="harga" class="adm-input @error('harga') is-invalid @enderror"
-                                                value="{{ old('harga') }}" required min="0" placeholder="Contoh: 150000">
+                                                value="{{ old('harga', 0) }}" min="0" placeholder="0">
                                             @error('harga')
                                                 <div class="invalid-feedback" style="font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</div>
                                             @enderror

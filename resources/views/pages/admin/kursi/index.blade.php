@@ -97,8 +97,13 @@
                                             </span>
                                         </td>
                                         <td style="padding: 6px 12px; vertical-align: middle; border-bottom: 1px solid #f1f5f9;">
-                                            <span style="font-size: 11.5px; font-weight: 600; color: #334155; font-family: monospace;">
-                                                Rp {{ number_format($data->harga ?? 0, 0, ',', '.') }}
+                                            @php
+                                                $tarifDisplay = ($data->harga && (int) $data->harga > 0)
+                                                    ? (int) $data->harga
+                                                    : ($latestJadwal ? (int) $latestJadwal->harga : (int) ($defaultHargaJadwal ?? $data->getTarif()));
+                                            @endphp
+                                            <span style="font-size: 11.5px; font-weight: 700; color: #0f172a; font-family: monospace;">
+                                                Rp {{ number_format($tarifDisplay, 0, ',', '.') }}
                                             </span>
                                         </td>
                                         <td style="padding: 6px 12px; vertical-align: middle; border-bottom: 1px solid #f1f5f9; font-size: 11px; color: #475569;">

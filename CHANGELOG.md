@@ -22,6 +22,27 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 ## [Unreleased]
 *Catatan perubahan yang sedang dikembangkan pada sesi aktif:*
 
+### Fixed
+- **Tampilan Nominal Tarif Kursi Admin > Data Kursi (`resources/views/pages/admin/kursi/index.blade.php`, `app/Http/Controllers/KursiController.php`)**:
+  - Menghapus teks badge `"Ikuti Jadwal"` pada kolom **Tarif Kursi** di tabel Admin > Data Kursi.
+  - Memastikan kolom Tarif Kursi **selalu menampilkan nominal harga aktual** yang berlaku untuk setiap kursi (misal: `Rp 100.000`, `Rp 300.000`).
+  - Mengimplementasikan logika prioritas harga konsisten: jika kursi memiliki tarif khusus (`harga > 0`), tampilkan tarif khusus tersebut; jika tidak ada tarif khusus (`harga = 0` / default), tampilkan nominal harga default dari jadwal keberangkatan armada bus.
+  - Memperbaiki label form input `create.blade.php` menjadi `Tarif / Harga Khusus Kursi (Rp)`.
+- **Sinkronisasi Tarif Kursi Jadwal & Master Data Kursi Admin (`app/Models/kursi.php`, `app/Services/BookingService.php`, `app/Http/Controllers/BusController.php`, `app/Http/Controllers/KursiController.php`, `resources/views/pages/tiket/kursi.blade.php`, `resources/views/pages/booking/form.blade.php`)**:
+  - Memperbaiki aturan hierarki prioritas tarif harga kursi:
+    1. **Tarif Khusus Kursi** (dari Admin > Data Kursi) jika diatur dan bernilai > 0.
+    2. **Tarif Default Jadwal** (dari Admin > Jadwal) jika kursi tidak memiliki tarif khusus.
+    3. Menghapus ketergantungan pada angka statis/hardcode agar seluruh data harga di User murni bersumber dari database Admin.
+  - Memperbaiki perhitungan total tagihan di `BookingService::createBooking` dan `BookingSeat::create` yang sebelumnya hanya mengambil harga jadwal flat (`$locked->harga`), kini menghitung harga aktual masing-masing kursi (`$kursi->getTarif($locked)`).
+  - Memperbaiki tampilan rincian harga pada Langkah 3 formulir data pemesan (`pages.booking.form`) agar menampilkan rincian harga aktual per kursi serta total harga yang sinkron dengan kursi yang dipilih.
+  - Memperbaiki generator kursi bus (`BusController::generateSeats`) agar kursi yang baru dibuat mewarisi kelas armada bus (`$bus->kelas`) dan default harga `0` (mengikuti jadwal), sehingga kelas dan tarif langsung selaras.
+  - Menghubungkan jadwal keberangkatan aktif (Jadwal ID 25) ke armada `Damri jaya 2` dengan harga default Rp 100.000, sehingga kursi 1A langsung mencerminkan kelas Sleeper dengan tarif khusus Rp 300.000 dan kursi lainnya mengikuti tarif default jadwal Rp 100.000.
+
+### Changed
+- **Panel Rincian Kursi Dipilih (`resources/views/pages/tiket/kursi.blade.php`)**:
+  - Memperbarui panel "Rincian Kursi Dipilih" untuk menampilkan label kelas dan nominal harga aktual pada masing-masing lencana kursi yang dipilih.
+  - Menyempurnakan teks "Harga per kursi" agar menampilkan harga spesifik jika 1 kursi dipilih atau seluruh kursi memiliki tarif yang sama, dan menampilkan rincian tarif per nomor kursi jika tarif berbeda (misal: `1A: Rp 300.000 • 1B: Rp 100.000`).
+
 ### Added
 - Prototipe interaktif Langkah 4 [`public/prototype/pembayaran.html`](public/prototype/pembayaran.html) yang mereplikasi tampilan Pembayaran Midtrans (QRIS, VA, Kartu Kredit, Gerai Retail), countdown timer otomatis, status verifikasi instan, serta pratinjau Boarding Pass / E-Tiket digital resmi dengan QR code verifikasi.
 - Penambahan protokol wajib pencatatan changelog di `CHANGELOG.md` dan aturan workspace `AGENTS.md`.

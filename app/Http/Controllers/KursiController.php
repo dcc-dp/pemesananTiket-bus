@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bus;
+use App\Models\Jadwal;
 use App\Models\Kursi;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,13 @@ class KursiController extends Controller
         // $datas = $bus ? Kursi::where('id_bus', $bus->id_bus)->orderBy('nomor_kursi')->get() : collect();
         $datas = $bus ? Kursi::where('id_bus', $bus->id_bus)->orderByRaw('LENGTH(nomor_kursi), nomor_kursi')->get() : collect();
 
-        return view('pages.admin.kursi.index', compact('menu', 'buses', 'bus', 'datas'));
+        $latestJadwal = $bus ? Jadwal::where('id_bus', $bus->id_bus)->orderByDesc('tanggal')->orderByDesc('jam_berangkat')->first() : null;
+        if (! $latestJadwal) {
+            $latestJadwal = Jadwal::orderByDesc('tanggal')->orderByDesc('jam_berangkat')->first();
+        }
+        $defaultHargaJadwal = $latestJadwal ? (int) $latestJadwal->harga : 0;
+
+        return view('pages.admin.kursi.index', compact('menu', 'buses', 'bus', 'datas', 'latestJadwal', 'defaultHargaJadwal'));
     }
 
     public function create()
@@ -38,7 +45,7 @@ class KursiController extends Controller
             'id_bus' => 'required|exists:buses,id_bus',
             'nomor_kursi' => 'required|string|max:10',
             'kelas' => 'required|in:ekonomi,bisnis,executive,sleeper',
-            'harga' => 'required|integer|min:0',
+            'harga' => 'nullable|integer|min:0',
             'posisi' => 'nullable|string|max:20',
             'status' => 'required|in:tersedia,rusak',
         ]);
@@ -52,6 +59,7 @@ class KursiController extends Controller
         }
 
         $data = $request->only(['id_bus', 'nomor_kursi', 'kelas', 'harga', 'posisi', 'status']);
+        $data['harga'] = (int) ($request->harga ?? 0);
         if (empty($data['posisi'])) {
             $col = strtoupper(substr($request->nomor_kursi, -1));
             $data['posisi'] = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
@@ -76,7 +84,7 @@ class KursiController extends Controller
             'nomor_kursi' => 'required|string|max:10',
             'posisi' => 'nullable|string|max:20',
             'kelas' => 'required|in:ekonomi,bisnis,executive,sleeper',
-            'harga' => 'required|integer|min:0',
+            'harga' => 'nullable|integer|min:0',
             'status' => 'required|in:tersedia,rusak',
         ]);
 
@@ -90,6 +98,7 @@ class KursiController extends Controller
         }
 
         $data = $request->only(['nomor_kursi', 'kelas', 'harga', 'posisi', 'status']);
+        $data['harga'] = (int) ($request->harga ?? 0);
         if (empty($data['posisi'])) {
             $col = strtoupper(substr($request->nomor_kursi, -1));
             $data['posisi'] = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
