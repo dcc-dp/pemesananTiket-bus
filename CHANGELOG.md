@@ -39,6 +39,9 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
   - Menghubungkan jadwal keberangkatan aktif (Jadwal ID 25) ke armada `Damri jaya 2` dengan harga default Rp 100.000, sehingga kursi 1A langsung mencerminkan kelas Sleeper dengan tarif khusus Rp 300.000 dan kursi lainnya mengikuti tarif default jadwal Rp 100.000.
 
 ### Changed
+- **Desain Tombol Aksi Pembayaran Detail Pemesanan (`resources/views/pages/booking/detail.blade.php`)**:
+  - Memperbarui layout tombol **"Bayar Sekarang"** pada kartu *Ringkasan Tagihan* agar responsif penuh (`w-full`) di desktop maupun mobile.
+  - Menyelaraskan estetika tombol dengan sistem desain UI aplikasi: menggunakan sudut melengkung `rounded-xl`, ikon kartu `credit_card`, tipografi `font-semibold text-xs sm:text-sm`, efek klik mikro (`active:scale-98`), bayangan halus (`shadow-xs`), serta padding yang proporsional (`py-3 px-4`).
 - **Panel Rincian Kursi Dipilih (`resources/views/pages/tiket/kursi.blade.php`)**:
   - Memperbarui panel "Rincian Kursi Dipilih" untuk menampilkan label kelas dan nominal harga aktual pada masing-masing lencana kursi yang dipilih.
   - Menyempurnakan teks "Harga per kursi" agar menampilkan harga spesifik jika 1 kursi dipilih atau seluruh kursi memiliki tarif yang sama, dan menampilkan rincian tarif per nomor kursi jika tarif berbeda (misal: `1A: Rp 300.000 • 1B: Rp 100.000`).

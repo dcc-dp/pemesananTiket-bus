@@ -100,8 +100,14 @@
                                         </span>
                                         <span>{{ $seat->nama_penumpang }}</span>
                                     </div>
+                                    <p class="text-slate-400 font-body mt-2">
+                                        NIK: {{ $seat->nik }} &middot;
+                                    </p>
                                     <p class="text-slate-400 font-body mt-0.5">
-                                        NIK: {{ $seat->nik }} &middot; {{ $seat->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }} &middot; Lahir: {{ $seat->tanggal_lahir->format('d M Y') }}
+                                       Jenis Kelamin:{{ $seat->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }} &middot;
+                                    </p>
+                                    <p class="text-slate-400 font-body mt-0.5">
+                                       Lahir: {{ $seat->tanggal_lahir->format('d M Y') }}
                                     </p>
                                 </div>
                                 <span class="font-bold text-slate-800">
@@ -144,18 +150,22 @@
 
                     <div class="pt-2">
                         @if ($booking->status_pembayaran == 'paid')
-                            <a href="{{ route('customer.booking.ticket', $booking->id) }}" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-all">
+                            <a href="{{ route('customer.booking.ticket', $booking->id) }}" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98">
                                 <span class="material-symbols-outlined text-base">confirmation_number</span>
                                 <span>Lihat E-Tiket &amp; Boarding Pass</span>
                             </a>
-                        @elseif ($booking->status_pembayaran == 'pending')
-                            <a href="{{ route('customer.booking.pay', $booking->id) }}" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98">
+                        @else
+                            <a href="{{ route('customer.booking.pay', $booking->id) }}" class="w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98">
                                 <span class="material-symbols-outlined text-base">credit_card</span>
                                 <span>Bayar Sekarang</span>
                             </a>
                         @endif
                     </div>
+
                 </div>
+
+
+                
 
             </div>
 
