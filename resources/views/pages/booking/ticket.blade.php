@@ -116,12 +116,15 @@
                             </ol>
                         </div>
 
+
+                        
+
                         <div class="sm:text-right">
                             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nomor Kursi</span>
                             <div class="flex sm:justify-end gap-1.5 flex-wrap">
-                                @foreach ($ticket['penumpang'] as $p)
+                                @foreach (($ticket['booking_seats'] ?? $ticket['penumpang'] ?? []) as $p)
                                     <span class="px-3 py-1 bg-amber-500 text-white font-bold text-xs rounded-lg shadow-2xs">
-                                        {{ $p['nomor_kursi'] }}
+                                        {{ $p['kursi'] ?? $p['nomor_kursi'] ?? '-' }}
                                     </span>
                                 @endforeach
                             </div>
@@ -141,11 +144,15 @@
                         <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">PINDAI DI GATE KEBERANGKATAN</span>
                         
                         <!-- Official SVG QR Code Container -->
-                        <div class="w-40 h-40 mx-auto bg-white border-2 border-slate-800 p-3 rounded-2xl shadow-xs flex items-center justify-center">
+                        <div class="w-40 h-40 mx-auto bg-white border-2 border-slate-800 p-3 rounded-2xl shadow-xs flex items-center justify-center overflow-hidden">
                             @if ($qr)
-                                <div class="w-full h-full flex items-center justify-center">
-                                    {!! $qr !!}
-                                </div>
+                                @if (str_starts_with($qr, 'data:image') || str_starts_with($qr, 'http'))
+                                    <img src="{{ $qr }}" alt="QR Code {{ $ticket['kode_booking'] }}" class="w-full h-full object-contain">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center [&>svg]:w-full [&>svg]:h-full">
+                                        {!! $qr !!}
+                                    </div>
+                                @endif
                             @else
                                 <span class="material-symbols-outlined text-6xl text-slate-300">qr_code_2</span>
                             @endif

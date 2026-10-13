@@ -16,6 +16,14 @@ class TicketService
         $bus = $jadwal->bus;
         $rute = $jadwal->rute;
 
+        $bookingSeats = $booking->bookingSeats->map(fn ($seat) => [
+            'nama_penumpang' => $seat->nama_penumpang,
+            'nik' => $seat->nik,
+            'no_hp' => $seat->no_hp,
+            'kursi' => $seat->kursi->nomor_kursi,
+            'nomor_kursi' => $seat->kursi->nomor_kursi,
+        ])->values();
+
         return [
             'kode_booking' => $booking->kode_booking,
             'status' => $booking->status_pembayaran,
@@ -31,12 +39,8 @@ class TicketService
             'jam_berangkat' => $jadwal->jam_berangkat,
             'jam_tiba' => $jadwal->jam_tiba ?: $jadwal->jam_berangkat,
             'total_harga' => $booking->total_harga,
-            'booking_seats' => $booking->bookingSeats->map(fn ($seat) => [
-                'nama_penumpang' => $seat->nama_penumpang,
-                'nik' => $seat->nik,
-                'no_hp' => $seat->no_hp,
-                'kursi' => $seat->kursi->nomor_kursi,
-            ])->values(),
+            'booking_seats' => $bookingSeats,
+            'penumpang' => $bookingSeats,
         ];
     }
 

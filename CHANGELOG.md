@@ -23,6 +23,14 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 *Catatan perubahan yang sedang dikembangkan pada sesi aktif:*
 
 ### Fixed
+- **Perbaikan Tampilan QR Code E-Tiket (`resources/views/pages/booking/ticket.blade.php`)**:
+  - Memperbaiki rendering `$qr` yang sebelumnya dicetak mentah dengan `{!! $qr !!}` sehingga string base64 (`data:image/svg+xml;base64,...`) meluap keluar sebagai teks mentah di halaman tiket.
+  - Membungkus `$qr` ke dalam elemen `<img src="{{ $qr }}" ...>` sehingga gambar QR code SVG tampil presisi di dalam kotak verifikasi boarding gate.
+- **Perbaikan Galat `Undefined array key "penumpang"` pada Halaman E-Tiket (`resources/views/pages/booking/ticket.blade.php`, `app/Services/TicketService.php`)**:
+  - Memperbaiki pemanggilan array nomor kursi di `ticket.blade.php` agar membaca `$ticket['booking_seats']` dengan fallback `$ticket['penumpang']` dan field `$p['kursi'] ?? $p['nomor_kursi']`.
+  - Menambahkan key `nomor_kursi` pada objek kursi serta alias key `penumpang` pada return array `TicketService::getTicketData` untuk kompatibilitas ke belakang (backward compatibility).
+- **Generator Kursi Armada Bus Sesuai Kapasitas Penuh (`app/Http/Controllers/BusController.php`)**:
+  - Memperbarui method `generateSeats()` agar melakukan perulangan sampai mencapai total `$bus->kapasitas`, sehingga kapasitas ganjil atau non-kelipatan 4 (seperti 30 kursi) tidak lagi terpotong menjadi 28 kursi.
 - **Tampilan Nominal Tarif Kursi Admin > Data Kursi (`resources/views/pages/admin/kursi/index.blade.php`, `app/Http/Controllers/KursiController.php`)**:
   - Menghapus teks badge `"Ikuti Jadwal"` pada kolom **Tarif Kursi** di tabel Admin > Data Kursi.
   - Memastikan kolom Tarif Kursi **selalu menampilkan nominal harga aktual** yang berlaku untuk setiap kursi (misal: `Rp 100.000`, `Rp 300.000`).
