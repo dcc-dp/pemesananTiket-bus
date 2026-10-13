@@ -110,8 +110,8 @@
                         <div>
                             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Daftar Penumpang</span>
                             <ol class="space-y-1 text-xs font-semibold text-slate-800 font-body">
-                                @foreach ($ticket['penumpang'] as $idx => $p)
-                                    <li>{{ $idx + 1 }}. {{ $p['nama_penumpang'] }} (NIK: {{ $p['nik'] }})</li>
+                                @foreach ($ticket['booking_seats'] as $i => $p)
+                                    <li>{{ $i + 1 }}. {{ $p['nama_penumpang'] }} (NIK: {{ $p['nik'] }})</li>
                                 @endforeach
                             </ol>
                         </div>
