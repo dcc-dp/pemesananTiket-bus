@@ -84,23 +84,31 @@ class BusController extends Controller
         return redirect()->route('admin.bus.index')->with('message', 'hapus');
     }
 
-    public function generateSeats(Bus $bus): void
-    {
-        $rows = intdiv($bus->kapasitas, 4);
+   public function generateSeats(Bus $bus): void
+{
+    $created = 0;
+    $row = 1;
+    $cols = ['A', 'B', 'C', 'D'];
 
-        foreach (range(1, $rows) as $row) {
-            foreach (['A', 'B', 'C', 'D'] as $col) {
-                $posisi = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
-                $bus->kursis()->firstOrCreate(
-                    ['nomor_kursi' => $row . $col],
-                    [
-                        'posisi' => $posisi,
-                        'kelas' => $bus->kelas ?? 'ekonomi',
-                        'harga' => 0,
-                        'status' => 'tersedia',
-                    ]
-                );
+    while ($created < $bus->kapasitas) {
+        foreach ($cols as $col) {
+            if ($created >= $bus->kapasitas) {
+                break;
             }
+            $posisi = in_array($col, ['A', 'D']) ? 'jendela' : 'lorong';
+            $bus->kursis()->firstOrCreate(
+                ['nomor_kursi' => $row . $col],
+                [
+                    'posisi' => $posisi,
+                    'kelas' => $bus->kelas ?? 'ekonomi',
+                    'harga' => 0,
+                    'status' => 'tersedia',
+                ]
+            );
+            $created++;
         }
+        $row++;
     }
+}
+
 }
