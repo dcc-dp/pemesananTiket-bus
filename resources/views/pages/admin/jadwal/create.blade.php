@@ -61,7 +61,7 @@
                                             <select name="id_rute" class="adm-select @error('id_rute') is-invalid @enderror" required>
                                                 <option value="">-- Pilih Rute Perjalanan --</option>
                                                 @foreach ($rutes as $rute)
-                                                    <option value="{{ $rute->id_rute }}" {{ old('id_rute') == $rute->id_rute ? 'selected' : '' }}>
+                                                    <option value="{{ $rute->id_rute }}" data-durasi="{{ $rute->estimasi_durasi ?? 0 }}" {{ old('id_rute') == $rute->id_rute ? 'selected' : '' }}>
                                                         {{ $rute->nama_rute }}
                                                     </option>
                                                 @endforeach
@@ -122,7 +122,7 @@
                                             <label class="adm-form-label">
                                                 Jam Tiba (Estimasi)
                                             </label>
-                                            <input type="time" name="jam_tiba" class="adm-input" value="{{ old('jam_tiba') }}">
+                                            <input type="time" name="jam_tiba" class="adm-input" value="{{ old('jam_tiba') }}" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -175,4 +175,59 @@
             </div>
         </section>
     </div>
+
+    {{-- Script Kalkulasi Otomatis Jam Tiba (Estimasi) --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ruteSelect = document.querySelector('select[name="id_rute"]');
+            const jamBerangkatInput = document.querySelector('input[name="jam_berangkat"]');
+            const jamTibaInput = document.querySelector('input[name="jam_tiba"]');
+
+            if (!ruteSelect || !jamBerangkatInput || !jamTibaInput) return;
+
+            function hitungJamTiba() {
+                const selectedOption = ruteSelect.options[ruteSelect.selectedIndex];
+                if (!selectedOption || !selectedOption.value) {
+                    return;
+                }
+
+                const durasiAttr = selectedOption.getAttribute('data-durasi');
+                const durasiMenit = durasiAttr ? parseInt(durasiAttr, 10) : 0;
+                const jamBerangkatVal = jamBerangkatInput.value;
+
+                if (!jamBerangkatVal || isNaN(durasiMenit) || durasiMenit <= 0) {
+                    return;
+                }
+
+                const parts = jamBerangkatVal.split(':');
+                if (parts.length < 2) return;
+
+                const jam = parseInt(parts[0], 10);
+                const menit = parseInt(parts[1], 10);
+                if (isNaN(jam) || isNaN(menit)) return;
+
+                const totalMenitAwal = (jam * 60) + menit;
+                let totalMenitAkhir = (totalMenitAwal + durasiMenit) % (24 * 60);
+                if (totalMenitAkhir < 0) {
+                    totalMenitAkhir += (24 * 60);
+                }
+
+                const jamTiba = Math.floor(totalMenitAkhir / 60);
+                const menitTiba = totalMenitAkhir % 60;
+
+                jamTibaInput.value = `${String(jamTiba).padStart(2, '0')}:${String(menitTiba).padStart(2, '0')}`;
+            }
+
+            ruteSelect.addEventListener('change', hitungJamTiba);
+            jamBerangkatInput.addEventListener('input', hitungJamTiba);
+            jamBerangkatInput.addEventListener('change', hitungJamTiba);
+
+            if (window.jQuery) {
+                window.jQuery(ruteSelect).on('change select2:select', hitungJamTiba);
+            }
+
+            // Jalankan kalkulasi saat halaman pertama kali dimuat
+            hitungJamTiba();
+        });
+    </script>
 @endsection

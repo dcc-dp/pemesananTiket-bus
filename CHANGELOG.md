@@ -22,6 +22,14 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 ## [Unreleased]
 *Catatan perubahan yang sedang dikembangkan pada sesi aktif:*
 
+### Added
+- **Kalkulasi Otomatis Jam Tiba (Estimasi) Form Tambah & Edit Jadwal (`resources/views/pages/admin/jadwal/create.blade.php`, `resources/views/pages/admin/jadwal/edit.blade.php`, `app/Http/Controllers/JadwalController.php`)**:
+  - Menambahkan atribut `data-durasi` pada setiap `<option>` rute perjalanan berdasarkan kolom `estimasi_durasi` (dalam menit) dari tabel `rutes`.
+  - Mengubah input field `jam_tiba` menjadi `readonly` sehingga terisi otomatis tanpa perlu diketik manual dan nilainya tetap terkirim saat form disubmit.
+  - Mengimplementasikan script kalkulasi real-time saat pengguna memilih/mengganti rute atau mengubah jam berangkat, dengan penanganan pergantian hari / melewati tengah malam yang akurat.
+  - Memastikan kalkulasi otomatis dieksekusi saat halaman form pertama kali dimuat (mendukung form edit dan restore nilai input lama).
+  - Menambahkan kalkulasi fallback di sisi backend (`JadwalController@store` dan `JadwalController@update`) agar field `jam_tiba` terjamin tersimpan ke database.
+
 ### Fixed
 - **Perbaikan Sidebar Mini dan Responsivitas Layout Admin Dashboard (`public/css/admin-modern.css`, `resources/views/components/default/sidebar.blade.php`)**:
   - Memperbaiki tata letak mini sidebar (saat tombol hamburger diklik): lebar sidebar mengecil rapi menjadi 65px (bukan lagi terpaksa 220px yang menumpuk konten dashboard di belakangnya).

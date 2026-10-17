@@ -57,9 +57,18 @@ class JadwalController extends Controller
             'status' => 'required|in:tersedia,penuh,berangkat,selesai,dibatalkan',
         ]);
 
-        Jadwal::create($request->only([
+        $payload = $request->only([
             'id_bus', 'id_rute', 'tanggal', 'jam_berangkat', 'jam_tiba', 'harga', 'status',
-        ]));
+        ]);
+
+        if (empty($payload['jam_tiba']) && $request->filled('jam_berangkat') && $request->filled('id_rute')) {
+            $rute = Rute::find($request->id_rute);
+            if ($rute && $rute->estimasi_durasi) {
+                $payload['jam_tiba'] = \Carbon\Carbon::parse($request->jam_berangkat)->addMinutes($rute->estimasi_durasi)->format('H:i');
+            }
+        }
+
+        Jadwal::create($payload);
 
         return redirect()->route('admin.jadwal.index')->with('message', 'store');
     }
@@ -86,9 +95,18 @@ class JadwalController extends Controller
             'status' => 'required|in:tersedia,penuh,berangkat,selesai,dibatalkan',
         ]);
 
-        $jadwal->update($request->only([
+        $payload = $request->only([
             'id_bus', 'id_rute', 'tanggal', 'jam_berangkat', 'jam_tiba', 'harga', 'status',
-        ]));
+        ]);
+
+        if (empty($payload['jam_tiba']) && $request->filled('jam_berangkat') && $request->filled('id_rute')) {
+            $rute = Rute::find($request->id_rute);
+            if ($rute && $rute->estimasi_durasi) {
+                $payload['jam_tiba'] = \Carbon\Carbon::parse($request->jam_berangkat)->addMinutes($rute->estimasi_durasi)->format('H:i');
+            }
+        }
+
+        $jadwal->update($payload);
 
         return redirect()->route('admin.jadwal.index')->with('message', 'update');
     }
