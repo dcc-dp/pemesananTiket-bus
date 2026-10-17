@@ -113,9 +113,7 @@
                                             </label>
                                             <input type="text" name="estimasi_durasi" id="estimasi_durasi"
                                                 class="adm-input" readonly placeholder="Dihitung otomatis...">
-                                            <small style="font-size: 11px; color: #64748b; margin-top: 4px; display: block;">
-                                                Otomatis dihitung via API rute.
-                                            </small>
+                                    
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12" style="padding-left: 9px; padding-right: 9px;">

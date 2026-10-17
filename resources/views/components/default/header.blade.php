@@ -6,11 +6,11 @@
         </a>
 
         <!-- Global Search Bar as shown in reference image -->
-        <div class="adm-navbar-search" style="flex: 1; max-width: 320px; position: relative;">
+        <form method="GET" action="{{ route('admin.booking.index') }}" class="adm-navbar-search" style="flex: 1; max-width: 320px; position: relative; margin: 0;">
             <i class="fas fa-search search-icon" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 11px; pointer-events: none;"></i>
-            <input type="text" id="admGlobalSearch" placeholder="Cari tiket, rute, atau penumpang..." style="width: 100%; height: 32px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 34px 4px 28px; font-size: 11px; color: #1e293b; outline: none; transition: all 0.15s ease;">
+            <input type="text" name="kode_booking" id="admGlobalSearch" value="{{ request('kode_booking') }}" placeholder="Cari tiket, rute, atau penumpang..." style="width: 100%; height: 32px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 34px 4px 28px; font-size: 11px; color: #1e293b; outline: none; transition: all 0.15s ease;">
             <span class="kbd-badge" style="position: absolute; right: 7px; top: 50%; transform: translateY(-50%); font-size: 9px; font-weight: 700; color: #94a3b8; background: #e2e8f0; padding: 1px 5px; border-radius: 3px; font-family: monospace; pointer-events: none;">&#8984;K</span>
-        </div>
+        </form>
     </div>
 
     <!-- Right Section: Actions & Profile (Single Row, No Wrap!) -->

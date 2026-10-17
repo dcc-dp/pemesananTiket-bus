@@ -35,7 +35,27 @@ class AdminBookingController extends Controller
         }
 
         if ($request->filled('kode_booking')) {
-            $query->where('kode_booking', 'like', '%' . $request->kode_booking . '%');
+            $search = $request->kode_booking;
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_booking', 'like', '%' . $search . '%')
+                    ->orWhereHas('user', function ($uq) use ($search) {
+                        $uq->where('name', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%')
+                            ->orWhere('phone', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('jadwal.bus', function ($bq) use ($search) {
+                        $bq->where('nama_bus', 'like', '%' . $search . '%')
+                            ->orWhere('nomor_polisi', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('jadwal.rute.terminalAsal', function ($tq) use ($search) {
+                        $tq->where('kota', 'like', '%' . $search . '%')
+                            ->orWhere('nama_terminal', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('jadwal.rute.terminalTujuan', function ($tq) use ($search) {
+                        $tq->where('kota', 'like', '%' . $search . '%')
+                            ->orWhere('nama_terminal', 'like', '%' . $search . '%');
+                    });
+            });
         }
 
         $datas = $query->latest()->paginate(15)->withQueryString();

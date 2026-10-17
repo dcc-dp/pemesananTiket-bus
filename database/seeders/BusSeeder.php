@@ -23,9 +23,11 @@ class BusSeeder extends Seeder
             ]],
             ['operator' => 'OP-ROSALIA', 'buses' => [
                 ['nomor_polisi' => 'AD 4567 DH', 'nama_bus' => 'Rosalia Indah 88', 'kapasitas' => 24, 'fasilitas' => 'AC, Wifi, Toilet, Sleeper Bed'],
+                ['nomor_polisi' => 'AD 4568 DJ', 'nama_bus' => 'Rosalia Indah Eksekutif', 'kapasitas' => 30, 'fasilitas' => 'AC, Wifi, Toilet, TV'],
             ]],
             ['operator' => 'OP-HARAPANJAYA', 'buses' => [
                 ['nomor_polisi' => 'B 5678 EK', 'nama_bus' => 'Harapan Jaya Ekonomi', 'kapasitas' => 40, 'fasilitas' => 'AC'],
+                ['nomor_polisi' => 'B 5679 EL', 'nama_bus' => 'Harapan Jaya Plus', 'kapasitas' => 36, 'fasilitas' => 'AC, Wifi, TV, USB Charger'],
             ]],
         ];
 

@@ -46,21 +46,24 @@ class TerminalController extends Controller
         $latitude = null;
         $longitude = null;
 
-        $response = Http::withHeaders([
-            'User-Agent' => 'BusTicket Laravel Application'
-        ])->timeout(10)->get('https://nominatim.openstreetmap.org/search', [
-            'q' => $alamatLengkap,
-            'format' => 'json',
-            'limit' => 1,
-            'countrycodes' => 'id',
-        ]);
-        // dd($response->json());
+        try {
+            $response = Http::withHeaders([
+                'User-Agent' => 'BusTicket Laravel Application'
+            ])->timeout(5)->get('https://nominatim.openstreetmap.org/search', [
+                'q' => $alamatLengkap,
+                'format' => 'json',
+                'limit' => 1,
+                'countrycodes' => 'id',
+            ]);
 
-        if ($response->successful() && !empty($response->json())) {
-            $location = $response->json()[0];
+            if ($response->successful() && !empty($response->json())) {
+                $location = $response->json()[0];
 
-            $latitude = $location['lat'];
-            $longitude = $location['lon'];
+                $latitude = $location['lat'];
+                $longitude = $location['lon'];
+            }
+        } catch (\Exception $e) {
+            // Geocoding gagal / offline, koordinat tetap null tanpa membuat form crash
         }
 
         Terminal::create([

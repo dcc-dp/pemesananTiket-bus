@@ -23,6 +23,12 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 *Catatan perubahan yang sedang dikembangkan pada sesi aktif:*
 
 ### Added
+- **Sinkronisasi Fitur & Data Admin Branch Lulu ke Midtrans (`app/Http/Controllers/RuteController.php`, `resources/views/components/default/sidebar.blade.php`, `resources/views/components/default/header.blade.php`, `app/Http/Controllers/AdminBookingController.php`, `database/seeders/`)**:
+  - Mengembalikan menu navigasi **Laporan** (`admin.report.index`) pada sidebar admin yang sebelumnya hilang di branch midtrans.
+  - Mengimplementasikan kembali method `calculateDistance` pada `RuteController` yang sebelumnya terhapus, menghubungkannya dengan API OSRM driving route untuk perhitungan jarak dan estimasi durasi rute secara otomatis di form tambah rute.
+  - Mengaktifkan fungsi pencarian global di header admin (`admGlobalSearch`) yang terhubung langsung ke pencarian booking, mencakup kode booking, nama customer/penumpang, nomor telepon, armada bus, nomor polisi, serta kota dan terminal rute.
+  - Melengkapi data master pada seeder (`TerminalSeeder`, `RuteSeeder`, `BusSeeder`) agar mencakup seluruh terminal di Indonesia, rute antar kota, dan armada bus eksekutif dari branch lulu.
+  - Memperkuat kestabilan geocoding terminal pada `TerminalController` dengan blok `try-catch` agar tidak crash saat koneksi API eksternal mengalami gangguan.
 - **Kalkulasi Otomatis Jam Tiba (Estimasi) Form Tambah & Edit Jadwal (`resources/views/pages/admin/jadwal/create.blade.php`, `resources/views/pages/admin/jadwal/edit.blade.php`, `app/Http/Controllers/JadwalController.php`)**:
   - Menambahkan atribut `data-durasi` pada setiap `<option>` rute perjalanan berdasarkan kolom `estimasi_durasi` (dalam menit) dari tabel `rutes`.
   - Mengubah input field `jam_tiba` menjadi `readonly` sehingga terisi otomatis tanpa perlu diketik manual dan nilainya tetap terkirim saat form disubmit.
@@ -31,6 +37,11 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
   - Menambahkan kalkulasi fallback di sisi backend (`JadwalController@store` dan `JadwalController@update`) agar field `jam_tiba` terjamin tersimpan ke database.
 
 ### Fixed
+- **Perbaikan Galat "Koordinat terminal asal belum tersedia" pada Tambah Rute (`app/Http/Controllers/RuteController.php`, `database/seeders/TerminalSeeder.php`)**:
+  - Mengatasi galat 422 alert saat memilih terminal asal dan tujuan (seperti Parepare dan Kendari) dengan menambahkan dictionary koordinat latitude & longitude otomatis untuk seluruh terminal dan kota se-Indonesia di `RuteController::calculateDistance`.
+  - Mengintegrasikan mekanisme auto-persist: koordinat yang terpecahkan langsung disimpan ke database terminal terkait secara otomatis, sehingga permintaan selanjutnya langsung terbaca dari database.
+  - Menambahkan koordinat akurat (`latitude` dan `longitude`) untuk seluruh 20 terminal pada `TerminalSeeder.php` dan memperbarui database.
+  - Menyediakan fallback rumus jarak Haversine dengan faktor kelengkungan jalan (1.35x) dan estimasi kecepatan bus (55 km/jam) jika API OSRM tidak dapat dihubungi atau mengalami timeout.
 - **Perbaikan Tampilan Pagination Admin (`app/Providers/AppServiceProvider.php`, `public/css/admin-modern.css`, `resources/views/pages/customer/bookings.blade.php`)**:
   - Mengaktifkan `Paginator::useBootstrapFour()` pada `AppServiceProvider` agar template admin berbasis Bootstrap 4 / Stisla tidak lagi me-render pagination bawaan Tailwind CSS yang menyebabkan ikon panah SVG membesar raksasa dan teks "Showing X to Y" terduplikasi.
   - Menambahkan styling CSS pagination modern, compact, dan responsif pada `admin-modern.css` (`.pagination`, `.page-item`, `.page-link`) dengan styling active state, hover state, serta batas ukuran maksimal untuk ikon SVG/panah.

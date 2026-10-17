@@ -98,6 +98,14 @@
                 </ul>
             </li>
 
+            <!-- Laporan -->
+            <li class="nav-item {{ ($menu ?? '') == 'report' ? 'active' : '' }}">
+                <a href="{{ route('admin.report.index') }}" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Laporan</span>
+                </a>
+            </li>
+
             <li class="menu-header">Pengaturan</li>
 
             <!-- Data Akun -->
