@@ -128,7 +128,7 @@
 
             @if($bookings->hasPages())
                 <div class="p-4 border-t border-slate-100">
-                    {{ $bookings->links() }}
+                    {{ $bookings->links('pagination::tailwind') }}
                 </div>
             @endif
         </div>

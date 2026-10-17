@@ -31,6 +31,10 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
   - Menambahkan kalkulasi fallback di sisi backend (`JadwalController@store` dan `JadwalController@update`) agar field `jam_tiba` terjamin tersimpan ke database.
 
 ### Fixed
+- **Perbaikan Tampilan Pagination Admin (`app/Providers/AppServiceProvider.php`, `public/css/admin-modern.css`, `resources/views/pages/customer/bookings.blade.php`)**:
+  - Mengaktifkan `Paginator::useBootstrapFour()` pada `AppServiceProvider` agar template admin berbasis Bootstrap 4 / Stisla tidak lagi me-render pagination bawaan Tailwind CSS yang menyebabkan ikon panah SVG membesar raksasa dan teks "Showing X to Y" terduplikasi.
+  - Menambahkan styling CSS pagination modern, compact, dan responsif pada `admin-modern.css` (`.pagination`, `.page-item`, `.page-link`) dengan styling active state, hover state, serta batas ukuran maksimal untuk ikon SVG/panah.
+  - Memastikan customer portal tetap menggunakan `pagination::tailwind` pada `customer/bookings.blade.php`.
 - **Perbaikan Sidebar Mini dan Responsivitas Layout Admin Dashboard (`public/css/admin-modern.css`, `resources/views/components/default/sidebar.blade.php`)**:
   - Memperbaiki tata letak mini sidebar (saat tombol hamburger diklik): lebar sidebar mengecil rapi menjadi 65px (bukan lagi terpaksa 220px yang menumpuk konten dashboard di belakangnya).
   - Menyembunyikan header kategori menu (`MENU UTAMA`, `PENGATURAN`) dan teks menu pada mode mini agar tidak terpotong (clipped).
