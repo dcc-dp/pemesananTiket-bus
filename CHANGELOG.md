@@ -23,6 +23,14 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 *Catatan perubahan yang sedang dikembangkan pada sesi aktif:*
 
 ### Fixed
+- **Perbaikan Sidebar Mini dan Responsivitas Layout Admin Dashboard (`public/css/admin-modern.css`, `resources/views/components/default/sidebar.blade.php`)**:
+  - Memperbaiki tata letak mini sidebar (saat tombol hamburger diklik): lebar sidebar mengecil rapi menjadi 65px (bukan lagi terpaksa 220px yang menumpuk konten dashboard di belakangnya).
+  - Menyembunyikan header kategori menu (`MENU UTAMA`, `PENGATURAN`) dan teks menu pada mode mini agar tidak terpotong (clipped).
+  - Memposisikan seluruh ikon menu presisi di tengah dengan ukuran pill 42x38px, serta merapikan floating dropdown submenu saat kursor diarahkan (hover).
+  - Merapikan tombol Logout pada mode mini dengan icon centered dan tooltip terintegrasi.
+  - Menyesuaikan pergeseran konten utama (`padding-left: 81px`) dan navbar (`left: 65px`) sehingga tidak ada elemen dashboard atau judul yang tertutup oleh sidebar.
+  - Memperkuat responsivitas drawer mobile/tablet (<= 1024px) dengan backdrop gelap yang bisa diklik untuk menutup drawer dan tombol `×` tutup menu di header drawer.
+  - Menambahkan container horizontal scroll responsif (`adm-table-wrapper`) untuk tabel data pada layar smartphone dan tablet.
 - **Perbaikan Tampilan QR Code E-Tiket (`resources/views/pages/booking/ticket.blade.php`)**:
   - Memperbaiki rendering `$qr` yang sebelumnya dicetak mentah dengan `{!! $qr !!}` sehingga string base64 (`data:image/svg+xml;base64,...`) meluap keluar sebagai teks mentah di halaman tiket.
   - Membungkus `$qr` ke dalam elemen `<img src="{{ $qr }}" ...>` sehingga gambar QR code SVG tampil presisi di dalam kotak verifikasi boarding gate.

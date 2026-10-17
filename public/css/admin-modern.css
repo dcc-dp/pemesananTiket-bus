@@ -1338,19 +1338,259 @@ label {
 }
 
 /* ==========================================================================
-   SIDEBAR MINI BRAND TOGGLING
+   SIDEBAR MINI TOGGLE SYSTEM (COMPACT 65px, CLEAN & PROPORTIONAL)
    ========================================================================== */
+body.sidebar-mini .main-sidebar {
+    width: 65px !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    background: #ffffff !important;
+    border-right: 1px solid var(--adm-border) !important;
+    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.02) !important;
+    z-index: 891 !important;
+    overflow: visible !important;
+}
+
+body.sidebar-mini .main-sidebar:after {
+    display: none !important;
+}
+
+body.sidebar-mini #sidebar-wrapper {
+    width: 65px !important;
+    overflow: visible !important;
+}
+
 body.sidebar-mini .main-sidebar .sidebar-brand {
     display: none !important;
 }
+
 body.sidebar-mini .main-sidebar .sidebar-brand-sm {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     height: 52px !important;
+    width: 65px !important;
+    padding: 0 !important;
+    border-bottom: 1px solid var(--adm-border) !important;
 }
+
+body.sidebar-mini .main-sidebar .sidebar-brand-sm a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-brand-sm img {
+    width: 26px !important;
+    height: 26px !important;
+    object-fit: contain !important;
+}
+
 body:not(.sidebar-mini) .main-sidebar .sidebar-brand-sm {
     display: none !important;
+}
+
+/* Sembunyikan Header Kategori ("MENU UTAMA", "PENGATURAN") saat Mini agar tidak terpotong */
+body.sidebar-mini .main-sidebar .sidebar-menu > li.menu-header {
+    display: none !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu {
+    padding: 6px 0 !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li {
+    padding: 0 !important;
+    margin: 0 !important;
+    position: relative !important;
+    text-align: center !important;
+}
+
+/* Tombol Menu Icon Rapi & Presisi di Tengah */
+body.sidebar-mini .main-sidebar .sidebar-menu > li > a {
+    width: 42px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    margin: 4px auto !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: var(--adm-radius-sm) !important;
+    text-align: center !important;
+    color: var(--adm-slate-600) !important;
+    position: relative !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li > a i {
+    width: auto !important;
+    margin: 0 auto !important;
+    font-size: 14.5px !important;
+    text-align: center !important;
+    line-height: 1 !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li > a span {
+    display: none !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li > a.has-dropdown:after {
+    display: none !important;
+    content: none !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li > a:hover {
+    background: var(--adm-slate-100) !important;
+    color: var(--adm-primary) !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a {
+    background: var(--adm-primary-light) !important;
+    color: var(--adm-primary) !important;
+    box-shadow: none !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a i {
+    color: var(--adm-primary) !important;
+}
+
+/* Floating Submenu Dropdown saat Hover di Mini Mode */
+body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu {
+    position: absolute !important;
+    left: 65px !important;
+    top: 0 !important;
+    width: 195px !important;
+    background: #ffffff !important;
+    border: 1px solid var(--adm-border) !important;
+    border-radius: var(--adm-radius-md) !important;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08) !important;
+    padding: 6px !important;
+    display: none !important;
+    z-index: 1050 !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li:hover > ul.dropdown-menu {
+    display: block !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu li.dropdown-title {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    color: var(--adm-slate-400) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    padding: 6px 10px 5px !important;
+    border-bottom: 1px solid var(--adm-slate-100) !important;
+    margin-bottom: 4px !important;
+    display: block !important;
+    text-align: left !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu li {
+    padding: 0 !important;
+    text-align: left !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu li a {
+    padding: 6px 10px !important;
+    height: auto !important;
+    min-height: 28px !important;
+    font-size: 11.5px !important;
+    color: var(--adm-slate-600) !important;
+    margin: 1px 0 !important;
+    border-radius: var(--adm-radius-sm) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    width: 100% !important;
+    transition: all 0.15s ease !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu li a i {
+    width: 16px !important;
+    margin-right: 8px !important;
+    margin-left: 0 !important;
+    font-size: 11px !important;
+    text-align: center !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu li a span {
+    display: inline !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu li a:hover {
+    background: var(--adm-slate-50) !important;
+    color: var(--adm-primary) !important;
+}
+
+body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu li.active a {
+    background: var(--adm-primary-light) !important;
+    color: var(--adm-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* Tombol Logout Rapi saat Mini Mode */
+body.sidebar-mini .adm-sidebar-logout {
+    width: 42px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    margin: 8px auto !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: var(--adm-radius-sm) !important;
+    color: var(--adm-danger) !important;
+}
+
+body.sidebar-mini .adm-sidebar-logout span {
+    display: none !important;
+}
+
+body.sidebar-mini .adm-sidebar-logout i {
+    margin: 0 auto !important;
+    font-size: 14.5px !important;
+    line-height: 1 !important;
+}
+
+body.sidebar-mini .adm-sidebar-logout:hover {
+    background: var(--adm-danger-light) !important;
+}
+
+/* Penyesuaian Navbar & Content Saat Mini Mode (No Overlap!) */
+body.sidebar-mini .main-navbar {
+    left: 65px !important;
+    width: calc(100% - 65px) !important;
+}
+
+body.sidebar-mini .main-content {
+    padding-left: 81px !important;
+}
+
+body.sidebar-mini .main-footer {
+    padding-left: 81px !important;
+}
+
+/* Animasi Transisi Halus pada Perubahan Ukuran Sidebar */
+.main-sidebar,
+.main-navbar,
+.main-content,
+.main-footer {
+    transition: left 0.2s cubic-bezier(0.4, 0, 0.2, 1), padding-left 0.2s cubic-bezier(0.4, 0, 0.2, 1), width 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Tabel Responsif Horizontal Scroll Container */
+.adm-table-wrapper {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin-bottom: 0 !important;
+    scrollbar-width: thin;
 }
 
 /* ==========================================================================
@@ -1365,23 +1605,73 @@ body:not(.sidebar-mini) .main-sidebar .sidebar-brand-sm {
         padding: 0 14px !important;
     }
 
+    body.sidebar-mini .main-navbar {
+        left: 0 !important;
+        width: 100% !important;
+    }
+
     .main-sidebar {
-        left: -250px !important;
+        left: -260px !important;
         position: fixed !important;
         top: 0 !important;
         bottom: 0 !important;
         height: 100vh !important;
+        width: 240px !important;
         z-index: 1000 !important;
         transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
         box-shadow: none !important;
     }
 
-    body.sidebar-show .main-sidebar {
+    body.sidebar-mini .main-sidebar {
+        width: 240px !important;
+        left: -260px !important;
+    }
+
+    body.sidebar-show .main-sidebar,
+    body.sidebar-mini.sidebar-show .main-sidebar {
         left: 0 !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
     }
 
-    .sidebar-backdrop {
+    /* Kembalikan tampilan drawer mobile menjadi penuh saat dibuka */
+    body.sidebar-mini.sidebar-show .main-sidebar .sidebar-menu > li.menu-header {
+        display: block !important;
+    }
+    body.sidebar-mini.sidebar-show .main-sidebar .sidebar-menu > li > a {
+        width: auto !important;
+        height: auto !important;
+        min-height: 32px !important;
+        margin: 1px 8px !important;
+        padding: 6px 10px !important;
+        justify-content: flex-start !important;
+    }
+    body.sidebar-mini.sidebar-show .main-sidebar .sidebar-menu > li > a i {
+        width: 16px !important;
+        margin-right: 8px !important;
+    }
+    body.sidebar-mini.sidebar-show .main-sidebar .sidebar-menu > li > a span {
+        display: inline !important;
+    }
+    body.sidebar-mini.sidebar-show .main-sidebar .sidebar-brand {
+        display: flex !important;
+    }
+    body.sidebar-mini.sidebar-show .main-sidebar .sidebar-brand-sm {
+        display: none !important;
+    }
+    body.sidebar-mini.sidebar-show .adm-sidebar-logout {
+        width: auto !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 12px 8px !important;
+        padding: 6px 10px !important;
+        justify-content: flex-start !important;
+    }
+    body.sidebar-mini.sidebar-show .adm-sidebar-logout span {
+        display: inline !important;
+    }
+
+    body.sidebar-show:before {
+        content: "" !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
@@ -1390,6 +1680,7 @@ body:not(.sidebar-mini) .main-sidebar .sidebar-brand-sm {
         background: rgba(15, 23, 42, 0.5) !important;
         backdrop-filter: blur(2px) !important;
         z-index: 995 !important;
+        cursor: pointer !important;
     }
 
     .main-content {
@@ -1399,6 +1690,11 @@ body:not(.sidebar-mini) .main-sidebar .sidebar-brand-sm {
         width: 100% !important;
         max-width: 100vw !important;
         overflow-x: hidden !important;
+    }
+
+    body.sidebar-mini .main-content {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
     }
 
     .adm-page-header .row {

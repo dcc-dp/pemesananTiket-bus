@@ -1,13 +1,16 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <!-- Logo & Brand Header (Protected with clean flexbox & no clipping) -->
-        <div class="sidebar-brand" style="height: 52px; line-height: 52px; padding: 0 14px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center;">
+        <div class="sidebar-brand" style="height: 52px; line-height: 52px; padding: 0 14px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
             <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 9px; text-decoration: none; height: 34px; line-height: 1.1;">
                 <img src="{{ asset('img/logo-bustiket.png') }}" alt="Logo BUSTIKET" style="width: 32px; height: 32px; object-fit: contain; flex-shrink: 0;">
                 <div style="display: flex; flex-direction: column; text-align: left;">
                     <span style="font-size: 13px; font-weight: 800; color: #0f172a; letter-spacing: -0.2px; text-transform: uppercase;">BUSTIKET</span>
                     <span style="font-size: 8px; font-weight: 600; color: #64748b; letter-spacing: 0.5px; text-transform: uppercase;">Transit Management</span>
                 </div>
+            </a>
+            <a href="#" data-toggle="sidebar" class="d-lg-none" title="Tutup Menu" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; color: #64748b; text-decoration: none; border-radius: 6px;">
+                <i class="fas fa-times" style="font-size: 14px;"></i>
             </a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
@@ -116,7 +119,7 @@
 
         <!-- Logout Link -->
         <div class="mt-3 mb-2">
-            <a href="{{ route('logout') }}" class="adm-sidebar-logout">
+            <a href="{{ route('logout') }}" class="adm-sidebar-logout" title="Logout" data-toggle="tooltip" data-placement="right">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>
