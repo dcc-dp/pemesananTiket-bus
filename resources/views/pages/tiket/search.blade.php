@@ -218,20 +218,20 @@
                                     <div class="md:col-span-4">
                                         <div class="flex items-center gap-2">
                                             <h3 class="text-base font-bold text-slate-900">{{ $jadwal->bus->nama_bus }}</h3>
-                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-50 text-brand-700">
+                                            {{-- <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-50 text-brand-700">
                                                 {{ ucfirst($jadwal->bus->kelas) }}
-                                            </span>
+                                            </span> --}}
                                         </div>
                                         <p class="text-xs text-slate-500 mt-0.5">
                                             {{ $jadwal->bus->operator->nama_operator }}
                                         </p>
-                                        @if ($jadwal->bus->fasilitas)
+                                        {{-- @if ($jadwal->bus->fasilitas)
                                             <div class="flex flex-wrap gap-1 mt-2 text-[10px] text-slate-500 font-body">
                                                 @foreach (explode(',', $jadwal->bus->fasilitas) as $fasilitas)
                                                     <span class="bg-slate-100 px-2 py-0.5 rounded text-slate-600">{{ trim($fasilitas) }}</span>
                                                 @endforeach
                                             </div>
-                                        @endif
+                                        @endif --}}
                                     </div>
 
                                     <!-- Departure Schedule Timeline -->

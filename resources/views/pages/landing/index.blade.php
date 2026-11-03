@@ -198,7 +198,8 @@
                             <div class="flex items-center justify-between mb-5">
                                 <div class="flex items-center gap-1.5">
                                     <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-brand-50 text-brand-600">
-                                        {{ $index % 2 == 0 ? 'Executive 2+2' : 'Sleeper Suite' }}
+                                        Rute Perjalanan
+                                        {{-- {{ $index % 2 == 0 ? 'Executive 2+2' : 'Sleeper Suite' }} --}}
                                     </span>
                                     @if ($index == 2)
                                         <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-cyan-500 text-white tracking-wider">TERPOPULER</span>
