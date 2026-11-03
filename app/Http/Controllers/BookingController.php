@@ -90,10 +90,15 @@ class BookingController extends Controller
             ];
         })->toArray();
 
-        $user = User::findOrFail(Session('user_id'));
+        $user = User::find(Session('user_id'));
 
         try {
             $booking = $this->bookingService->createBooking($user, $jadwal, $passengers);
+
+            // Berikan akses kepada pengunjung yang membuat booking tanpa login.
+            if (!$user) {
+                session()->put('guest_booking_' . $booking->id, true);
+            }
         } catch (\Exception $e) {
             return redirect()->route('tiket.seats', $jadwal->id_jadwal)
                 ->with('error', $e->getMessage());
@@ -140,7 +145,7 @@ class BookingController extends Controller
         return response()->json(['status' => 'ok']);
     }
 
-    public function detail(Booking $booking)
+    public function     detail(Booking $booking)
     {
         $this->authorizeOwnership($booking);
 
@@ -179,6 +184,12 @@ class BookingController extends Controller
         }
 
         if ($booking->user_id != Session('user_id')) {
+            abort(403, 'Anda tidak berhak mengakses booking ini.');
+        }
+
+        // Booking pengunjung tanpa akun.
+        $guestAccess = session()->get('guest_booking_' . $booking->id);
+        if (!$guestAccess) {
             abort(403, 'Anda tidak berhak mengakses booking ini.');
         }
     }

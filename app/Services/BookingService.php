@@ -52,7 +52,7 @@ class BookingService
      *
      * @param  array<int, array>  $passengers  [{id_kursi, nama_penumpang, nik, no_hp, jenis_kelamin, tanggal_lahir}]
      */
-    public function createBooking(User $user, Jadwal $jadwal, array $passengers): Booking
+    public function createBooking(?User $user, Jadwal $jadwal, array $passengers): Booking
     {
         return DB::transaction(function () use ($user, $jadwal, $passengers) {
             if ($jadwal->status != 'tersedia') {
@@ -90,7 +90,7 @@ class BookingService
             $kode = $this->generateKodeBooking();
 
             $booking = Booking::create([
-                'user_id' => $user->id,
+                'user_id' => $user?->id,
                 'id_jadwal' => $locked->id_jadwal,
                 'kode_booking' => $kode,
                 'tanggal_booking' => now(),

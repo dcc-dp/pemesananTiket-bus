@@ -41,7 +41,7 @@ class PaymentService
         if (! $payment) {
             $payment = Payment::create([
                 'booking_id' => $booking->id,
-                'order_id' => 'MID-'.$booking->kode_booking,
+                'order_id' => 'MID-' . $booking->kode_booking,
                 'gross_amount' => $booking->total_harga,
                 'payment_status' => 'pending',
             ]);
@@ -54,16 +54,29 @@ class PaymentService
             return ['payment' => $payment];
         }
 
+        $booking->loadMissing(['user', 'bookingSeats']);
+
+        $firstPassenger = $booking->bookingSeats->first();
+
+        $customerDetails = [
+            'first_name' => $booking->user?->name
+                ?? $firstPassenger?->nama_penumpang
+                ?? 'Pelanggan',
+
+            'phone' => $firstPassenger?->no_hp ?? '',
+        ];
+
+        if (!empty($booking->user?->email)) {
+            $customerDetails['email'] = $booking->user->email;
+        }
+
+
         $params = [
             'transaction_details' => [
                 'order_id' => $payment->order_id,
                 'gross_amount' => $booking->total_harga,
             ],
-            'customer_details' => [
-                'first_name' => $booking->user->name,
-                'email' => $booking->user->email,
-                'phone' => $booking->user->phone,
-            ],
+            'customer_details' => $customerDetails,
             'item_details' => $this->itemDetails($booking),
             'callbacks' => [
                 'finish' => route('customer.booking.detail', $booking->id),
@@ -81,7 +94,7 @@ class PaymentService
                 'payment' => $payment,
             ];
         } catch (\Throwable $e) {
-            Log::error('Midtrans Snap gagal: '.$e->getMessage());
+            Log::error('Midtrans Snap gagal: ' . $e->getMessage());
 
             throw new \Exception('Gagal menghubungi gateway pembayaran. Silakan coba lagi.');
         }
@@ -93,10 +106,10 @@ class PaymentService
 
         foreach ($booking->bookingSeats as $seat) {
             $items[] = [
-                'id' => 'KURSI-'.$seat->id_kursi,
+                'id' => 'KURSI-' . $seat->id_kursi,
                 'price' => $seat->harga,
                 'quantity' => 1,
-                'name' => 'Tiket Bus '.($seat->kursi->nomor_kursi ?? ''),
+                'name' => 'Tiket Bus ' . ($seat->kursi->nomor_kursi ?? ''),
             ];
         }
 
@@ -118,7 +131,7 @@ class PaymentService
         $payment = Payment::where('order_id', $orderId)->first();
 
         if (! $payment) {
-            Log::warning('Midtrans callback untuk order yang tidak dikenal: '.$orderId);
+            Log::warning('Midtrans callback untuk order yang tidak dikenal: ' . $orderId);
 
             return;
         }
@@ -127,8 +140,8 @@ class PaymentService
 
         $notifGross = (int) ($grossAmount ?? 0);
         if ($notifGross > 0 && $notifGross != (int) $booking->total_harga) {
-            Log::error('Midtrans callback gross_amount tidak cocok. order='.$orderId
-                .' notif='.$notifGross.' booking='.$booking->total_harga);
+            Log::error('Midtrans callback gross_amount tidak cocok. order=' . $orderId
+                . ' notif=' . $notifGross . ' booking=' . $booking->total_harga);
 
             return;
         }
@@ -213,7 +226,7 @@ class PaymentService
             if (! $payment) {
                 $payment = Payment::create([
                     'booking_id' => $booking->id,
-                    'order_id' => 'MID-'.$booking->kode_booking,
+                    'order_id' => 'MID-' . $booking->kode_booking,
                     'gross_amount' => $booking->total_harga,
                     'payment_status' => 'pending',
                 ]);
@@ -255,7 +268,7 @@ class PaymentService
 
             $this->resolvePaymentStatus($payment, $status, $fraud, $booking);
         } catch (\Throwable $e) {
-            Log::warning('Cek status Midtrans gagal untuk '.$payment->order_id.': '.$e->getMessage());
+            Log::warning('Cek status Midtrans gagal untuk ' . $payment->order_id . ': ' . $e->getMessage());
         }
     }
 }

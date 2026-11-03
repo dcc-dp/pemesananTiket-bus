@@ -49,16 +49,24 @@ Route::get('/prototype/riwayat', function () {
 // Pencarian tiket
 Route::get('/tiket', [TicketController::class, 'search'])->name('tiket.search.form');
 Route::get('/tiket/search', [TicketController::class, 'search'])->name('tiket.search');
-
 Route::get('/tiket/{jadwal}/kursi', [TicketController::class, 'seats'])->name('tiket.seats');
-Route::get('/booking/{jadwal}/form', [BookingController::class, 'passengerForm'])->name('booking.form');
-Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
 
-Route::get('/booking/{booking}', [BookingController::class, 'detail'])->name('customer.booking.detail');
-Route::get('/booking/{booking}/bayar', [BookingController::class, 'pay'])->name('customer.booking.pay');
-Route::get('/booking/{booking}/tiket', [BookingController::class, 'ticket'])->name('customer.booking.ticket');
+Route::get('/booking/{jadwal}/form', [BookingController::class, 'passengerForm'])
+    ->name('booking.form');
 
-    Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
+Route::post('/booking/store', [BookingController::class, 'store'])
+    ->name('booking.store');
+
+Route::get('/booking/{booking}', [BookingController::class, 'detail'])
+    ->name('customer.booking.detail');
+
+Route::get('/booking/{booking}/bayar', [BookingController::class, 'pay'])
+    ->name('customer.booking.pay');
+
+Route::get('/booking/{booking}/tiket', [BookingController::class, 'ticket'])
+    ->name('customer.booking.ticket');
+    
+Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
 
 
 // ===================== AUTH =====================
