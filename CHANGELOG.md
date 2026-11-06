@@ -52,6 +52,11 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
   - Menghapus baris "Asuransi Penumpang: Termasuk" dari ringkasan tagihan (price breakdown) pada form pengisian data penumpang dan halaman konfirmasi pembayaran agar tampilan rincian harga hanya menampilkan tarif tiket bus murni.
 
 ### Fixed
+- **Navigasi Navbar Berpindah Mulus (Smooth Scroll) & Indikator Aktif (Scrollspy) (`resources/views/layouts/landing/topbar.blade.php`, `resources/views/pages/landing/index.blade.php`)**:
+  - Mengatasi masalah di mana menu navigasi **Rute** pada navbar landing page tidak mengubah status aktif (garis bawah biru tetap di Beranda) dan tidak menggulir halaman ke seksi rute saat diklik.
+  - Menambahkan penanganan event klik berbasis JavaScript pada tautan navigasi (`data-nav`) untuk melakukan *smooth scroll* dengan offset kompensasi tinggi sticky navbar (`navbar.offsetHeight + 12px`), sehingga judul dan konten seksi terlihat utuh tanpa tertutup navbar.
+  - Mengimplementasikan *Scrollspy* interaktif yang secara otomatis memindahkan garis bawah biru / status aktif di navbar (**Beranda**, **Rute**, dan **Bantuan**) sesuai dengan seksi yang sedang dilihat oleh pengguna saat menggulir halaman.
+  - Menambahkan kelas `scroll-mt-20` pada seksi `beranda`, `rute-populer`, dan `faq-section` agar penelusuran melalui hash URL peramban memiliki margin atas yang pas.
 - **Filter Jadwal Keberangkatan Hari Ini pada Pencarian Tiket (`app/Http/Controllers/TicketController.php`, `app/Http/Controllers/BookingController.php`, `app/Services/BookingService.php`, `tests/Feature/BookingFlowTest.php`)**:
   - Menambahkan filter `whereTime('jam_berangkat', '>', now()->format('H:i:s'))` pada method `TicketController@search` ketika pencarian dilakukan untuk tanggal hari ini (`tanggal == today()`), sehingga bus yang sudah lewat jam berangkatnya (misal jadwal pagi/siang saat mencari di sore hari) tidak lagi muncul di hasil pencarian.
   - Menambahkan validasi keberangkatan waktu lampau (`$berangkat->isPast()`) pada pemilihan kursi (`TicketController@seats`), pengisian formulir penumpang (`BookingController@passengerForm`), dan pembuatan transaksi booking (`BookingService@createBooking`), sehingga calon penumpang tidak dapat mengakses atau memesan jadwal bus yang sudah berangkat melalui tautan langsung atau riwayat peramban.

@@ -8,17 +8,25 @@
         </a>
 
         <!-- Desktop Navigation Links -->
-        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-            <a href="{{ route('home') }}" class="{{ ($menu ?? '') == 'home' ? 'text-brand-600 font-bold border-b-2 border-brand-600 py-1' : 'hover:text-brand-600 transition-colors' }}">
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600" id="desktopNav">
+            <a href="{{ route('home') }}#beranda" 
+               data-nav="beranda" 
+               class="nav-link border-b-2 py-1 transition-all {{ ($menu ?? '') == 'home' ? 'text-brand-600 font-bold border-brand-600' : 'text-slate-600 border-transparent hover:text-brand-600' }}">
                 Beranda
             </a>
-            <a href="{{ route('tiket.search') }}" class="{{ in_array($menu ?? '', ['tiket', 'booking']) ? 'text-brand-600 font-bold border-b-2 border-brand-600 py-1' : 'hover:text-brand-600 transition-colors' }}">
+            <a href="{{ route('tiket.search') }}" 
+               data-nav="tiket" 
+               class="nav-link border-b-2 py-1 transition-all {{ in_array($menu ?? '', ['tiket', 'booking']) ? 'text-brand-600 font-bold border-brand-600' : 'text-slate-600 border-transparent hover:text-brand-600' }}">
                 Pesan Tiket
             </a>
-            <a href="{{ route('home') }}#rute-populer" class="hover:text-brand-600 transition-colors">
+            <a href="{{ route('home') }}#rute-populer" 
+               data-nav="rute" 
+               class="nav-link border-b-2 py-1 transition-all text-slate-600 border-transparent hover:text-brand-600">
                 Rute
             </a>
-            <a href="{{ route('home') }}#faq-section" class="hover:text-brand-600 transition-colors">
+            <a href="{{ route('home') }}#faq-section" 
+               data-nav="bantuan" 
+               class="nav-link border-b-2 py-1 transition-all text-slate-600 border-transparent hover:text-brand-600">
                 Bantuan
             </a>
         </nav>
@@ -64,16 +72,24 @@
 
     <!-- Mobile Navigation Drawer -->
     <div id="mobileMenuPanel" class="hidden md:hidden border-t border-slate-100 bg-white px-4 pt-3 pb-5 space-y-2">
-        <a href="{{ route('home') }}" class="block px-3 py-2.5 rounded-xl text-sm font-semibold {{ ($menu ?? '') == 'home' ? 'bg-brand-50 text-brand-600 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
+        <a href="{{ route('home') }}#beranda" 
+           data-nav-mobile="beranda" 
+           class="mobile-nav-link block px-3 py-2.5 rounded-xl text-sm font-semibold {{ ($menu ?? '') == 'home' ? 'bg-brand-50 text-brand-600 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
             Beranda
         </a>
-        <a href="{{ route('tiket.search') }}" class="block px-3 py-2.5 rounded-xl text-sm font-semibold {{ in_array($menu ?? '', ['tiket', 'booking']) ? 'bg-brand-50 text-brand-600 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
+        <a href="{{ route('tiket.search') }}" 
+           data-nav-mobile="tiket" 
+           class="mobile-nav-link block px-3 py-2.5 rounded-xl text-sm font-semibold {{ in_array($menu ?? '', ['tiket', 'booking']) ? 'bg-brand-50 text-brand-600 font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
             Pesan Tiket
         </a>
-        <a href="{{ route('home') }}#rute-populer" class="block px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50">
+        <a href="{{ route('home') }}#rute-populer" 
+           data-nav-mobile="rute" 
+           class="mobile-nav-link block px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50">
             Rute Populer
         </a>
-        <a href="{{ route('home') }}#faq-section" class="block px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50">
+        <a href="{{ route('home') }}#faq-section" 
+           data-nav-mobile="bantuan" 
+           class="mobile-nav-link block px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50">
             Bantuan
         </a>
         @if (Session('cek') && Session('role') != 'admin')
@@ -88,6 +104,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 1. Mobile Menu Toggle
             const btn = document.getElementById('mobileMenuBtn');
             const panel = document.getElementById('mobileMenuPanel');
             const icon = document.getElementById('mobileMenuIcon');
@@ -99,6 +116,134 @@
                         icon.textContent = isHidden ? 'close' : 'menu';
                     }
                 });
+            }
+
+            // 2. Active State & Smooth Scrolling for Landing Page Sections
+            const isHomePage = document.getElementById('rute-populer') !== null;
+            const desktopLinks = document.querySelectorAll('.nav-link[data-nav]');
+            const mobileLinks = document.querySelectorAll('.mobile-nav-link[data-nav-mobile]');
+
+            function setActiveNav(navKey) {
+                desktopLinks.forEach(link => {
+                    if (link.getAttribute('data-nav') === navKey) {
+                        link.classList.add('text-brand-600', 'font-bold', 'border-brand-600');
+                        link.classList.remove('text-slate-600', 'border-transparent');
+                    } else {
+                        link.classList.remove('text-brand-600', 'font-bold', 'border-brand-600');
+                        link.classList.add('text-slate-600', 'border-transparent');
+                    }
+                });
+
+                mobileLinks.forEach(link => {
+                    if (link.getAttribute('data-nav-mobile') === navKey) {
+                        link.classList.add('bg-brand-50', 'text-brand-600', 'font-bold');
+                        link.classList.remove('text-slate-700', 'hover:bg-slate-50');
+                    } else {
+                        link.classList.remove('bg-brand-50', 'text-brand-600', 'font-bold');
+                        link.classList.add('text-slate-700', 'hover:bg-slate-50');
+                    }
+                });
+            }
+
+            function scrollToSection(targetId) {
+                const el = document.getElementById(targetId);
+                if (!el) return;
+
+                const navbar = document.querySelector('header');
+                const navbarHeight = navbar ? navbar.offsetHeight : 80;
+                const targetPosition = el.getBoundingClientRect().top + window.pageYOffset - (navbarHeight + 12);
+
+                window.scrollTo({
+                    top: Math.max(0, targetPosition),
+                    behavior: 'smooth'
+                });
+            }
+
+            if (isHomePage) {
+                const hashTargets = {
+                    'beranda': 'beranda',
+                    'rute': 'rute-populer',
+                    'bantuan': 'faq-section'
+                };
+
+                const handleAnchorClick = (e, navKey) => {
+                    const targetId = hashTargets[navKey];
+                    if (targetId && document.getElementById(targetId)) {
+                        e.preventDefault();
+                        setActiveNav(navKey);
+                        scrollToSection(targetId);
+                        history.pushState(null, null, '#' + targetId);
+
+                        if (panel && !panel.classList.contains('hidden')) {
+                            panel.classList.add('hidden');
+                            if (icon) icon.textContent = 'menu';
+                        }
+                    }
+                };
+
+                desktopLinks.forEach(link => {
+                    const navKey = link.getAttribute('data-nav');
+                    if (hashTargets[navKey]) {
+                        link.addEventListener('click', (e) => handleAnchorClick(e, navKey));
+                    }
+                });
+
+                mobileLinks.forEach(link => {
+                    const navKey = link.getAttribute('data-nav-mobile');
+                    if (hashTargets[navKey]) {
+                        link.addEventListener('click', (e) => handleAnchorClick(e, navKey));
+                    }
+                });
+
+                // Scrollspy
+                const sections = [
+                    { key: 'bantuan', id: 'faq-section' },
+                    { key: 'rute', id: 'rute-populer' },
+                    { key: 'beranda', id: 'beranda' }
+                ];
+
+                let isScrolling = false;
+                window.addEventListener('scroll', () => {
+                    if (isScrolling) return;
+                    isScrolling = true;
+                    requestAnimationFrame(() => {
+                        const navbar = document.querySelector('header');
+                        const offset = (navbar ? navbar.offsetHeight : 80) + 120;
+                        const scrollPos = window.pageYOffset;
+
+                        if (scrollPos < 250) {
+                            setActiveNav('beranda');
+                            isScrolling = false;
+                            return;
+                        }
+
+                        for (const sec of sections) {
+                            const el = document.getElementById(sec.id);
+                            if (el) {
+                                const top = el.offsetTop - offset;
+                                const height = el.offsetHeight;
+                                if (scrollPos >= top && scrollPos < top + height) {
+                                    setActiveNav(sec.key);
+                                    isScrolling = false;
+                                    return;
+                                }
+                            }
+                        }
+                        isScrolling = false;
+                    });
+                }, { passive: true });
+
+                // Check on initial load if hash is present
+                if (window.location.hash) {
+                    const hash = window.location.hash.substring(1);
+                    for (const [key, id] of Object.entries(hashTargets)) {
+                        if (hash === id) {
+                            setActiveNav(key);
+                            setTimeout(() => scrollToSection(id), 120);
+                            break;
+                        }
+                    }
+                }
             }
         });
     </script>

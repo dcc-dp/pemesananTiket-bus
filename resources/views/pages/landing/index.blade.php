@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- HERO SECTION (PROTOTYPE DESIGN SYSTEM) -->
-    <section class="relative overflow-hidden pt-12 pb-20 lg:pt-16 lg:pb-24 hero-radial-glow">
+    <section class="relative overflow-hidden pt-12 pb-20 lg:pt-16 lg:pb-24 hero-radial-glow scroll-mt-20" id="beranda">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             
             <!-- Pill Badge -->
@@ -175,7 +175,7 @@
     </section>
 
     <!-- RUTE POPULER FAVORIT PENUMPANG SECTION -->
-    <section class="py-20 bg-slate-50/70 border-t border-slate-200/80" id="rute-populer">
+    <section class="py-20 bg-slate-50/70 border-t border-slate-200/80 scroll-mt-20" id="rute-populer">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center max-w-2xl mx-auto mb-14">
@@ -403,7 +403,7 @@
     @endif
 
     <!-- PERTANYAAN YANG SERING DIAJUKAN (FAQ) SECTION -->
-    <section class="py-20 bg-white border-t border-slate-100" id="faq-section">
+    <section class="py-20 bg-white border-t border-slate-100 scroll-mt-20" id="faq-section">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center mb-14">
