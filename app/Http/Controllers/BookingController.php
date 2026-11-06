@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\BookingService;
 use App\Services\PaymentService;
 use App\Services\TicketService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -34,9 +35,17 @@ class BookingController extends Controller
         $jadwal = Jadwal::with(['bus.kursis', 'rute.terminalAsal', 'rute.terminalTujuan', 'bus.operator'])
             ->findOrFail($id);
 
+        $berangkat = $jadwal->tanggal->copy()->setTimeFromTimeString(
+            Carbon::parse($jadwal->jam_berangkat)->format('H:i')
+        );
+
+        if ($berangkat->isPast()) {
+            return redirect()->route('tiket.search.form')->with('error', 'Jadwal bus ini telah lewat.');
+        }
+
         $seatIds = array_values(array_filter(
             (array) $request->query('seats', []),
-            fn($v) => is_numeric($v)
+            fn ($v) => is_numeric($v)
         ));
 
         if (empty($seatIds)) {
@@ -96,8 +105,8 @@ class BookingController extends Controller
             $booking = $this->bookingService->createBooking($user, $jadwal, $passengers);
 
             // Berikan akses kepada pengunjung yang membuat booking tanpa login.
-            if (!$user) {
-                session()->put('guest_booking_' . $booking->id, true);
+            if (! $user) {
+                session()->put('guest_booking_'.$booking->id, true);
             }
         } catch (\Exception $e) {
             return redirect()->route('tiket.seats', $jadwal->id_jadwal)
@@ -145,7 +154,7 @@ class BookingController extends Controller
         return response()->json(['status' => 'ok']);
     }
 
-    public function     detail(Booking $booking)
+    public function detail(Booking $booking)
     {
         $this->authorizeOwnership($booking);
 
@@ -193,8 +202,8 @@ class BookingController extends Controller
         }
 
         // Jika booking dibuat oleh pengunjung tanpa akun (guest)
-        $guestAccess = session()->get('guest_booking_' . $booking->id);
-        if (!$guestAccess) {
+        $guestAccess = session()->get('guest_booking_'.$booking->id);
+        if (! $guestAccess) {
             abort(403, 'Anda tidak berhak mengakses booking ini.');
         }
     }

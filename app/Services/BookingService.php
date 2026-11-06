@@ -7,6 +7,7 @@ use App\Models\BookingSeat;
 use App\Models\Jadwal;
 use App\Models\Kursi;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -34,13 +35,13 @@ class BookingService
 
     public function isSeatAvailable(Jadwal $jadwal, Kursi $kursi): bool
     {
-        return !in_array($kursi->id_kursi, $jadwal->kursiTerpesan());
+        return ! in_array($kursi->id_kursi, $jadwal->kursiTerpesan());
     }
 
     public function generateKodeBooking(): string
     {
         do {
-            $kode = 'BUS-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6));
+            $kode = 'BUS-'.now()->format('Ymd').'-'.Str::upper(Str::random(6));
         } while (Booking::where('kode_booking', $kode)->exists());
 
         return $kode;
@@ -57,6 +58,20 @@ class BookingService
         return DB::transaction(function () use ($user, $jadwal, $passengers) {
             if ($jadwal->status != 'tersedia') {
                 throw new \Exception('Jadwal tidak tersedia untuk pemesanan.');
+            }
+
+            $berangkat = $jadwal->tanggal->copy()->setTimeFromTimeString(
+                Carbon::parse($jadwal->jam_berangkat)->format('H:i')
+            );
+            if ($berangkat->isPast()) {
+                throw new \Exception('Jadwal keberangkatan ini telah lewat.');
+            }
+
+            $berangkat = $jadwal->tanggal->copy()->setTimeFromTimeString(
+                \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i')
+            );
+            if ($berangkat->isPast()) {
+                throw new \Exception('Jadwal keberangkatan ini telah lewat.');
             }
 
             // Kunci jadwal untuk mencegah race condition
@@ -77,7 +92,7 @@ class BookingService
             }
 
             foreach ($kursis as $kursi) {
-                if (!$this->isSeatAvailable($locked, $kursi)) {
+                if (! $this->isSeatAvailable($locked, $kursi)) {
                     throw new \Exception("Kursi {$kursi->nomor_kursi} sudah dipesan orang lain.");
                 }
             }
@@ -150,7 +165,7 @@ class BookingService
     public function updateBookingStatus(Booking $booking, string $status): void
     {
         $allowed = ['pending', 'confirmed', 'completed', 'cancelled', 'expired'];
-        if (!in_array($status, $allowed)) {
+        if (! in_array($status, $allowed)) {
             throw new \Exception('Status booking tidak valid.');
         }
 

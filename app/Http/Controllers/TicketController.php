@@ -6,6 +6,7 @@ use App\Models\Jadwal;
 use App\Models\Operator;
 use App\Models\Terminal;
 use App\Services\BookingService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -21,7 +22,7 @@ class TicketController extends Controller
     {
         $terminals = Terminal::where('status', 'aktif')->orderBy('kota')->get();
 
-        if (!$request->has(['terminal_asal', 'terminal_tujuan', 'tanggal', 'penumpang'])) {
+        if (! $request->has(['terminal_asal', 'terminal_tujuan', 'tanggal', 'penumpang'])) {
             return view('pages.tiket.search', [
                 'menu' => 'tiket',
                 'jadwals' => collect(),
@@ -45,6 +46,11 @@ class TicketController extends Controller
                 $q->where('terminal_asal_id', $validated['terminal_asal'])
                     ->where('terminal_tujuan_id', $validated['terminal_tujuan']);
             });
+
+        // Jika mencari tiket untuk hari ini, filter jadwal yang jam keberangkatannya belum lewat
+        if ($validated['tanggal'] === now()->toDateString()) {
+            $query->whereTime('jam_berangkat', '>', now()->format('H:i:s'));
+        }
 
         if ($request->filled('kelas')) {
             $query->whereHas('bus', fn ($q) => $q->where('kelas', $request->kelas));
@@ -88,6 +94,14 @@ class TicketController extends Controller
 
         if ($jadwal->status != 'tersedia') {
             return back()->with('error', 'Jadwal ini tidak tersedia.');
+        }
+
+        $berangkat = $jadwal->tanggal->copy()->setTimeFromTimeString(
+            Carbon::parse($jadwal->jam_berangkat)->format('H:i')
+        );
+
+        if ($berangkat->isPast()) {
+            return redirect()->route('tiket.search.form')->with('error', 'Jadwal bus ini telah lewat.');
         }
 
         $available = $this->bookingService->getAvailableSeats($jadwal);

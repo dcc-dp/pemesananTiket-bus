@@ -178,20 +178,18 @@
     <section class="py-20 bg-slate-50/70 border-t border-slate-200/80" id="rute-populer">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-                <div>
-                    <span class="text-xs font-bold text-brand-600 uppercase tracking-widest block mb-2">Destinasi Favorit</span>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                        Rute Populer Favorit Penumpang
-                    </h2>
-                </div>
-                <p class="text-sm text-slate-500 font-body max-w-md">
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-widest block mb-2">Destinasi Favorit</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
+                    Rute Populer Favorit Penumpang
+                </h2>
+                <p class="text-sm sm:text-base text-slate-500 font-body">
                     Pilihan perjalanan darat paling sering dipesan dengan armada bus terbaik di kelasnya.
                 </p>
             </div>
 
-            <!-- Grid 4 Route Cards (From Database / Fallback) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Grid 6 Route Cards (From Database / Fallback) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse ($popularRoutes as $index => $route)
                     <div class="bg-white rounded-2xl border {{ $index == 2 ? 'border-2 border-brand-600/70 shadow-md' : 'border-slate-200/90 shadow-xs' }} overflow-hidden hover:shadow-lg transition-all duration-200 flex flex-col justify-between">
                         <div class="p-6">

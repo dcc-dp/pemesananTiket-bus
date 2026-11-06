@@ -39,11 +39,23 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
   - Menampilkan durasi perjalanan secara eksplisit pada teks opsi dropdown rute (contoh: `Makassar → Palopo (Durasi: 6 jam)`).
   - Memperkuat `JadwalController@store` dan `JadwalController@update` agar selalu menghitung ulang `jam_tiba` dari `jam_berangkat` ditambah `rute->estimasi_durasi` di sisi server sebagai validasi mutlak.
 
+### Changed
+- **Penyelarasan Tata Letak Judul & Deskripsi Rute Populer ke Tengah (Center Alignment) (`resources/views/pages/landing/index.blade.php`)**:
+  - Memperbaiki tata letak header pada bagian "Rute Populer Favorit Penumpang" dari sebelumnya model split-header (`justify-between`) yang memisahkan judul di tepi kiri dan deskripsi di pojok kanan dengan ruang kosong lebar di antaranya.
+  - Menyatukan badge kategori (`Destinasi Favorit`), judul utama (`Rute Populer Favorit Penumpang`), dan teks deskripsi perjalanan ke posisi tengah (`text-center max-w-2xl mx-auto mb-14`) tepat di atas grid 6 kartu rute, selaras dan konsisten dengan seluruh seksi lain pada landing page.
+- **Peningkatan Tampilan Rute Populer Menjadi 6 Kartu dengan Grid Responsif 3 Kolom (`app/Http/Controllers/HomeController.php`, `resources/views/pages/landing/index.blade.php`)**:
+  - Mengubah jumlah rute populer yang dimuat pada `HomeController@index` dari sebelumnya `->take(4)` menjadi `->take(6)` sehingga seluruh 6 rute aktif utama di database (Makassar → Parepare, Makassar → Palopo, Makassar → Palu, Makassar → Kendari, Parepare → Palopo, dan Kendari → Palopo) dapat tampil seluruhnya.
+  - Menyesuaikan tata letak grid pada seksi "Rute Populer Favorit Penumpang" di landing page menjadi `grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6` (2 baris x 3 kolom yang proporsional dan seimbang pada layar desktop/tablet).
+
 ### Removed
 - **Penghapusan Keterangan Asuransi Penumpang dari Sistem (`resources/views/pages/booking/form.blade.php`, `resources/views/pages/booking/payment.blade.php`)**:
   - Menghapus baris "Asuransi Penumpang: Termasuk" dari ringkasan tagihan (price breakdown) pada form pengisian data penumpang dan halaman konfirmasi pembayaran agar tampilan rincian harga hanya menampilkan tarif tiket bus murni.
 
 ### Fixed
+- **Filter Jadwal Keberangkatan Hari Ini pada Pencarian Tiket (`app/Http/Controllers/TicketController.php`, `app/Http/Controllers/BookingController.php`, `app/Services/BookingService.php`, `tests/Feature/BookingFlowTest.php`)**:
+  - Menambahkan filter `whereTime('jam_berangkat', '>', now()->format('H:i:s'))` pada method `TicketController@search` ketika pencarian dilakukan untuk tanggal hari ini (`tanggal == today()`), sehingga bus yang sudah lewat jam berangkatnya (misal jadwal pagi/siang saat mencari di sore hari) tidak lagi muncul di hasil pencarian.
+  - Menambahkan validasi keberangkatan waktu lampau (`$berangkat->isPast()`) pada pemilihan kursi (`TicketController@seats`), pengisian formulir penumpang (`BookingController@passengerForm`), dan pembuatan transaksi booking (`BookingService@createBooking`), sehingga calon penumpang tidak dapat mengakses atau memesan jadwal bus yang sudah berangkat melalui tautan langsung atau riwayat peramban.
+  - Menambahkan pengujian otomatis fitur (`test_search_filters_out_departed_schedules_for_today` dan `test_cannot_access_or_book_departed_schedule`) pada `BookingFlowTest` untuk menjamin jadwal yang telah lewat disaring dengan benar dari hasil pencarian dan ditolak saat dipesan.
 - **Pencegahan Kedaluwarsa Dini pada Batas Waktu Pembayaran Booking (`app/Services/BookingService.php`)**:
   - Memperbaiki logika `BookingService::expiredAt()` yang sebelumnya menetapkan batas waktu kedaluwarsa mundur ke jam keberangkatan (`$expiry = $berangkat`) bahkan ketika jam keberangkatan bus sudah terlewat (misal bus jam 13:00 dipesan pada jam 13:44), sehingga pesanan langsung berstatus `EXPIRED` seketika saat dibuat.
   - Menetapkan batas waktu pembayaran selalu minimal 2 jam ke depan dari waktu pembuatan pesanan (`now()->addHours(2)`) jika jadwal keberangkatan sudah dekat atau telah terlewat, sehingga transaksi tidak hangus secara prematur.
@@ -141,6 +153,14 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 - Prototipe interaktif Langkah 4 [`public/prototype/pembayaran.html`](public/prototype/pembayaran.html) yang mereplikasi tampilan Pembayaran Midtrans (QRIS, VA, Kartu Kredit, Gerai Retail), countdown timer otomatis, status verifikasi instan, serta pratinjau Boarding Pass / E-Tiket digital resmi dengan QR code verifikasi.
 - Penambahan protokol wajib pencatatan changelog di `CHANGELOG.md` dan aturan workspace `AGENTS.md`.
 - Berkas [`docs/FEATURE_AUDIT_AND_RECOMMENDATIONS.md`](docs/FEATURE_AUDIT_AND_RECOMMENDATIONS.md) berisi audit mendalam seluruh skrip controller/view/service eksisting, identifikasi 4 temuan celah teknis/bug, matriks kematangan fitur, serta roadmap rekomendasi fitur berprioritas (Auto-cancel cron, scanner boarding, PDF tiket resmi, WhatsApp gateway, PO multi-tenancy).
+
+### Changed
+- **Penyelarasan Tata Letak Judul & Deskripsi Rute Populer ke Tengah (Center Alignment) (`resources/views/pages/landing/index.blade.php`)**:
+  - Memperbaiki tata letak header pada bagian "Rute Populer Favorit Penumpang" dari sebelumnya model split-header (`justify-between`) yang memisahkan judul di tepi kiri dan deskripsi di pojok kanan dengan ruang kosong lebar di antaranya.
+  - Menyatukan badge kategori (`Destinasi Favorit`), judul utama (`Rute Populer Favorit Penumpang`), dan teks deskripsi perjalanan ke posisi tengah (`text-center max-w-2xl mx-auto mb-14`) tepat di atas grid 6 kartu rute, selaras dan konsisten dengan seluruh seksi lain pada landing page.
+- **Peningkatan Tampilan Rute Populer Menjadi 6 Kartu dengan Grid Responsif 3 Kolom (`app/Http/Controllers/HomeController.php`, `resources/views/pages/landing/index.blade.php`)**:
+  - Mengubah jumlah rute populer yang dimuat pada `HomeController@index` dari sebelumnya `->take(4)` menjadi `->take(6)` sehingga seluruh 6 rute aktif utama di database (Makassar → Parepare, Makassar → Palopo, Makassar → Palu, Makassar → Kendari, Parepare → Palopo, dan Kendari → Palopo) dapat tampil seluruhnya.
+  - Menyesuaikan tata letak grid pada seksi "Rute Populer Favorit Penumpang" di landing page menjadi `grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6` (2 baris x 3 kolom yang proporsional dan seimbang pada layar desktop/tablet).
 
 ### Removed
 - [`resources/views/pages/admin/dashboard/index.blade.php`](resources/views/pages/admin/dashboard/index.blade.php): Menghapus tombol "Refresh Data" di baris header dan teks/badge "Update: Real-time" pada heading Statistik Utama sesuai permintaan pengguna.

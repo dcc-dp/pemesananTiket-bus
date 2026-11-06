@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
-use App\Models\Bus;
 use App\Models\Jadwal;
 use App\Models\Operator;
 use App\Models\Rute;
 use App\Models\Terminal;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -26,13 +22,13 @@ class HomeController extends Controller
                 $q->where('status', 'tersedia')
                     ->orderBy('tanggal', 'asc')
                     ->orderBy('jam_berangkat', 'asc');
-            }
+            },
         ])
-        ->where('status', 'aktif')
-        ->withCount('jadwals')
-        ->orderBy('jadwals_count', 'desc')
-        ->take(4)
-        ->get();
+            ->where('status', 'aktif')
+            ->withCount('jadwals')
+            ->orderBy('jadwals_count', 'desc')
+            ->take(6)
+            ->get();
 
         $defaultJam = ['07:30', '13:00', '19:30', '21:00'];
 
@@ -40,24 +36,24 @@ class HomeController extends Controller
             // Ambil jadwal aktif mendatang (hari ini / ke depan)
             $jadwal = $route->jadwals
                 ->filter(function ($j) {
-                    return \Carbon\Carbon::parse($j->tanggal)->startOfDay()->gte(today());
+                    return Carbon::parse($j->tanggal)->startOfDay()->gte(today());
                 })
                 ->first();
 
             // Jika tidak ada jadwal mendatang, fallback ke jadwal yang tersedia
-            if (!$jadwal) {
+            if (! $jadwal) {
                 $jadwal = $route->jadwals->first();
             }
 
             if ($jadwal) {
-                $tgl = \Carbon\Carbon::parse($jadwal->tanggal);
+                $tgl = Carbon::parse($jadwal->tanggal);
                 if ($tgl->lt(today())) {
                     $tgl = today()->addDays(($index % 3) + 1);
                 }
 
                 $route->next_tanggal = $tgl->format('Y-m-d');
                 $route->next_tanggal_formatted = $tgl->locale('id')->isoFormat('DD MMM Y');
-                $route->next_jam_berangkat = \Carbon\Carbon::parse($jadwal->jam_berangkat)->format('H:i');
+                $route->next_jam_berangkat = Carbon::parse($jadwal->jam_berangkat)->format('H:i');
                 $route->min_harga = $jadwal->harga ?: (150000 + ($index * 30000));
             } else {
                 $tgl = today()->addDays(($index % 3) + 1);

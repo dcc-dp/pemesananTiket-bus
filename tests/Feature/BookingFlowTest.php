@@ -10,6 +10,7 @@ use App\Models\Operator;
 use App\Models\Rute;
 use App\Models\Terminal;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -99,7 +100,7 @@ class BookingFlowTest extends TestCase
         $response->assertRedirect(route('customer.booking.detail', $booking->id));
 
         // Tamu dapat melihat detail pesanan yang baru dibuat dalam sesi yang sama
-        $this->get('/booking/' . $booking->id)->assertOk();
+        $this->get('/booking/'.$booking->id)->assertOk();
     }
 
     public function test_customer_can_create_booking(): void
@@ -122,8 +123,8 @@ class BookingFlowTest extends TestCase
         $this->assertSame(1, $booking->bookingSeats()->count());
 
         // Verifikasi Bug 1: Pelanggan yang login dapat mengakses detail pemesanan mereka tanpa 403
-        $this->get('/booking/' . $booking->id)->assertOk();
-        $this->get('/booking/' . $booking->id . '/bayar')->assertOk();
+        $this->get('/booking/'.$booking->id)->assertOk();
+        $this->get('/booking/'.$booking->id.'/bayar')->assertOk();
     }
 
     public function test_double_booking_same_seat_is_rejected(): void
@@ -246,5 +247,83 @@ class BookingFlowTest extends TestCase
 
         // Customer dapat mengakses riwayat pesanannya
         $this->get('/customer/bookings')->assertOk();
+    }
+
+    public function test_search_filters_out_departed_schedules_for_today(): void
+    {
+        Carbon::setTestNow('2026-11-06 14:00:00');
+
+        $data = $this->seedJourney();
+        $rute = $data['rute'];
+        $bus = $data['bus'];
+
+        // Jadwal yang sudah lewat tadi pagi (10:00)
+        $pastJadwal = Jadwal::factory()->create([
+            'id_bus' => $bus->id_bus,
+            'id_rute' => $rute->id_rute,
+            'tanggal' => '2026-11-06',
+            'jam_berangkat' => '10:00',
+            'jam_tiba' => '16:00',
+            'status' => 'tersedia',
+        ]);
+
+        // Jadwal yang akan berangkat sore nanti (16:00)
+        $futureJadwal = Jadwal::factory()->create([
+            'id_bus' => $bus->id_bus,
+            'id_rute' => $rute->id_rute,
+            'tanggal' => '2026-11-06',
+            'jam_berangkat' => '16:00',
+            'jam_tiba' => '22:00',
+            'status' => 'tersedia',
+        ]);
+
+        $response = $this->get(route('tiket.search', [
+            'terminal_asal' => $rute->terminal_asal_id,
+            'terminal_tujuan' => $rute->terminal_tujuan_id,
+            'tanggal' => '2026-11-06',
+            'penumpang' => 1,
+        ]));
+
+        $response->assertOk();
+
+        $jadwals = $response->viewData('jadwals');
+        $this->assertFalse($jadwals->contains('id_jadwal', $pastJadwal->id_jadwal));
+        $this->assertTrue($jadwals->contains('id_jadwal', $futureJadwal->id_jadwal));
+
+        Carbon::setTestNow();
+    }
+
+    public function test_cannot_access_or_book_departed_schedule(): void
+    {
+        Carbon::setTestNow('2026-11-06 14:00:00');
+
+        $data = $this->seedJourney();
+        $rute = $data['rute'];
+        $bus = $data['bus'];
+        $kursi = $data['kursis']['1A'];
+
+        $pastJadwal = Jadwal::factory()->create([
+            'id_bus' => $bus->id_bus,
+            'id_rute' => $rute->id_rute,
+            'tanggal' => '2026-11-06',
+            'jam_berangkat' => '10:00',
+            'jam_tiba' => '16:00',
+            'status' => 'tersedia',
+        ]);
+
+        // Coba akses halaman pemilihan kursi untuk jadwal yang sudah lewat
+        $seatsResponse = $this->get(route('tiket.seats', $pastJadwal->id_jadwal));
+        $seatsResponse->assertRedirect(route('tiket.search.form'));
+        $seatsResponse->assertSessionHas('error');
+
+        // Coba kirim request booking langsung
+        $bookResponse = $this->post('/booking/store', [
+            'id_jadwal' => $pastJadwal->id_jadwal,
+            'penumpang' => [0 => $this->passengerPayload($kursi)],
+        ]);
+        $bookResponse->assertRedirect(route('tiket.seats', $pastJadwal->id_jadwal));
+        $bookResponse->assertSessionHas('error');
+
+        Carbon::setTestNow();
     }
 }
