@@ -25,7 +25,7 @@ class JadwalSeeder extends Seeder
             'sleeper' => 450000,
         ];
 
-        $jamBerangkat = ['07:00', '09:00', '11:00', '13:00', '16:00', '19:00', '21:00'];
+        $jamBerangkat = ['11:00', '13:00', '16:00', '19:00', '21:00'];
         $index = 0;
 
         for ($day = 1; $day <= 3; $day++) {

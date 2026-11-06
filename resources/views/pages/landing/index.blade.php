@@ -223,14 +223,25 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-4 text-slate-500 text-xs font-body border-t border-slate-100 pt-3.5">
-                                <div class="flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[17px] text-slate-400">schedule</span>
-                                    <span>{{ $route->estimasi_durasi ? gmdate('H:i', $route->estimasi_durasi * 60) . ' Jam' : '~8 Jam' }}</span>
+                            <!-- Tanggal Keberangkatan & Jam Berangkat (Menggantikan Durasi & Jarak) -->
+                            <div class="flex items-end justify-between border-t border-slate-100 pt-3.5 gap-2">
+                                <div class="min-w-0">
+                                    <span class="block text-[10px] text-slate-400 font-medium mb-1">
+                                        Tanggal Keberangkatan
+                                    </span>
+                                    <div class="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                                        <span class="material-symbols-outlined text-[16px] text-brand-600 shrink-0">calendar_today</span>
+                                        <span class="truncate">{{ $route->next_tanggal_formatted ?? now()->addDay()->locale('id')->isoFormat('DD MMM Y') }}</span>
+                                    </div>
                                 </div>
-                                <div class="flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[17px] text-slate-400">route</span>
-                                    <span>{{ $route->jarak ?? '-' }} km</span>
+                                <div class="text-right shrink-0">
+                                    <span class="block text-[10px] text-slate-400 font-medium mb-1 text-right">
+                                        Jam Berangkat
+                                    </span>
+                                    <div class="flex items-center justify-end gap-1.5 text-xs font-bold text-slate-900">
+                                        <span class="material-symbols-outlined text-[16px] text-amber-500 shrink-0">schedule</span>
+                                        <span>{{ $route->next_jam_berangkat ?? '08:00' }} WITA</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -239,10 +250,10 @@
                             <div>
                                 <span class="block text-[11px] text-slate-400">Mulai dari</span>
                                 <span class="text-base font-extrabold {{ $index == 2 ? 'text-brand-700' : 'text-slate-900' }}">
-                                    Rp {{ number_format(150000 + ($index * 30000), 0, ',', '.') }}
+                                    Rp {{ number_format($route->min_harga ?? (150000 + ($index * 30000)), 0, ',', '.') }}
                                 </span>
                             </div>
-                            <a href="{{ route('tiket.search', ['terminal_asal' => $route->terminal_asal_id, 'terminal_tujuan' => $route->terminal_tujuan_id, 'tanggal' => now()->addDay()->format('Y-m-d'), 'penumpang' => 1]) }}"
+                            <a href="{{ route('tiket.search', ['terminal_asal' => $route->terminal_asal_id, 'terminal_tujuan' => $route->terminal_tujuan_id, 'tanggal' => $route->next_tanggal ?? now()->addDay()->format('Y-m-d'), 'penumpang' => 1]) }}"
                                class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs">
                                 Lihat Tiket
                             </a>
@@ -253,6 +264,9 @@
                     <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between">
                         <div class="p-6">
                             <div class="flex items-center justify-between mb-5">
+                                <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-brand-50 text-brand-600">
+                                    Rute Perjalanan
+                                </span>
                             </div>
                             <div class="space-y-3 mb-6">
                                 <div class="flex items-center gap-3">
@@ -265,8 +279,26 @@
                                     <span class="text-sm font-bold text-slate-800">Parepare</span>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-4 text-slate-500 text-xs font-body border-t border-slate-100 pt-3.5">
-                                <span>~3.5 Jam</span><span>Tersedia 12 Kursi</span>
+                            <!-- Tanggal Keberangkatan & Jam Berangkat Fallback -->
+                            <div class="flex items-end justify-between border-t border-slate-100 pt-3.5 gap-2">
+                                <div class="min-w-0">
+                                    <span class="block text-[10px] text-slate-400 font-medium mb-1">
+                                        Tanggal Keberangkatan
+                                    </span>
+                                    <div class="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                                        <span class="material-symbols-outlined text-[16px] text-brand-600 shrink-0">calendar_today</span>
+                                        <span class="truncate">{{ now()->addDay()->locale('id')->isoFormat('DD MMM Y') }}</span>
+                                    </div>
+                                </div>
+                                <div class="text-right shrink-0">
+                                    <span class="block text-[10px] text-slate-400 font-medium mb-1 text-right">
+                                        Jam Berangkat
+                                    </span>
+                                    <div class="flex items-center justify-end gap-1.5 text-xs font-bold text-slate-900">
+                                        <span class="material-symbols-outlined text-[16px] text-amber-500 shrink-0">schedule</span>
+                                        <span>08:00 WITA</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="px-6 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">

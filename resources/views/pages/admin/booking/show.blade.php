@@ -115,7 +115,14 @@
                                     <div style="display: flex; flex-direction: column; gap: 8px;">
                                         <div style="display: flex; justify-content: space-between; font-size: 12.5px; padding-bottom: 8px; border-bottom: 1px dashed #f1f5f9;">
                                             <span style="color: #64748b;">Nama Pemesan:</span>
-                                            <span style="font-weight: 600; color: #0f172a;">{{ $data->user->name }}</span>
+                                            <span style="font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 5px;">
+                                                @if ($data->user)
+                                                    {{ $data->user->name }}
+                                                @else
+                                                    <span>{{ $data->bookingSeats->first()?->nama_penumpang ?? 'Tamu (Guest)' }}</span>
+                                                    <span style="font-size: 9px; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 1px 5px; border-radius: 4px; border: 1px solid #bae6fd;">Tamu</span>
+                                                @endif
+                                            </span>
                                         </div>
                                         <div style="display: flex; justify-content: space-between; font-size: 12.5px; padding-bottom: 8px; border-bottom: 1px dashed #f1f5f9;">
                                             <span style="color: #64748b;">Waktu Pemesanan:</span>

@@ -23,6 +23,10 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
 *Catatan perubahan yang sedang dikembangkan pada sesi aktif:*
 
 ### Added
+- **Informasi Tanggal Keberangkatan & Jam Berangkat pada Kartu Rute Populer Landing Page (`resources/views/pages/landing/index.blade.php`, `app/Http/Controllers/HomeController.php`)**:
+  - Menggantikan baris durasi dan jarak di bagian bawah kartu rute populer secara langsung dengan label teks kecil **Tanggal Keberangkatan** di sisi kiri serta **Jam Berangkat** rata kanan (ikon `schedule` dan waktu `H:i WITA`) untuk keterbacaan optimal tanpa terpotong (truncated).
+  - Menghubungkan kartu rute dengan jadwal armada aktif terdekat dari database (`jadwals`), dengan format tanggal bahasa Indonesia (`DD MMM Y`) dan waktu keberangkatan (`H:i WITA`).
+  - Menyinkronkan tautan tombol "Lihat Tiket" agar membawa parameter tanggal keberangkatan aktual yang tertera di kartu rute menuju halaman pencarian tiket.
 - **Sinkronisasi Fitur & Data Admin Branch Lulu ke Midtrans (`app/Http/Controllers/RuteController.php`, `resources/views/components/default/sidebar.blade.php`, `resources/views/components/default/header.blade.php`, `app/Http/Controllers/AdminBookingController.php`, `database/seeders/`)**:
   - Mengembalikan menu navigasi **Laporan** (`admin.report.index`) pada sidebar admin yang sebelumnya hilang di branch midtrans.
   - Mengimplementasikan kembali method `calculateDistance` pada `RuteController` yang sebelumnya terhapus, menghubungkannya dengan API OSRM driving route untuk perhitungan jarak dan estimasi durasi rute secara otomatis di form tambah rute.
@@ -37,6 +41,18 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
   - Menambahkan kalkulasi fallback di sisi backend (`JadwalController@store` dan `JadwalController@update`) agar field `jam_tiba` terjamin tersimpan ke database.
 
 ### Fixed
+- **Perbaikan Otorisasi Akses Booking untuk Pengguna Terdaftar & Tamu (`app/Http/Controllers/BookingController.php`, `tests/Feature/BookingFlowTest.php`)**:
+  - Memperbaiki logika otorisasi `authorizeOwnership` yang sebelumnya selalu mengecek session token `guest_booking_{id}` pada semua request, sehingga pelanggan yang sudah login tidak lagi terkena galat `403 Forbidden` saat mengakses detail pesanan, pembayaran, dan e-tiket mereka sendiri.
+  - Memisahkan percabangan otorisasi secara tegas: verifikasi kecocokan `user_id` untuk pesanan pengguna terdaftar, dan verifikasi session token `guest_booking_{id}` untuk pesanan tamu tanpa akun.
+  - Memperbarui pengujian unit/fitur `BookingFlowTest.php` untuk memvalidasi alur checkout tamu tanpa login serta memastikan pengguna terdaftar dapat mengakses pesanannya tanpa hambatan.
+- **Pencegahan Fatal Error Null User pada Antarmuka Admin (`resources/views/pages/admin/booking/index.blade.php`, `resources/views/pages/admin/booking/show.blade.php`, `resources/views/pages/admin/payment/index.blade.php`, `resources/views/pages/admin/payment/show.blade.php`, `resources/views/pages/admin/dashboard/index.blade.php`, `app/Http/Controllers/AdminBookingController.php`, `app/Http/Controllers/PaymentController.php`, `app/Http/Controllers/DashboardController.php`)**:
+  - Mengatasi galat `Attempt to read property "name" on null` pada halaman Daftar Pemesanan, Detail Pemesanan, Riwayat Pembayaran, Detail Pembayaran, dan Dashboard Admin ketika terdapat transaksi dari pengunjung tamu (`user_id = null`).
+  - Menambahkan penanganan null-safe terstruktur: menampilkan nama penumpang pertama dari relasi manifest kursi (`bookingSeats`) dilengkapi lencana visual `Tamu` dan nomor telepon pemesan.
+  - Menambahkan eager loading `bookingSeats` pada query controller admin terkait serta memperluas pencarian global/filter booking admin agar dapat menemukan pesanan tamu berdasarkan nama penumpang, nomor WhatsApp, maupun NIK.
+- **Penyertaan Pesanan Tamu pada Modul Laporan Transaksi Admin (`app/Http/Controllers/ReportController.php`)**:
+  - Mengubah relasi query tabel `users` dari `INNER JOIN` menjadi `leftJoin('users', ...)` pada `ReportController::index` sehingga transaksi yang dibuat oleh tamu tanpa akun tidak lagi tereliminasi dari laporan.
+  - Menggunakan ekspresi `COALESCE` untuk kolom `customer` dengan fallback ke nama penumpang pada `booking_seats` atau `'Tamu (Guest)'`.
+  - Memastikan akumulasi total transaksi, omzet pendapatan, tabel laporan interaktif, dan format cetak laporan merefleksikan seluruh penjualan aktual termasuk pesanan tanpa login.
 - **Perbaikan Galat "Koordinat terminal asal belum tersedia" pada Tambah Rute (`app/Http/Controllers/RuteController.php`, `database/seeders/TerminalSeeder.php`)**:
   - Mengatasi galat 422 alert saat memilih terminal asal dan tujuan (seperti Parepare dan Kendari) dengan menambahkan dictionary koordinat latitude & longitude otomatis untuk seluruh terminal dan kota se-Indonesia di `RuteController::calculateDistance`.
   - Mengintegrasikan mekanisme auto-persist: koordinat yang terpecahkan langsung disimpan ke database terminal terkait secara otomatis, sehingga permintaan selanjutnya langsung terbaca dari database.

@@ -81,12 +81,12 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        $bookingsTerbaru = Booking::with(['user', 'jadwal.bus.operator'])
+        $bookingsTerbaru = Booking::with(['user', 'bookingSeats', 'jadwal.bus.operator'])
             ->latest()
             ->take(8)
             ->get();
 
-        $pembayaranTerbaru = \App\Models\Payment::with(['booking.user'])
+        $pembayaranTerbaru = \App\Models\Payment::with(['booking.user', 'booking.bookingSeats'])
             ->latest()
             ->take(8)
             ->get();

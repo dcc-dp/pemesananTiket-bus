@@ -17,7 +17,7 @@ class ReportController extends Controller
         $menu = $this->menu;
 
         $query = DB::table('bookings')
-            ->join('users', 'bookings.user_id', '=', 'users.id')
+            ->leftJoin('users', 'bookings.user_id', '=', 'users.id')
             ->join('jadwals', 'bookings.id_jadwal', '=', 'jadwals.id_jadwal')
             ->join('buses', 'jadwals.id_bus', '=', 'buses.id_bus')
             ->join('operators', 'buses.operator_id', '=', 'operators.id')
@@ -26,7 +26,7 @@ class ReportController extends Controller
             ->join('terminals as tujuan', 'rutes.terminal_tujuan_id', '=', 'tujuan.id_terminal')
             ->select(
                 'bookings.*',
-                'users.name as customer',
+                DB::raw("COALESCE(users.name, (SELECT nama_penumpang FROM booking_seats WHERE booking_seats.booking_id = bookings.id LIMIT 1), 'Tamu (Guest)') as customer"),
                 'jadwals.tanggal',
                 'jadwals.jam_berangkat',
                 'jadwals.harga as harga_jadwal',

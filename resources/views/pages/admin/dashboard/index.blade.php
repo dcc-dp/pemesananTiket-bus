@@ -206,7 +206,7 @@
                                             </a>
                                         </td>
                                         <td style="padding: 7px 10px; vertical-align: middle; border-bottom: 1px solid #f1f5f9;">
-                                            <div style="font-size: 11px; font-weight: 600; color: #0f172a; line-height: 1.2;">{{ $booking->user->name ?? 'Penumpang' }}</div>
+                                            <div style="font-size: 11px; font-weight: 600; color: #0f172a; line-height: 1.2;">{{ $booking->user?->name ?? ($booking->bookingSeats->first()?->nama_penumpang ?? 'Tamu (Guest)') }}</div>
                                             <div class="text-muted" style="font-size: 9.5px; line-height: 1.2; margin-top: 1px;">
                                                 @if($booking->bookingSeats->count() > 0)
                                                     Kursi: {{ $booking->bookingSeats->map(fn($s) => $s->kursi->nomor_kursi ?? '')->filter()->join(', ') }}

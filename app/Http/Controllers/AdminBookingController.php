@@ -24,7 +24,7 @@ class AdminBookingController extends Controller
     {
         $menu = $this->menu;
 
-        $query = Booking::with(['user', 'jadwal.bus.operator', 'jadwal.rute.terminalAsal', 'jadwal.rute.terminalTujuan']);
+        $query = Booking::with(['user', 'bookingSeats', 'jadwal.bus.operator', 'jadwal.rute.terminalAsal', 'jadwal.rute.terminalTujuan']);
 
         if ($request->filled('status_booking')) {
             $query->where('status_booking', $request->status_booking);
@@ -42,6 +42,11 @@ class AdminBookingController extends Controller
                         $uq->where('name', 'like', '%' . $search . '%')
                             ->orWhere('email', 'like', '%' . $search . '%')
                             ->orWhere('phone', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('bookingSeats', function ($sq) use ($search) {
+                        $sq->where('nama_penumpang', 'like', '%' . $search . '%')
+                            ->orWhere('no_hp', 'like', '%' . $search . '%')
+                            ->orWhere('nik', 'like', '%' . $search . '%');
                     })
                     ->orWhereHas('jadwal.bus', function ($bq) use ($search) {
                         $bq->where('nama_bus', 'like', '%' . $search . '%')

@@ -80,16 +80,26 @@ class BookingFlowTest extends TestCase
         ];
     }
 
-    public function test_guest_redirected_to_login_when_booking(): void
+    public function test_guest_can_create_booking_without_login(): void
     {
         $data = $this->seedJourney();
         $jadwal = $data['jadwal'];
         $kursi = $data['kursis']['1A'];
 
-        $this->post('/booking/store', [
+        $response = $this->post('/booking/store', [
             'id_jadwal' => $jadwal->id_jadwal,
             'penumpang' => [0 => $this->passengerPayload($kursi)],
-        ])->assertRedirect('/auth/login');
+        ]);
+
+        $response->assertRedirect();
+
+        $booking = Booking::whereNull('user_id')->latest()->first();
+        $this->assertNotNull($booking);
+        $this->assertEquals('pending', $booking->status_booking);
+        $response->assertRedirect(route('customer.booking.detail', $booking->id));
+
+        // Tamu dapat melihat detail pesanan yang baru dibuat dalam sesi yang sama
+        $this->get('/booking/' . $booking->id)->assertOk();
     }
 
     public function test_customer_can_create_booking(): void
@@ -110,6 +120,10 @@ class BookingFlowTest extends TestCase
         $this->assertEquals('pending', $booking->status_booking);
         $this->assertEquals(100000, $booking->total_harga);
         $this->assertSame(1, $booking->bookingSeats()->count());
+
+        // Verifikasi Bug 1: Pelanggan yang login dapat mengakses detail pemesanan mereka tanpa 403
+        $this->get('/booking/' . $booking->id)->assertOk();
+        $this->get('/booking/' . $booking->id . '/bayar')->assertOk();
     }
 
     public function test_double_booking_same_seat_is_rejected(): void

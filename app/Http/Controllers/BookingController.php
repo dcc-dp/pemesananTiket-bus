@@ -183,11 +183,16 @@ class BookingController extends Controller
             return;
         }
 
-        if ($booking->user_id != Session('user_id')) {
-            abort(403, 'Anda tidak berhak mengakses booking ini.');
+        // Jika booking milik user terdaftar
+        if ($booking->user_id !== null) {
+            if ((int) $booking->user_id !== (int) Session('user_id')) {
+                abort(403, 'Anda tidak berhak mengakses booking ini.');
+            }
+
+            return;
         }
 
-        // Booking pengunjung tanpa akun.
+        // Jika booking dibuat oleh pengunjung tanpa akun (guest)
         $guestAccess = session()->get('guest_booking_' . $booking->id);
         if (!$guestAccess) {
             abort(403, 'Anda tidak berhak mengakses booking ini.');

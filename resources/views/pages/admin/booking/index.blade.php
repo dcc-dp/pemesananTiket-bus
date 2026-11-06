@@ -105,12 +105,25 @@
 
                                     <!-- Customer -->
                                     <td style="padding: 6px 12px; vertical-align: middle;">
-                                        <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; line-height: 1.2;">
-                                            {{ $data->user->name }}
-                                        </div>
-                                        <div style="font-size: 10.5px; color: #64748b; margin-top: 1px;">
-                                            {{ $data->user->phone ?? $data->user->email }}
-                                        </div>
+                                        @if ($data->user)
+                                            <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; line-height: 1.2;">
+                                                {{ $data->user->name }}
+                                            </div>
+                                            <div style="font-size: 10.5px; color: #64748b; margin-top: 1px;">
+                                                {{ $data->user->phone ?? $data->user->email }}
+                                            </div>
+                                        @else
+                                            @php
+                                                $firstPassenger = $data->bookingSeats->first();
+                                            @endphp
+                                            <div style="font-size: 11.5px; font-weight: 600; color: #0f172a; line-height: 1.2; display: flex; align-items: center; gap: 5px;">
+                                                <span>{{ $firstPassenger?->nama_penumpang ?? 'Tamu (Guest)' }}</span>
+                                                <span style="font-size: 9px; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 1px 5px; border-radius: 4px; border: 1px solid #bae6fd;">Tamu</span>
+                                            </div>
+                                            <div style="font-size: 10.5px; color: #64748b; margin-top: 1px;">
+                                                {{ $firstPassenger?->no_hp ?? '-' }}
+                                            </div>
+                                        @endif
                                     </td>
 
                                     <!-- Rute -->

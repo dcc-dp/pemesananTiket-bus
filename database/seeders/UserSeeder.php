@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
             User::updateOrCreate(['email' => $user['email']], $user);
         }
 
-        User::factory()->customer()->count(10)->create();
+        User::factory()->customer()->count(5)->create();
 
         User::updateOrCreate(
             ['email' => 'customer@busticket.test'],

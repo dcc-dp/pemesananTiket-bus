@@ -140,7 +140,14 @@
 
                                 <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px dashed #f1f5f9; font-size: 11.5px;">
                                     <span style="color: #64748b;">Customer</span>
-                                    <span style="font-weight: 600; color: #0f172a;">{{ $data->booking->user->name }}</span>
+                                    <span style="font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 5px;">
+                                        @if ($data->booking->user)
+                                            {{ $data->booking->user->name }}
+                                        @else
+                                            <span>{{ $data->booking->bookingSeats->first()?->nama_penumpang ?? 'Tamu (Guest)' }}</span>
+                                            <span style="font-size: 9px; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 1px 5px; border-radius: 4px; border: 1px solid #bae6fd;">Tamu</span>
+                                        @endif
+                                    </span>
                                 </div>
 
                                 <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px dashed #f1f5f9; font-size: 11.5px;">

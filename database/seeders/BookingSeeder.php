@@ -75,7 +75,7 @@ class BookingSeeder extends Seeder
                 Payment::create([
                     'booking_id' => $booking->id,
                     'order_id' => 'MID-'.$booking->kode_booking,
-                    'transaction_id' => 'TRX-'.Str::upper(Str::random(10)),
+                    'transaction_id' => 'TRX-'.Str::upper(Str::random(7)),
                     'payment_type' => 'bank_transfer',
                     'gross_amount' => $total,
                     'transaction_status' => 'settlement',

@@ -13,7 +13,7 @@ class PaymentController extends Controller
     {
         $menu = $this->menu;
 
-        $query = Payment::with(['booking.user', 'booking.jadwal.bus']);
+        $query = Payment::with(['booking.user', 'booking.bookingSeats', 'booking.jadwal.bus']);
 
         if ($request->filled('payment_status')) {
             $query->where('payment_status', $request->payment_status);
@@ -35,7 +35,7 @@ class PaymentController extends Controller
     public function show(Payment $payment)
     {
         $menu = $this->menu;
-        $data = $payment->load(['booking.user', 'booking.jadwal.bus', 'booking.jadwal.rute.terminalAsal', 'booking.jadwal.rute.terminalTujuan']);
+        $data = $payment->load(['booking.user', 'booking.bookingSeats', 'booking.jadwal.bus', 'booking.jadwal.rute.terminalAsal', 'booking.jadwal.rute.terminalTujuan']);
 
         return view('pages.admin.payment.show', compact('data', 'menu'));
     }
