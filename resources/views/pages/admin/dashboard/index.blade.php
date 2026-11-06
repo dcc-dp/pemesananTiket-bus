@@ -226,7 +226,7 @@
                                         <td style="padding: 7px 10px; vertical-align: middle; border-bottom: 1px solid #f1f5f9;">
                                             <div style="font-size: 10.5px; color: #334155; font-weight: 500; line-height: 1.2;">{{ $booking->tanggal_booking ? $booking->tanggal_booking->format('d M Y') : '-' }}</div>
                                             <div class="text-muted" style="font-size: 9.5px; line-height: 1.2;">
-                                                {{ $booking->tanggal_booking ? $booking->tanggal_booking->format('H:i') : '' }} WIB
+                                                {{ $booking->tanggal_booking ? $booking->tanggal_booking->format('H:i') : '' }} WITA
                                             </div>
                                         </td>
                                         <td style="padding: 7px 10px; vertical-align: middle; border-bottom: 1px solid #f1f5f9;">

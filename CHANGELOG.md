@@ -33,14 +33,50 @@ Format dokumen ini mengacu pada [Keep a Changelog](https://keepachangelog.com/id
   - Mengaktifkan fungsi pencarian global di header admin (`admGlobalSearch`) yang terhubung langsung ke pencarian booking, mencakup kode booking, nama customer/penumpang, nomor telepon, armada bus, nomor polisi, serta kota dan terminal rute.
   - Melengkapi data master pada seeder (`TerminalSeeder`, `RuteSeeder`, `BusSeeder`) agar mencakup seluruh terminal di Indonesia, rute antar kota, dan armada bus eksekutif dari branch lulu.
   - Memperkuat kestabilan geocoding terminal pada `TerminalController` dengan blok `try-catch` agar tidak crash saat koneksi API eksternal mengalami gangguan.
-- **Kalkulasi Otomatis Jam Tiba (Estimasi) Form Tambah & Edit Jadwal (`resources/views/pages/admin/jadwal/create.blade.php`, `resources/views/pages/admin/jadwal/edit.blade.php`, `app/Http/Controllers/JadwalController.php`)**:
-  - Menambahkan atribut `data-durasi` pada setiap `<option>` rute perjalanan berdasarkan kolom `estimasi_durasi` (dalam menit) dari tabel `rutes`.
-  - Mengubah input field `jam_tiba` menjadi `readonly` sehingga terisi otomatis tanpa perlu diketik manual dan nilainya tetap terkirim saat form disubmit.
-  - Mengimplementasikan script kalkulasi real-time saat pengguna memilih/mengganti rute atau mengubah jam berangkat, dengan penanganan pergantian hari / melewati tengah malam yang akurat.
-  - Memastikan kalkulasi otomatis dieksekusi saat halaman form pertama kali dimuat (mendukung form edit dan restore nilai input lama).
-  - Menambahkan kalkulasi fallback di sisi backend (`JadwalController@store` dan `JadwalController@update`) agar field `jam_tiba` terjamin tersimpan ke database.
+- **Kalkulasi Otomatis & Penguncian Total Input Jam Tiba (Estimasi) pada Form Jadwal Admin (`resources/views/pages/admin/jadwal/create.blade.php`, `resources/views/pages/admin/jadwal/edit.blade.php`, `app/Http/Controllers/JadwalController.php`)**:
+  - Mengunci total input `jam_tiba` dari segala bentuk manipulasi/input manual (`readonly`, `tabindex="-1"`, `onkeydown="return false;"`, `onfocus="this.blur();"`, `pointer-events: none;`, warna latar abu-abu `#f1f5f9` dengan badge `Terisi Otomatis`) guna mencegah pengguna mengetik manual atau memicu clock-picker bawaan browser.
+  - Mengimplementasikan kalkulasi otomatis real-time di mana estimasi jam tiba terhitung sendiri saat jam berangkat diinput atau rute dipilih, didukung penanganan pergantian hari (`Keesokan Harinya`) dan catatan interaktif.
+  - Menampilkan durasi perjalanan secara eksplisit pada teks opsi dropdown rute (contoh: `Makassar → Palopo (Durasi: 6 jam)`).
+  - Memperkuat `JadwalController@store` dan `JadwalController@update` agar selalu menghitung ulang `jam_tiba` dari `jam_berangkat` ditambah `rute->estimasi_durasi` di sisi server sebagai validasi mutlak.
+
+### Removed
+- **Penghapusan Keterangan Asuransi Penumpang dari Sistem (`resources/views/pages/booking/form.blade.php`, `resources/views/pages/booking/payment.blade.php`)**:
+  - Menghapus baris "Asuransi Penumpang: Termasuk" dari ringkasan tagihan (price breakdown) pada form pengisian data penumpang dan halaman konfirmasi pembayaran agar tampilan rincian harga hanya menampilkan tarif tiket bus murni.
 
 ### Fixed
+- **Pencegahan Kedaluwarsa Dini pada Batas Waktu Pembayaran Booking (`app/Services/BookingService.php`)**:
+  - Memperbaiki logika `BookingService::expiredAt()` yang sebelumnya menetapkan batas waktu kedaluwarsa mundur ke jam keberangkatan (`$expiry = $berangkat`) bahkan ketika jam keberangkatan bus sudah terlewat (misal bus jam 13:00 dipesan pada jam 13:44), sehingga pesanan langsung berstatus `EXPIRED` seketika saat dibuat.
+  - Menetapkan batas waktu pembayaran selalu minimal 2 jam ke depan dari waktu pembuatan pesanan (`now()->addHours(2)`) jika jadwal keberangkatan sudah dekat atau telah terlewat, sehingga transaksi tidak hangus secara prematur.
+  - Memulihkan status pesanan `BUS-20261106-CK79VG` (ID: 182) dari `expired` kembali ke `pending`/`unpaid` dengan batas bayar 2 jam ke depan.
+- **Konfigurasi Zona Waktu Aplikasi ke WITA & Sinkronisasi Waktu Pemesanan (`config/app.php`, `.env`, `.env.example`, `resources/views/pages/admin/booking/show.blade.php`, `resources/views/pages/customer/bookings.blade.php`, `resources/views/pages/admin/payment/index.blade.php`, `resources/views/pages/admin/payment/show.blade.php`)**:
+  - Mengubah konfigurasi `timezone` aplikasi pada `config/app.php` dari `Asia/Jakarta` (WIB / UTC+7) menjadi `Asia/Makassar` (WITA / UTC+8) dengan dukungan variabel lingkungan `APP_TIMEZONE` di `.env` dan `.env.example`.
+  - Mengatasi perbedaan jam pembuatan pesanan yang sebelumnya tertinggal 1 jam (WIB alih-alih waktu lokal Sulawesi WITA).
+  - Menambahkan keterangan zona waktu eksplisit `WITA` pada baris **Waktu Pemesanan** dan **Waktu Pelunasan** di detail booking admin, riwayat pesanan pelanggan, serta tabel pembayaran.
+- **Standardisasi Zona Waktu WITA pada Seluruh Tampilan Admin Panel (`resources/views/pages/admin/booking/show.blade.php`, `resources/views/pages/admin/booking/index.blade.php`, `resources/views/pages/admin/dashboard/index.blade.php`, `resources/views/pages/admin/payment/show.blade.php`, `resources/views/pages/admin/report/index.blade.php`)**:
+  - Mengubah seluruh label zona waktu yang sebelumnya tertulis `WIB` menjadi **`WITA`** (Waktu Indonesia Tengah) pada detail booking admin, tabel booking, ringkasan dashboard, detail pembayaran, dan laporan transaksi.
+  - Memastikan konsistensi 100% dengan domain operasional rute dan terminal bus di Sulawesi (Makassar, Parepare, Palopo, Palu, Kendari) yang telah digunakan di seluruh halaman pemesanan penumpang.
+- **Perbaikan Autentikasi Rute Riwayat Pemesanan & Alur Booking Tamu/Member (`routes/web.php`, `app/Http/Controllers/CustomerController.php`, `app/Http/Controllers/AuthController.php`, `resources/views/pages/booking/detail.blade.php`, `resources/views/pages/booking/ticket.blade.php`, `tests/Feature/BookingFlowTest.php`)**:
+  - Mengembalikan rute `customer.bookings` (`/customer/bookings`) ke dalam grup middleware `ValidasiUser` dan `CheckRole:customer` serta menambahkan penanganan pengalihan yang aman pada seluruh method `CustomerController` guna mencegah `ModelNotFoundException` (error 404) saat diakses oleh pengunjung yang belum login.
+  - Memperbarui tombol navigasi kembali pada halaman detail pesanan (`booking/detail.blade.php`) dan tiket digital (`booking/ticket.blade.php`) agar secara kontekstual mengarahkan tamu (guest) kembali ke Beranda (`home`), sementara pengguna yang telah login diarahkan ke Riwayat Pemesanan (`customer.bookings`).
+  - Menambahkan pengaitan otomatis pada `AuthController@login_action`: ketika pengunjung yang telah membuat booking tanpa login kemudian masuk ke akun pelanggan miliknya, seluruh transaksi tamu yang ada di sesi akan otomatis ditautkan ke akun pengguna tersebut.
+- **Perbaikan Estimasi Jam Tiba & Durasi Perjalanan di Seluruh Rute Termasuk Makassar ke Palopo (`resources/views/pages/tiket/search.blade.php`, `resources/views/pages/booking/form.blade.php`, `resources/views/pages/booking/payment.blade.php`, `resources/views/pages/booking/detail.blade.php`, `resources/views/pages/customer/tickets.blade.php`, `resources/views/pages/admin/rute/index.blade.php`, `app/Models/rute.php`, `app/Models/Jadwal.php`, `database/seeders/RuteSeeder.php`)**:
+  - Memperbaiki galat kalkulasi menit ganda `addMinutes(($durasi ?? 8) * 60)` pada timeline kartu jadwal tiket dan halaman alur pemesanan yang sebelumnya menyebabkan jam tiba berputar ratusan jam dan kembali ke waktu berangkat yang sama.
+  - Menghilangkan format teks durasi canggung (`06:00 Jam`) dengan accessor `durasi_singkat` (`8j 30m`) dan `durasi_formatted` (`8 jam 30 mnt`) pada model `Rute`.
+  - Mengintegrasikan accessor `jam_tiba_formatted` dan deteksi `is_next_day` pada model `Jadwal` dengan badge penanda `+1 hari` untuk keberangkatan malam yang tiba subuh/keesokan harinya.
+  - Menyesuaikan estimasi durasi rute Makassar ke Palopo (380 km) dari yang sebelumnya 360 menit (6 jam - tidak realistis) menjadi 510 menit (8 jam 30 menit) di basis data dan seeder, serta memperbarui nilai kolom `jam_tiba` pada seluruh jadwal aktif di database.
+- **Standardisasi Label Pembayaran Cash & Validasi Form Konfirmasi Manual (`app/Models/Payment.php`, `resources/views/pages/admin/payment/index.blade.php`, `resources/views/pages/admin/booking/show.blade.php`, `app/Http/Controllers/AdminBookingController.php`)**:
+  - Mengubah label metode pembayaran tunai agar selalu tertulis **`Cash`** (bukan `Tunai (Loket)` atau angka nominal).
+  - Mengganti input teks bebas pada form konfirmasi pembayaran manual admin menjadi dropdown `<select>` (`Cash` atau `Transfer Bank`) untuk mencegah salah ketik nominal uang ke kolom metode.
+  - Memperbaiki data pembayaran lampau (`MID-BUS-20261106-FFNOWP`) yang sebelumnya tertulis angka `100000` menjadi **`Cash`**.
+- **Pencatatan & Tampilan Metode Pembayaran Midtrans / GoPay (`app/Services/PaymentService.php`, `app/Models/Payment.php`, `resources/views/pages/admin/payment/index.blade.php`, `resources/views/pages/admin/payment/show.blade.php`, `resources/views/pages/admin/booking/show.blade.php`, `routes/web.php`, `app/Http/Middleware/VerifyCsrfToken.php`)**:
+  - Mengatasi kolom metode pembayaran yang sebelumnya kosong / strip (`-`) saat pelanggan membayar menggunakan GoPay atau e-wallet melalui Midtrans Snap.
+  - Memperbarui `PaymentService::checkStatus` dan `PaymentService::handleNotification` agar merekam `payment_type`, `transaction_id`, dan secara cerdas mendeteksi issuer `gopay` dari transaksi QRIS Midtrans.
+  - Menambahkan accessor `metode_label` pada model `Payment` untuk menampilkan nama metode pembayaran yang ramah (GoPay, ShopeePay, Transfer Bank BCA/BNI/BRI/Mandiri, QRIS, dll).
+  - Melakukan sinkronisasi data riwayat pembayaran sebelumnya yang memiliki `payment_type = NULL` agar kembali menampilkan metode `GoPay`.
+  - Menambahkan alias rute `/midtrans/callback` dan pengecualian CSRF pada `VerifyCsrfToken.php` serta memperbaiki penanganan status `expire` sehingga pengujian `MidtransPaymentTest` lulus 100%.
+- **Perapian Garis Vertikal Indikator Rute Kartu Populer (`resources/views/pages/landing/index.blade.php`)**:
+  - Mengatasi garis penghubung rute asal-tujuan yang sebelumnya miring/offset ke kanan sejauh 4-5px akibat kalkulasi padding-margin manual (`pl-1.5 ml-1`).
+  - Mengubah wrapper garis penghubung menjadi flex container berlebar persis sama dengan diameter lingkaran (`w-3 flex justify-center`) sehingga garis vertikal (`w-0.5`) terjamin lurus presisi tepat di titik pusat kedua lingkaran titik henti.
 - **Perbaikan Otorisasi Akses Booking untuk Pengguna Terdaftar & Tamu (`app/Http/Controllers/BookingController.php`, `tests/Feature/BookingFlowTest.php`)**:
   - Memperbaiki logika otorisasi `authorizeOwnership` yang sebelumnya selalu mengecek session token `guest_booking_{id}` pada semua request, sehingga pelanggan yang sudah login tidak lagi terkena galat `403 Forbidden` saat mengakses detail pesanan, pembayaran, dan e-tiket mereka sendiri.
   - Memisahkan percabangan otorisasi secara tegas: verifikasi kecocokan `user_id` untuk pesanan pengguna terdaftar, dan verifikasi session token `guest_booking_{id}` untuk pesanan tamu tanpa akun.

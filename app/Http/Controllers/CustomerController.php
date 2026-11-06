@@ -10,9 +10,22 @@ use Illuminate\Support\Facades\Session;
 
 class CustomerController extends Controller
 {
+    private function getAuthenticatedUser(): ?User
+    {
+        $userId = Session('user_id');
+        if (!$userId) {
+            return null;
+        }
+
+        return User::find($userId);
+    }
+
     public function dashboard()
     {
-        $user = User::findOrFail(Session('user_id'));
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return redirect()->route('login')->with('message', 'need login');
+        }
 
         $terminals = Terminal::where('status', 'aktif')->orderBy('kota')->get();
 
@@ -43,7 +56,10 @@ class CustomerController extends Controller
 
     public function bookings(Request $request)
     {
-        $user = User::findOrFail(Session('user_id'));
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return redirect()->route('login')->with('message', 'need login');
+        }
 
         $status = $request->query('status');
 
@@ -65,7 +81,10 @@ class CustomerController extends Controller
 
     public function tickets()
     {
-        $user = User::findOrFail(Session('user_id'));
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return redirect()->route('login')->with('message', 'need login');
+        }
 
         $bookings = $user->bookings()
             ->with('jadwal.bus', 'jadwal.rute.terminalAsal', 'jadwal.rute.terminalTujuan', 'bookingSeats.kursi')
@@ -81,7 +100,10 @@ class CustomerController extends Controller
 
     public function profile()
     {
-        $user = User::findOrFail(Session('user_id'));
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return redirect()->route('login')->with('message', 'need login');
+        }
 
         return view('pages.customer.profile', [
             'menu' => 'profile',
@@ -91,7 +113,10 @@ class CustomerController extends Controller
 
     public function profileUpdate(Request $request)
     {
-        $user = User::findOrFail(Session('user_id'));
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return redirect()->route('login')->with('message', 'need login');
+        }
 
         $request->validate([
             'name' => 'required|string|max:255',

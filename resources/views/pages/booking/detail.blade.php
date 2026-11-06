@@ -6,7 +6,7 @@
         <!-- Header Strip -->
         <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-3.5">
-                <a href="{{ Session('role') == 'admin' ? route('admin.booking.show', $booking->id) : route('customer.bookings') }}" class="w-9 h-9 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 flex items-center justify-center transition-colors">
+                <a href="{{ Session('role') == 'admin' ? route('admin.booking.show', $booking->id) : (Session('cek') ? route('customer.bookings') : route('home')) }}" class="w-9 h-9 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 flex items-center justify-center transition-colors" title="{{ Session('cek') ? 'Kembali ke Riwayat Pesanan' : 'Kembali ke Beranda' }}">
                     <span class="material-symbols-outlined text-lg">arrow_back</span>
                 </a>
                 <div>
@@ -75,7 +75,7 @@
 
                         <div class="sm:col-span-4 text-right">
                             <div class="text-lg font-black text-slate-900">
-                                {{ \Carbon\Carbon::parse($booking->jadwal->jam_berangkat)->addMinutes(($booking->jadwal->rute->estimasi_durasi ?? 8) * 60)->format('H:i') }} WITA
+                                {{ $booking->jadwal->jam_tiba_formatted }} WITA{{ $booking->jadwal->is_next_day ? ' (+1 hari)' : '' }}
                             </div>
                             <div class="font-bold text-slate-800">{{ $booking->jadwal->rute->terminalTujuan->kota }}</div>
                             <div class="text-slate-400 font-body">{{ $booking->jadwal->rute->terminalTujuan->nama_terminal }}</div>

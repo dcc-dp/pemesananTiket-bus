@@ -62,4 +62,39 @@ class Jadwal extends Model
     {
         return ucfirst($this->status);
     }
+
+    public function getJamTibaFormattedAttribute(): string
+    {
+        if ($this->jam_tiba) {
+            return \Carbon\Carbon::parse($this->jam_tiba)->format('H:i');
+        }
+
+        if ($this->jam_berangkat && $this->rute && $this->rute->estimasi_durasi) {
+            return \Carbon\Carbon::parse($this->jam_berangkat)->addMinutes($this->rute->estimasi_durasi)->format('H:i');
+        }
+
+        return $this->jam_berangkat ? \Carbon\Carbon::parse($this->jam_berangkat)->format('H:i') : '-';
+    }
+
+    public function getIsNextDayAttribute(): bool
+    {
+        if (!$this->jam_berangkat) {
+            return false;
+        }
+
+        $berangkat = \Carbon\Carbon::parse($this->jam_berangkat);
+        $durasiMenit = $this->rute->estimasi_durasi ?? null;
+
+        if ($durasiMenit !== null && $durasiMenit > 0) {
+            $tiba = (clone $berangkat)->addMinutes($durasiMenit);
+            return $tiba->format('Y-m-d') !== $berangkat->format('Y-m-d');
+        }
+
+        if ($this->jam_tiba) {
+            $tiba = \Carbon\Carbon::parse($this->jam_tiba);
+            return $tiba->format('H:i') < $berangkat->format('H:i');
+        }
+
+        return false;
+    }
 }

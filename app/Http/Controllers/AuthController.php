@@ -41,6 +41,20 @@ class AuthController extends Controller
         Session::put('role', $user->role);
         Session::put('cek', true);
 
+        // Kaitkan booking tamu yang tersimpan di sesi ke akun pengguna yang baru login
+        if ($user->isCustomer()) {
+            foreach (session()->all() as $key => $val) {
+                if (str_starts_with($key, 'guest_booking_') && $val) {
+                    $bookingId = (int) str_replace('guest_booking_', '', $key);
+                    $guestBooking = \App\Models\Booking::where('id', $bookingId)->whereNull('user_id')->first();
+                    if ($guestBooking) {
+                        $guestBooking->user_id = $user->id;
+                        $guestBooking->save();
+                    }
+                }
+            }
+        }
+
         if ($user->isAdmin()) {
             return redirect()->route('admin.dashboard')
                 ->with('message', 'sukses login');

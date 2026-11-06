@@ -46,9 +46,9 @@
                             <div class="col-md-5 col-12 mb-2 mb-md-0" style="padding-left: 5px; padding-right: 5px;">
                                 <select name="payment_type" class="adm-select" style="height: 35px; font-size: 11.5px; border-radius: 6px; padding: 0 10px; border: 1px solid #cbd5e1; width: 100%;">
                                     <option value="">Semua Metode Pembayaran</option>
-                                    @foreach (['cash', 'transfer', 'qris', 'midtrans'] as $type)
-                                        <option value="{{ $type }}" {{ ($filter['payment_type'] ?? '') == $type ? 'selected' : '' }}>
-                                            {{ ucfirst($type) }}
+                                    @foreach (['gopay' => 'GoPay', 'qris' => 'QRIS', 'bank_transfer' => 'Transfer Bank', 'cash' => 'Cash', 'midtrans' => 'Midtrans (Lainnya)'] as $typeKey => $typeLabel)
+                                        <option value="{{ $typeKey }}" {{ ($filter['payment_type'] ?? '') == $typeKey ? 'selected' : '' }}>
+                                            {{ $typeLabel }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -118,9 +118,17 @@
 
                                     <!-- Metode -->
                                     <td style="padding: 6px 12px; vertical-align: middle;">
-                                        <span style="font-size: 10.5px; font-weight: 600; text-transform: uppercase; background: #f8fafc; color: #475569; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0;">
-                                            {{ $data->payment_type ? ucfirst($data->payment_type) : '-' }}
-                                        </span>
+                                        @php
+                                            $mLabel = $data->metode_label;
+                                        @endphp
+                                        @if ($mLabel !== '-')
+                                            <span style="font-size: 10.5px; font-weight: 700; background: #f8fafc; color: #1e293b; padding: 2.5px 7px; border-radius: 4px; border: 1px solid #cbd5e1; display: inline-flex; align-items: center; gap: 4px;">
+                                                <i class="fas fa-credit-card" style="font-size: 9px; color: #64748b;"></i>
+                                                {{ $mLabel }}
+                                            </span>
+                                        @else
+                                            <span style="font-size: 11px; color: #94a3b8;">-</span>
+                                        @endif
                                     </td>
 
                                     <!-- Gross Amount -->
@@ -151,7 +159,7 @@
 
                                     <!-- Paid At -->
                                     <td style="padding: 6px 12px; vertical-align: middle; font-size: 11px; color: #64748b;">
-                                        {{ $data->paid_at ? $data->paid_at->format('d M Y H:i') : '-' }}
+                                        {{ $data->paid_at ? $data->paid_at->format('d M Y H:i') . ' WITA' : '-' }}
                                     </td>
 
                                     <!-- Action -->

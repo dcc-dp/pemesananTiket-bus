@@ -70,8 +70,11 @@
 
                                 <!-- Destination -->
                                 <div class="text-right min-w-[70px]">
-                                    <div class="text-lg sm:text-xl font-black text-slate-900">
-                                        {{ \Carbon\Carbon::parse($booking->jadwal->jam_berangkat)->addMinutes($booking->jadwal->rute->estimasi_durasi ?? 0)->format('H:i') }}
+                                    <div class="text-lg sm:text-xl font-black text-slate-900 flex items-center justify-end gap-1">
+                                        <span>{{ $booking->jadwal->jam_tiba_formatted }}</span>
+                                        @if ($booking->jadwal->is_next_day)
+                                            <span class="text-[9.5px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1 py-0.5 rounded leading-none" title="Tiba keesokan harinya">+1 hari</span>
+                                        @endif
                                     </div>
                                     <div class="text-xs font-semibold text-slate-700">
                                         {{ $booking->jadwal->rute->terminalTujuan->kota }}</div>

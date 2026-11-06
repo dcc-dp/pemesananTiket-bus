@@ -113,8 +113,13 @@ class AdminBookingController extends Controller
             'payment_method' => 'required|string|max:50',
         ]);
 
+        $method = strtolower(trim($request->payment_method));
+        if ($method === 'tunai' || is_numeric($method)) {
+            $method = 'cash';
+        }
+
         try {
-            $this->paymentService->confirmManually($booking, $request->payment_method);
+            $this->paymentService->confirmManually($booking, $method);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }

@@ -208,17 +208,16 @@
 
                             </div>
 
-                            <!-- Route Stop Visual -->
-                            <div class="space-y-3 mb-6">
+                            <div class="space-y-2 mb-6">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-3 h-3 rounded-full border-2 border-brand-600 bg-white"></div>
+                                    <div class="w-3 h-3 rounded-full border-2 border-brand-600 bg-white shrink-0"></div>
                                     <span class="text-sm font-bold text-slate-800">{{ $route->terminalAsal->kota ?? 'Makassar' }}</span>
                                 </div>
-                                <div class="pl-1.5 -my-2.5">
-                                    <div class="w-0.5 h-6 bg-slate-200 ml-1"></div>
+                                <div class="w-3 flex justify-center -my-1.5 shrink-0">
+                                    <div class="w-0.5 h-5 bg-slate-200"></div>
                                 </div>
                                 <div class="flex items-center gap-3">
-                                    <div class="w-3 h-3 rounded-full bg-brand-600"></div>
+                                    <div class="w-3 h-3 rounded-full bg-brand-600 shrink-0"></div>
                                     <span class="text-sm font-bold text-slate-800">{{ $route->terminalTujuan->kota ?? 'Toraja' }}</span>
                                 </div>
                             </div>
@@ -268,14 +267,16 @@
                                     Rute Perjalanan
                                 </span>
                             </div>
-                            <div class="space-y-3 mb-6">
+                            <div class="space-y-2 mb-6">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-3 h-3 rounded-full border-2 border-brand-600 bg-white"></div>
+                                    <div class="w-3 h-3 rounded-full border-2 border-brand-600 bg-white shrink-0"></div>
                                     <span class="text-sm font-bold text-slate-800">Makassar</span>
                                 </div>
-                                <div class="pl-1.5 -my-2.5"><div class="w-0.5 h-6 bg-slate-200 ml-1"></div></div>
+                                <div class="w-3 flex justify-center -my-1.5 shrink-0">
+                                    <div class="w-0.5 h-5 bg-slate-200"></div>
+                                </div>
                                 <div class="flex items-center gap-3">
-                                    <div class="w-3 h-3 rounded-full bg-brand-600"></div>
+                                    <div class="w-3 h-3 rounded-full bg-brand-600 shrink-0"></div>
                                     <span class="text-sm font-bold text-slate-800">Parepare</span>
                                 </div>
                             </div>

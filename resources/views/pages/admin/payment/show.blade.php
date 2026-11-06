@@ -67,8 +67,9 @@
 
                                 <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px dashed #f1f5f9; font-size: 11.5px;">
                                     <span style="color: #64748b;">Metode Pembayaran</span>
-                                    <span style="font-size: 10.5px; font-weight: 600; text-transform: uppercase; background: #f8fafc; color: #334155; padding: 2px 6px; border-radius: 4px; border: 1px solid #cbd5e1;">
-                                        {{ $data->payment_type ? ucfirst($data->payment_type) : '-' }}
+                                    <span style="font-size: 11px; font-weight: 700; background: #f8fafc; color: #1e293b; padding: 3px 8px; border-radius: 4px; border: 1px solid #cbd5e1; display: inline-flex; align-items: center; gap: 5px;">
+                                        <i class="fas fa-credit-card" style="font-size: 10px; color: #64748b;"></i>
+                                        {{ $data->metode_label }}
                                     </span>
                                 </div>
 
@@ -108,7 +109,7 @@
                                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11.5px;">
                                     <span style="color: #64748b;">Waktu Pelunasan</span>
                                     <span style="font-weight: 600; color: #0f172a;">
-                                        {{ $data->paid_at ? $data->paid_at->format('d M Y H:i:s') : '-' }}
+                                        {{ $data->paid_at ? $data->paid_at->format('d M Y H:i:s') . ' WITA' : '-' }}
                                     </span>
                                 </div>
                             </div>
@@ -160,7 +161,7 @@
                                 <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px dashed #f1f5f9; font-size: 11.5px;">
                                     <span style="color: #64748b;">Jadwal Keberangkatan</span>
                                     <span style="font-weight: 600; color: #0f172a;">
-                                        {{ $data->booking->jadwal->tanggal->format('d M Y') }} &middot; {{ $data->booking->jadwal->jam_berangkat->format('H:i') }} WIB
+                                        {{ $data->booking->jadwal->tanggal->format('d M Y') }} &middot; {{ $data->booking->jadwal->jam_berangkat->format('H:i') }} WITA
                                     </span>
                                 </div>
 

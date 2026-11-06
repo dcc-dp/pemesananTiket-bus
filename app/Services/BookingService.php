@@ -129,8 +129,16 @@ class BookingService
 
         $expiry = now()->addHours(2);
 
-        if ($expiry->gt($berangkat)) {
-            $expiry = $berangkat;
+        // Jika jadwal keberangkatan masih di masa depan
+        if ($berangkat->gt(now())) {
+            // Jika keberangkatan kurang dari 2 jam lagi, batas bayar disesuaikan ke waktu berangkat
+            if ($expiry->gt($berangkat)) {
+                $expiry = $berangkat;
+            }
+        } else {
+            // Jika jam keberangkatan sudah terlewat (misal data demo/jadwal hari ini),
+            // berikan toleransi waktu bayar 2 jam dari sekarang agar pesanan tidak langsung hangus
+            $expiry = now()->addHours(2);
         }
 
         return $expiry;

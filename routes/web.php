@@ -65,8 +65,6 @@ Route::get('/booking/{booking}/bayar', [BookingController::class, 'pay'])
 
 Route::get('/booking/{booking}/tiket', [BookingController::class, 'ticket'])
     ->name('customer.booking.ticket');
-    
-Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
 
 
 // ===================== AUTH =====================
@@ -80,6 +78,7 @@ Route::prefix('auth')->group(function () {
 
 // Callback pembayaran (Midtrans) - tanpa CSRF
 Route::post('/payment/callback', [BookingController::class, 'callback'])->name('payment.callback');
+Route::post('/midtrans/callback', [BookingController::class, 'callback'])->name('midtrans.callback');
 
 // ===================== CUSTOMER =====================
 Route::group(['middleware' => ['ValidasiUser', 'CheckRole:customer']], function () {
@@ -94,7 +93,7 @@ Route::group(['middleware' => ['ValidasiUser', 'CheckRole:customer']], function 
     // Route::get('/booking/{booking}/bayar', [BookingController::class, 'pay'])->name('customer.booking.pay');
     // Route::get('/booking/{booking}/tiket', [BookingController::class, 'ticket'])->name('customer.booking.ticket');
 
-    // Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
+    Route::get('/customer/bookings', [CustomerController::class, 'bookings'])->name('customer.bookings');
     Route::get('/customer/tickets', [CustomerController::class, 'tickets'])->name('customer.tickets');
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::post('/customer/profile/update', [CustomerController::class, 'profileUpdate'])->name('customer.profile.update');

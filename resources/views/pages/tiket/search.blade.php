@@ -243,7 +243,7 @@
 
                                         <div class="flex-1 flex flex-col items-center px-3">
                                             <span class="text-[10px] font-medium text-slate-400 mb-1">
-                                                {{ $jadwal->rute->estimasi_durasi ? gmdate('H:i', $jadwal->rute->estimasi_durasi * 60) . ' Jam' : '8j 30m' }}
+                                                {{ $jadwal->rute ? $jadwal->rute->durasi_singkat : '8j 30m' }}
                                             </span>
                                             <div class="w-full flex items-center">
                                                 <div class="w-2 h-2 rounded-full bg-brand-600"></div>
@@ -255,8 +255,11 @@
                                         </div>
 
                                         <div class="text-right">
-                                            <div class="text-base sm:text-lg font-bold text-slate-900">
-                                                {{ \Carbon\Carbon::parse($jadwal->jam_berangkat)->addMinutes(($jadwal->rute->estimasi_durasi ?? 8) * 60)->format('H:i') }}
+                                            <div class="text-base sm:text-lg font-bold text-slate-900 flex items-center justify-end gap-1">
+                                                <span>{{ $jadwal->jam_tiba_formatted }}</span>
+                                                @if ($jadwal->is_next_day)
+                                                    <span class="text-[9.5px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1 py-0.5 rounded leading-none" title="Tiba keesokan harinya">+1 hari</span>
+                                                @endif
                                             </div>
                                             <div class="text-xs text-slate-500 font-body">{{ $jadwal->rute->terminalTujuan->kota }}</div>
                                         </div>

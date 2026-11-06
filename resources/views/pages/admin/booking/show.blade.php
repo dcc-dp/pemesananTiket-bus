@@ -59,7 +59,7 @@
                                 <div class="row align-items-center text-center">
                                     <div class="col-4">
                                         <div style="font-size: 20px; font-weight: 800; color: #0f172a; line-height: 1.2;">
-                                            {{ $data->jadwal->jam_berangkat->format('H:i') }} <span style="font-size: 11px; font-weight: 500; color: #64748b;">WIB</span>
+                                            {{ $data->jadwal->jam_berangkat->format('H:i') }} <span style="font-size: 11px; font-weight: 500; color: #64748b;">WITA</span>
                                         </div>
                                         <div style="font-size: 13px; font-weight: 700; color: #2563eb; margin-top: 4px;">
                                             {{ $data->jadwal->rute->terminalAsal->nama_terminal }}
@@ -81,7 +81,7 @@
                                     </div>
                                     <div class="col-4">
                                         <div style="font-size: 20px; font-weight: 800; color: #0f172a; line-height: 1.2;">
-                                            {{ $data->jadwal->jam_tiba ? $data->jadwal->jam_tiba->format('H:i') : '-' }} <span style="font-size: 11px; font-weight: 500; color: #64748b;">WIB</span>
+                                            {{ $data->jadwal->jam_tiba_formatted }} <span style="font-size: 11px; font-weight: 500; color: #64748b;">WITA</span>
                                         </div>
                                         <div style="font-size: 13px; font-weight: 700; color: #2563eb; margin-top: 4px;">
                                             {{ $data->jadwal->rute->terminalTujuan->nama_terminal }}
@@ -126,12 +126,12 @@
                                         </div>
                                         <div style="display: flex; justify-content: space-between; font-size: 12.5px; padding-bottom: 8px; border-bottom: 1px dashed #f1f5f9;">
                                             <span style="color: #64748b;">Waktu Pemesanan:</span>
-                                            <span style="font-weight: 600; color: #0f172a;">{{ $data->tanggal_booking->format('d M Y H:i') }}</span>
+                                            <span style="font-weight: 600; color: #0f172a;">{{ $data->tanggal_booking->format('d M Y H:i') }} WITA</span>
                                         </div>
                                         @if ($data->paid_at)
                                             <div style="display: flex; justify-content: space-between; font-size: 12.5px;">
                                                 <span style="color: #64748b;">Waktu Pelunasan:</span>
-                                                <span style="font-weight: 600; color: #16a34a;">{{ $data->paid_at->format('d M Y H:i') }}</span>
+                                                <span style="font-weight: 600; color: #16a34a;">{{ $data->paid_at->format('d M Y H:i') }} WITA</span>
                                             </div>
                                         @endif
                                     </div>
@@ -253,7 +253,7 @@
                                     </div>
                                     <div style="display: flex; justify-content: space-between; font-size: 12px;">
                                         <span style="color: #64748b;">Metode:</span>
-                                        <span style="font-weight: 600; color: #0f172a; text-transform: uppercase;">{{ $data->payment->payment_type ?: '-' }}</span>
+                                        <span style="font-weight: 700; color: #0f172a;">{{ $data->payment->metode_label ?: ($data->payment_method ? ucfirst($data->payment_method) : '-') }}</span>
                                     </div>
                                 </div>
                             @endif
@@ -277,7 +277,10 @@
                                         <form method="POST" action="{{ route('admin.booking.confirm-payment', $data->id) }}" style="margin: 0;">
                                             @csrf
                                             <div style="margin-bottom: 8px;">
-                                                <input type="text" name="payment_method" class="adm-input" placeholder="Metode (cash / transfer)" required style="height: 36px; font-size: 12px;">
+                                                <select name="payment_method" class="adm-select" required style="height: 36px; font-size: 12px; width: 100%;">
+                                                    <option value="cash" selected>Cash (Tunai)</option>
+                                                    <option value="transfer">Transfer Bank</option>
+                                                </select>
                                             </div>
                                             <button type="submit" class="adm-btn-submit" style="width: 100%; height: 36px; justify-content: center; background: #16a34a; font-size: 12px;" onclick="return confirm('Konfirmasi bahwa pembayaran tiket ini telah diterima?');">
                                                 <i class="fas fa-check-circle" style="font-size: 11px;"></i>

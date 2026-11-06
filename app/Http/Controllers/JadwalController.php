@@ -61,7 +61,7 @@ class JadwalController extends Controller
             'id_bus', 'id_rute', 'tanggal', 'jam_berangkat', 'jam_tiba', 'harga', 'status',
         ]);
 
-        if (empty($payload['jam_tiba']) && $request->filled('jam_berangkat') && $request->filled('id_rute')) {
+        if ($request->filled('jam_berangkat') && $request->filled('id_rute')) {
             $rute = Rute::find($request->id_rute);
             if ($rute && $rute->estimasi_durasi) {
                 $payload['jam_tiba'] = \Carbon\Carbon::parse($request->jam_berangkat)->addMinutes($rute->estimasi_durasi)->format('H:i');
@@ -99,7 +99,7 @@ class JadwalController extends Controller
             'id_bus', 'id_rute', 'tanggal', 'jam_berangkat', 'jam_tiba', 'harga', 'status',
         ]);
 
-        if (empty($payload['jam_tiba']) && $request->filled('jam_berangkat') && $request->filled('id_rute')) {
+        if ($request->filled('jam_berangkat') && $request->filled('id_rute')) {
             $rute = Rute::find($request->id_rute);
             if ($rute && $rute->estimasi_durasi) {
                 $payload['jam_tiba'] = \Carbon\Carbon::parse($request->jam_berangkat)->addMinutes($rute->estimasi_durasi)->format('H:i');

@@ -196,7 +196,7 @@
                         <div class="flex items-start gap-3">
                             <div class="w-2.5 h-2.5 rounded-full bg-slate-900 mt-1"></div>
                             <div>
-                                <span class="font-bold text-slate-900">{{ \Carbon\Carbon::parse($booking->jadwal->jam_berangkat)->addMinutes(($booking->jadwal->rute->estimasi_durasi ?? 8) * 60)->format('H:i') }} WITA</span>
+                                <span class="font-bold text-slate-900">{{ $booking->jadwal->jam_tiba_formatted }} WITA{{ $booking->jadwal->is_next_day ? ' (+1 hari)' : '' }}</span>
                                 <p class="text-slate-500 font-body">{{ $booking->jadwal->rute->terminalTujuan->kota }} — {{ $booking->jadwal->rute->terminalTujuan->nama_terminal }}</p>
                             </div>
                         </div>
@@ -229,10 +229,6 @@
                             </span>
                         </div>
                         
-                        <div class="flex justify-between text-slate-600">
-                            <span>Asuransi Penumpang</span>
-                            <span class="font-semibold text-emerald-600">Termasuk</span>
-                        </div>
 
                         <div class="border-t border-slate-100 pt-3 flex items-center justify-between">
                             <div>

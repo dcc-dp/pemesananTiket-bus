@@ -210,4 +210,41 @@ class BookingFlowTest extends TestCase
         $this->loginAs($data['customer']);
         $this->get('/booking/'.$booking->id.'/tiket')->assertOk();
     }
+
+    public function test_guest_accessing_customer_bookings_is_redirected_to_login(): void
+    {
+        $response = $this->get('/customer/bookings');
+
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_guest_booking_is_associated_with_customer_after_login(): void
+    {
+        $data = $this->seedJourney();
+        $jadwal = $data['jadwal'];
+        $kursi = $data['kursis']['1A'];
+
+        // Tamu pesan tiket tanpa login
+        $this->post('/booking/store', [
+            'id_jadwal' => $jadwal->id_jadwal,
+            'penumpang' => [0 => $this->passengerPayload($kursi)],
+        ])->assertRedirect();
+
+        $booking = Booking::whereNull('user_id')->latest()->first();
+        $this->assertNotNull($booking);
+
+        // Tamu melakukan login
+        $customer = $data['customer'];
+        $this->post('/auth/login', [
+            'identity' => $customer->username,
+            'password' => 'password',
+        ])->assertRedirect(route('customer.dashboard'));
+
+        // Booking sekarang otomatis terhubung ke akun customer
+        $booking->refresh();
+        $this->assertEquals($customer->id, $booking->user_id);
+
+        // Customer dapat mengakses riwayat pesanannya
+        $this->get('/customer/bookings')->assertOk();
+    }
 }

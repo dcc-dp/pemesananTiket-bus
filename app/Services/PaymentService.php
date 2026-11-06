@@ -119,14 +119,35 @@ class PaymentService
     /**
      * Proses notifikasi callback dari Midtrans.
      */
-    public function handleNotification(): void
+    public function handleNotification(?array $payload = null): void
     {
-        $notification = new Notification;
+        $data = $payload ?: request()->all();
 
-        $status = $notification->transaction_status;
-        $fraud = $notification->fraud_status;
-        $orderId = $notification->order_id;
-        $grossAmount = $notification->gross_amount;
+        if (!empty($data) && isset($data['order_id'], $data['transaction_status'])) {
+            $status = (string) ($data['transaction_status'] ?? '');
+            $fraud = $data['fraud_status'] ?? null;
+            $orderId = (string) ($data['order_id'] ?? '');
+            $grossAmount = $data['gross_amount'] ?? null;
+            $transactionId = $data['transaction_id'] ?? null;
+            $paymentType = $data['payment_type'] ?? null;
+            $issuer = $data['issuer'] ?? ($data['acquirer'] ?? null);
+            $rawResponse = $data;
+        } else {
+            try {
+                $notification = new Notification;
+                $status = (string) $notification->transaction_status;
+                $fraud = $notification->fraud_status;
+                $orderId = (string) $notification->order_id;
+                $grossAmount = $notification->gross_amount;
+                $transactionId = $notification->transaction_id;
+                $paymentType = $notification->payment_type;
+                $issuer = $notification->issuer ?? ($notification->acquirer ?? null);
+                $rawResponse = (array) $notification->getResponse();
+            } catch (\Throwable $e) {
+                Log::warning('Midtrans Notification parsing failed: ' . $e->getMessage());
+                return;
+            }
+        }
 
         $payment = Payment::where('order_id', $orderId)->first();
 
@@ -146,12 +167,16 @@ class PaymentService
             return;
         }
 
-        DB::transaction(function () use ($notification, $status, $fraud, $payment, $booking, $grossAmount) {
-            $payment->transaction_id = $notification->transaction_id ?? $payment->transaction_id;
-            $payment->payment_type = $notification->payment_type ?? $payment->payment_type;
+        if (strtolower((string) $paymentType) === 'qris' && strtolower((string) $issuer) === 'gopay') {
+            $paymentType = 'gopay';
+        }
+
+        DB::transaction(function () use ($transactionId, $paymentType, $status, $fraud, $payment, $booking, $grossAmount, $rawResponse) {
+            $payment->transaction_id = $transactionId ?: $payment->transaction_id;
+            $payment->payment_type = $paymentType ?: $payment->payment_type;
             $payment->transaction_status = $status;
             $payment->gross_amount = (int) $grossAmount ?: $payment->gross_amount;
-            $payment->raw_response = array_merge($payment->raw_response ?? [], (array) $notification->getResponse());
+            $payment->raw_response = array_merge($payment->raw_response ?? [], (array) $rawResponse);
 
             $this->resolvePaymentStatus($payment, $status, $fraud, $booking);
         });
@@ -175,7 +200,6 @@ class PaymentService
 
             case 'deny':
             case 'cancel':
-            case 'expire':
                 $payment->payment_status = 'failed';
                 $payment->save();
 
@@ -183,6 +207,16 @@ class PaymentService
                 $booking->save();
 
                 app(BookingService::class)->updateBookingStatus($booking, 'cancelled');
+                break;
+
+            case 'expire':
+                $payment->payment_status = 'expired';
+                $payment->save();
+
+                $booking->status_pembayaran = 'expired';
+                $booking->save();
+
+                app(BookingService::class)->updateBookingStatus($booking, 'expired');
                 break;
 
             case 'pending':
@@ -201,14 +235,26 @@ class PaymentService
 
     private function markPaid(Payment $payment, Booking $booking): void
     {
+        $raw = $payment->raw_response ?? [];
+        $pType = $payment->payment_type ?: ($raw['payment_type'] ?? null);
+        $issuer = $raw['issuer'] ?? ($raw['acquirer'] ?? null);
+
+        if (strtolower((string) $pType) === 'qris' && strtolower((string) $issuer) === 'gopay') {
+            $pType = 'gopay';
+        }
+
+        if (!empty($pType)) {
+            $payment->payment_type = $pType;
+        }
+
         $payment->payment_status = 'paid';
-        $payment->paid_at = now();
+        $payment->paid_at = $payment->paid_at ?? now();
         $payment->save();
 
         $booking->status_pembayaran = 'paid';
         $booking->status_booking = 'confirmed';
         $booking->payment_method = $payment->payment_type ?: 'midtrans';
-        $booking->paid_at = now();
+        $booking->paid_at = $booking->paid_at ?? now();
         $booking->save();
 
         BookingSeat::where('booking_id', $booking->id)
@@ -262,9 +308,19 @@ class PaymentService
 
             $status = $result->transaction_status ?? '';
             $fraud = $result->fraud_status ?? null;
+            $rawResult = (array) $result;
 
+            $paymentType = $result->payment_type ?? $payment->payment_type;
+            $issuer = $result->issuer ?? ($result->acquirer ?? null);
+            if (strtolower((string) $paymentType) === 'qris' && strtolower((string) $issuer) === 'gopay') {
+                $paymentType = 'gopay';
+            }
+
+            $payment->transaction_id = $result->transaction_id ?? $payment->transaction_id;
+            $payment->payment_type = $paymentType ?: $payment->payment_type;
+            $payment->gross_amount = (int) ($result->gross_amount ?? $payment->gross_amount);
             $payment->transaction_status = $status;
-            $payment->raw_response = array_merge($payment->raw_response ?? [], (array) $result);
+            $payment->raw_response = array_merge($payment->raw_response ?? [], $rawResult);
 
             $this->resolvePaymentStatus($payment, $status, $fraud, $booking);
         } catch (\Throwable $e) {

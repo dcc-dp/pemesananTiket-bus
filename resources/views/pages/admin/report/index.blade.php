@@ -243,7 +243,7 @@
                                             {{ \Carbon\Carbon::parse($data->tanggal)->format('d M Y') }}
                                         </div>
                                         <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
-                                            <i class="far fa-clock" style="font-size: 10px; margin-right: 3px;"></i>{{ \Carbon\Carbon::parse($data->jam_berangkat)->format('H:i') }} WIB
+                                            <i class="far fa-clock" style="font-size: 10px; margin-right: 3px;"></i>{{ \Carbon\Carbon::parse($data->jam_berangkat)->format('H:i') }} WITA
                                         </div>
                                     </td>
 

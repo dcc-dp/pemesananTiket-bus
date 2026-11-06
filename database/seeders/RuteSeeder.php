@@ -12,12 +12,12 @@ class RuteSeeder extends Seeder
     {
         $routes = [
             ['asal' => 'TML-DAYA', 'tujuan' => 'TML-PAREPARE', 'jarak' => 154, 'durasi' => 165],
-            ['asal' => 'TML-DAYA', 'tujuan' => 'TML-PALOPO', 'jarak' => 380, 'durasi' => 360],
+            ['asal' => 'TML-DAYA', 'tujuan' => 'TML-PALOPO', 'jarak' => 380, 'durasi' => 510],
             ['asal' => 'TML-DAYA', 'tujuan' => 'TML-PALU', 'jarak' => 600, 'durasi' => 600],
             ['asal' => 'TML-DAYA', 'tujuan' => 'TML-KENDARI', 'jarak' => 688, 'durasi' => 780],
             ['asal' => 'TML-MALENGKERI', 'tujuan' => 'TML-PAREPARE', 'jarak' => 160, 'durasi' => 170],
-            ['asal' => 'TML-PAREPARE', 'tujuan' => 'TML-PALOPO', 'jarak' => 226, 'durasi' => 240],
-            ['asal' => 'TML-KENDARI', 'tujuan' => 'TML-PALOPO', 'jarak' => 310, 'durasi' => 330],
+            ['asal' => 'TML-PAREPARE', 'tujuan' => 'TML-PALOPO', 'jarak' => 226, 'durasi' => 300],
+            ['asal' => 'TML-KENDARI', 'tujuan' => 'TML-PALOPO', 'jarak' => 310, 'durasi' => 360],
         ];
 
         foreach ($routes as $route) {

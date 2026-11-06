@@ -91,7 +91,7 @@
                                         <td style="width: 130px; padding: 6px 12px; vertical-align: middle; border-bottom: 1px solid #f1f5f9;">
                                             <span style="font-size: 10.5px; font-weight: 600; color: #475569; display: inline-flex; align-items: center; gap: 4px;">
                                                 <i class="far fa-clock" style="font-size: 9.5px; color: #64748b;"></i>
-                                                <span>{{ $data->estimasi_durasi ? gmdate('H:i', $data->estimasi_durasi * 60) . ' jam' : '-' }}</span>
+                                                <span>{{ $data->durasi_formatted }}</span>
                                             </span>
                                         </td>
                                         <td style="width: 110px; text-align: center; padding: 6px 12px; vertical-align: middle; border-bottom: 1px solid #f1f5f9;">

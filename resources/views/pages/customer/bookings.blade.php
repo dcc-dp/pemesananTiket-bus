@@ -57,7 +57,7 @@
                             <tr class="hover:bg-slate-50/50 transition-colors">
                                 <td class="py-3.5 px-4 font-mono font-bold text-brand-700">
                                     {{ $booking->kode_booking }}
-                                    <div class="text-[10px] text-slate-400 font-sans font-normal mt-0.5">{{ $booking->tanggal_booking->format('d M Y H:i') }}</div>
+                                    <div class="text-[10px] text-slate-400 font-sans font-normal mt-0.5">{{ $booking->tanggal_booking->format('d M Y H:i') }} WITA</div>
                                 </td>
                                 <td class="py-3.5 px-4">
                                     <div class="font-semibold text-slate-800">

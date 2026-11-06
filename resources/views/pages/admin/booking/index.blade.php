@@ -144,7 +144,7 @@
                                             {{ $data->jadwal->tanggal->format('d M Y') }}
                                         </div>
                                         <div style="font-size: 10.5px; color: #2563eb; font-weight: 600; margin-top: 1px;">
-                                            <i class="far fa-clock" style="font-size: 9.5px; margin-right: 2px;"></i>{{ $data->jadwal->jam_berangkat->format('H:i') }} WIB
+                                            <i class="far fa-clock" style="font-size: 9.5px; margin-right: 2px;"></i>{{ $data->jadwal->jam_berangkat->format('H:i') }} WITA
                                         </div>
                                     </td>
 

@@ -31,8 +31,8 @@
                     <span class="material-symbols-outlined text-sm">print</span>
                     <span>Cetak Tiket</span>
                 </button>
-                <a href="{{ route('customer.bookings') }}" class="px-4 py-2 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs font-bold transition-all">
-                    Riwayat Pesanan
+                <a href="{{ Session('cek') ? route('customer.bookings') : route('home') }}" class="px-4 py-2 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs font-bold transition-all">
+                    {{ Session('cek') ? 'Riwayat Pesanan' : 'Kembali ke Beranda' }}
                 </a>
             </div>
         </div>

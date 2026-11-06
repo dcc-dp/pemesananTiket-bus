@@ -52,4 +52,40 @@ class Rute extends Model
     {
         return ucfirst($this->status);
     }
+
+    public function getDurasiFormattedAttribute(): string
+    {
+        if (!$this->estimasi_durasi) {
+            return '-';
+        }
+
+        $jam = intdiv($this->estimasi_durasi, 60);
+        $menit = $this->estimasi_durasi % 60;
+
+        if ($jam > 0 && $menit > 0) {
+            return "{$jam} jam {$menit} mnt";
+        } elseif ($jam > 0) {
+            return "{$jam} jam";
+        }
+
+        return "{$menit} mnt";
+    }
+
+    public function getDurasiSingkatAttribute(): string
+    {
+        if (!$this->estimasi_durasi) {
+            return '-';
+        }
+
+        $jam = intdiv($this->estimasi_durasi, 60);
+        $menit = $this->estimasi_durasi % 60;
+
+        if ($jam > 0 && $menit > 0) {
+            return "{$jam}j {$menit}m";
+        } elseif ($jam > 0) {
+            return "{$jam}j";
+        }
+
+        return "{$menit}m";
+    }
 }

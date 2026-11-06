@@ -59,11 +59,16 @@
                                             <label class="adm-form-label">
                                                 Pilih Rute <span class="req-star">*</span>
                                             </label>
-                                            <select name="id_rute" class="adm-select @error('id_rute') is-invalid @enderror" required>
-                                                <option value="">-- Pilih Rute Perjalanan --</option>
+                                            <select name="id_rute" id="id_rute" class="adm-select @error('id_rute') is-invalid @enderror" required>
+                                                <option value="" data-durasi="0">-- Pilih Rute Perjalanan --</option>
                                                 @foreach ($rutes as $rute)
-                                                    <option value="{{ $rute->id_rute }}" data-durasi="{{ $rute->estimasi_durasi ?? 0 }}" {{ old('id_rute', $data->id_rute) == $rute->id_rute ? 'selected' : '' }}>
-                                                        {{ $rute->nama_rute }}
+                                                    @php
+                                                        $jam = floor(($rute->estimasi_durasi ?? 0) / 60);
+                                                        $menit = ($rute->estimasi_durasi ?? 0) % 60;
+                                                        $durasiText = $jam > 0 ? "{$jam} jam" . ($menit > 0 ? " {$menit} mnt" : "") : "{$menit} mnt";
+                                                    @endphp
+                                                    <option value="{{ $rute->id_rute }}" data-durasi="{{ $rute->estimasi_durasi ?? 0 }}" data-durasi-text="{{ $durasiText }}" {{ old('id_rute', $data->id_rute) == $rute->id_rute ? 'selected' : '' }}>
+                                                        {{ $rute->nama_rute }} (Durasi: {{ $durasiText }})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -111,20 +116,30 @@
                                             <label class="adm-form-label">
                                                 Jam Berangkat <span class="req-star">*</span>
                                             </label>
-                                            <input type="time" name="jam_berangkat" class="adm-input @error('jam_berangkat') is-invalid @enderror"
+                                            <input type="time" name="jam_berangkat" id="jam_berangkat" class="adm-input @error('jam_berangkat') is-invalid @enderror"
                                                 value="{{ old('jam_berangkat', $data->jam_berangkat->format('H:i')) }}" required>
                                             @error('jam_berangkat')
                                                 <div class="invalid-feedback" style="font-size: 11px; margin-top: 4px; display: block;">{{ $message }}</div>
                                             @enderror
+        
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12" style="padding-left: 9px; padding-right: 9px;">
                                         <div class="adm-form-group">
-                                            <label class="adm-form-label">
-                                                Jam Tiba (Estimasi)
+                                            <label class="adm-form-label" style="display: flex; align-items: center; justify-content: space-between;">
+                                                <span>Jam Tiba (Estimasi)</span>
                                             </label>
-                                            <input type="time" name="jam_tiba" class="adm-input"
-                                                value="{{ old('jam_tiba', $data->jam_tiba ? $data->jam_tiba->format('H:i') : '') }}" readonly>
+                                            <input type="time" name="jam_tiba" id="jam_tiba" class="adm-input"
+                                                value="{{ old('jam_tiba', $data->jam_tiba ? $data->jam_tiba->format('H:i') : '') }}"
+                                                readonly
+                                                tabindex="-1"
+                                                onkeydown="return false;"
+                                                onfocus="this.blur();"
+                                                style="background-color: #f1f5f9; color: #334155; cursor: not-allowed; pointer-events: none; border-color: #cbd5e1; font-weight: 600;"
+                                                title="Jam tiba terisi otomatis berdasarkan Jam Berangkat + Durasi Rute dan tidak dapat diubah manual">
+                                            <small id="info_estimasi_tiba" style="display: block; font-size: 11px; color: #64748b; margin-top: 4px;">
+                                                <i class="fas fa-info-circle"></i> Terisi otomatis sesuai durasi rute (tidak dapat diedit).
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -176,27 +191,39 @@
             </div>
         </section>
     </div>
+@endsection
 
+@push('scripts')
     {{-- Script Kalkulasi Otomatis Jam Tiba (Estimasi) --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ruteSelect = document.querySelector('select[name="id_rute"]');
-            const jamBerangkatInput = document.querySelector('input[name="jam_berangkat"]');
-            const jamTibaInput = document.querySelector('input[name="jam_tiba"]');
-
-            if (!ruteSelect || !jamBerangkatInput || !jamTibaInput) return;
-
+        (function() {
             function hitungJamTiba() {
+                const ruteSelect = document.getElementById('id_rute') || document.querySelector('select[name="id_rute"]');
+                const jamBerangkatInput = document.getElementById('jam_berangkat') || document.querySelector('input[name="jam_berangkat"]');
+                const jamTibaInput = document.getElementById('jam_tiba') || document.querySelector('input[name="jam_tiba"]');
+                const infoText = document.getElementById('info_estimasi_tiba');
+
+                if (!ruteSelect || !jamBerangkatInput || !jamTibaInput) return;
+
                 const selectedOption = ruteSelect.options[ruteSelect.selectedIndex];
-                if (!selectedOption || !selectedOption.value) {
+                const durasiAttr = selectedOption ? selectedOption.getAttribute('data-durasi') : null;
+                const durasiText = selectedOption ? selectedOption.getAttribute('data-durasi-text') : null;
+                const durasiMenit = durasiAttr ? parseInt(durasiAttr, 10) : 0;
+                const jamBerangkatVal = jamBerangkatInput.value ? jamBerangkatInput.value.trim() : '';
+
+                if (!selectedOption || !selectedOption.value || durasiMenit <= 0) {
+                    if (infoText) {
+                        infoText.innerHTML = '<i class="fas fa-info-circle"></i> Pilih rute perjalanan untuk menentukan durasi perjalanan.';
+                    }
+                    jamTibaInput.value = '';
                     return;
                 }
 
-                const durasiAttr = selectedOption.getAttribute('data-durasi');
-                const durasiMenit = durasiAttr ? parseInt(durasiAttr, 10) : 0;
-                const jamBerangkatVal = jamBerangkatInput.value;
-
-                if (!jamBerangkatVal || isNaN(durasiMenit) || durasiMenit <= 0) {
+                if (!jamBerangkatVal) {
+                    if (infoText) {
+                        infoText.innerHTML = `<i class="fas fa-info-circle"></i> Durasi rute: <strong>${durasiText || (durasiMenit + ' menit')}</strong>. Masukkan jam berangkat untuk menghitung estimasi tiba.`;
+                    }
+                    jamTibaInput.value = '';
                     return;
                 }
 
@@ -208,27 +235,53 @@
                 if (isNaN(jam) || isNaN(menit)) return;
 
                 const totalMenitAwal = (jam * 60) + menit;
-                let totalMenitAkhir = (totalMenitAwal + durasiMenit) % (24 * 60);
+                const totalMenitPlusDurasi = totalMenitAwal + durasiMenit;
+                const isNextDay = Math.floor(totalMenitPlusDurasi / (24 * 60)) > 0;
+                let totalMenitAkhir = totalMenitPlusDurasi % (24 * 60);
                 if (totalMenitAkhir < 0) {
                     totalMenitAkhir += (24 * 60);
                 }
 
                 const jamTiba = Math.floor(totalMenitAkhir / 60);
                 const menitTiba = totalMenitAkhir % 60;
+                const formattedJamTiba = `${String(jamTiba).padStart(2, '0')}:${String(menitTiba).padStart(2, '0')}`;
 
-                jamTibaInput.value = `${String(jamTiba).padStart(2, '0')}:${String(menitTiba).padStart(2, '0')}`;
+                jamTibaInput.value = formattedJamTiba;
+
+                if (infoText) {
+                    const extraHari = isNextDay ? ' <span class="badge badge-warning" style="font-size: 10px; margin-left: 4px; padding: 2px 6px;">Keesokan Harinya</span>' : '';
+                    infoText.innerHTML = `<i class="fas fa-check-circle" style="color: #10b981;"></i> Estimasi tiba pukul <strong>${formattedJamTiba} WITA</strong> (+${durasiText || (durasiMenit + ' mnt')})${extraHari}`;
+                }
             }
 
-            ruteSelect.addEventListener('change', hitungJamTiba);
-            jamBerangkatInput.addEventListener('input', hitungJamTiba);
-            jamBerangkatInput.addEventListener('change', hitungJamTiba);
+            function initKalkulasi() {
+                const ruteSelect = document.getElementById('id_rute') || document.querySelector('select[name="id_rute"]');
+                const jamBerangkatInput = document.getElementById('jam_berangkat') || document.querySelector('input[name="jam_berangkat"]');
 
-            if (window.jQuery) {
-                window.jQuery(ruteSelect).on('change select2:select', hitungJamTiba);
+                if (!ruteSelect || !jamBerangkatInput) return;
+
+                ['change', 'input'].forEach(evt => {
+                    ruteSelect.addEventListener(evt, hitungJamTiba);
+                });
+
+                ['input', 'change', 'blur', 'keyup'].forEach(evt => {
+                    jamBerangkatInput.addEventListener(evt, hitungJamTiba);
+                });
+
+                if (window.jQuery) {
+                    window.jQuery(ruteSelect).on('change select2:select selectric-select', hitungJamTiba);
+                    window.jQuery(jamBerangkatInput).on('input change blur keyup', hitungJamTiba);
+                }
+
+                // Jalankan kalkulasi saat halaman edit pertama kali dimuat
+                hitungJamTiba();
             }
 
-            // Jalankan kalkulasi saat halaman edit pertama kali dimuat
-            hitungJamTiba();
-        });
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initKalkulasi);
+            } else {
+                initKalkulasi();
+            }
+        })();
     </script>
-@endsection
+@endpush
